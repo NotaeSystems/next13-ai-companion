@@ -11,6 +11,11 @@ export const checkSubscription = async () => {
     return false;
   }
 
+  // for debugging purposes can turn off subscriptions in .env
+  if (`${process.env.SUSCRIPTIONS_ACTIVE}`  == 'false'){
+    return true
+
+  }
   const userSubscription = await prismadb.userSubscription.findUnique({
     where: {
       userId: userId,
