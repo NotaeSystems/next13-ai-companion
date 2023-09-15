@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 import { StreamingTextResponse, LangChainStream } from "ai";
 import { auth, currentUser } from "@clerk/nextjs";
-import { Replicate } from "langchain/llms/replicate";
+//import { Replicate } from "langchain/llms/replicate";
+import { OpenAI } from "langchain/llms/openai"
 import { CallbackManager } from "langchain/callbacks";
 import { NextResponse } from "next/server";
 
@@ -16,6 +17,7 @@ export async function POST(
   { params }: { params: { chatId: string } }
 ) {
   try {
+    console.log(" Inside of api/stream")
     const { prompt } = await request.json();
     const user = await currentUser();
 
@@ -83,15 +85,22 @@ export async function POST(
     }
     const { handlers } = LangChainStream();
     // Call Replicate for inference
-    const model = new Replicate({
-      model:
-        "a16z-infra/llama-2-13b-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
-      input: {
-        max_length: 2048,
-      },
-      apiKey: process.env.REPLICATE_API_TOKEN,
-      callbackManager: CallbackManager.fromHandlers(handlers),
-    });
+    // const model = new Replicate({
+    //   model:
+    //     "a16z-infra/llama-2-13b-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
+    //   input: {
+    //     max_length: 2048,
+    //   },
+    //   apiKey: process.env.REPLICATE_API_TOKEN,
+    //   callbackManager: CallbackManager.fromHandlers(handlers),
+    // });
+
+    // Call OpenAi for inference
+
+    const model = new OpenAI({
+      openAIApiKey: process.env.openAIApiKey,
+      temperature: 0.1,
+    })
 
     // Turn verbose on for debugging
     //model.verbose = true;
@@ -148,3 +157,4 @@ export async function POST(
     return new NextResponse("Internal Error", { status: 500 });
   }
 };
+
