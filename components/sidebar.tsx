@@ -28,19 +28,19 @@ export const Sidebar = ({
   const routes = [
     {
       icon: Home,
-      href: '/',
+      href: '/dashboard',
       label: "Home",
       pro: false,
     },
     {
       icon: Plus,
-      href: '/companion/new',
+      href: '/dashboard/companion/new',
       label: "Create",
       pro: true,
     },
     {
       icon: Settings,
-      href: '/settings',
+      href: '/dashboard/settings',
       label: "Settings",
       pro: false,
     },

@@ -7,7 +7,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster';
 import { ProModal } from '@/components/pro-modal';
 
-import './globals.css'
+import '@/app//globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
