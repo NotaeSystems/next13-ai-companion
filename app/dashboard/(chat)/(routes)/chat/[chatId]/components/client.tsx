@@ -19,6 +19,8 @@ interface ChatClientProps {
   };
 };
 
+const LOCAL_CHAT_API =  process.env.LOCAL_CHAT_API
+
 export const ChatClient = ({
   companion,
 }: ChatClientProps) => {
@@ -32,7 +34,7 @@ export const ChatClient = ({
     handleSubmit,
     setInput,
   } = useCompletion({
-    api: `/api/stream/${companion.id}`,
+    api: `${LOCAL_CHAT_API}${companion.id}`,
     onFinish(_prompt, completion) {
       const systemMessage: ChatMessageProps = {
         role: "system",

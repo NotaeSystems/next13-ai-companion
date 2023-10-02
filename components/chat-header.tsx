@@ -76,7 +76,7 @@ export const ChatHeader = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => router.push(`/companion/${companion.id}`)}>
+            <DropdownMenuItem onClick={() => router.push(`/dashboard/companion/${companion.id}`)}>
               <Edit className="w-4 h-4 mr-2" />
               Edit
             </DropdownMenuItem>

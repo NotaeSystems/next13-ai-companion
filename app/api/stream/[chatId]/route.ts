@@ -57,7 +57,7 @@ export async function POST(
     const companionKey = {
       companionName: name!,
       userId: user.id,
-      modelName: "llama2-13b",
+      modelName: "gpt-3.5-turbo",
     };
     const memoryManager = await MemoryManager.getInstance();
 
@@ -99,7 +99,8 @@ export async function POST(
 
     const model = new OpenAI({
       openAIApiKey: process.env.openAIApiKey,
-      temperature: 0.1,
+      temperature: 0.9,
+      modelName: "gpt-3.5-turbo"
     })
 
     // Turn verbose on for debugging

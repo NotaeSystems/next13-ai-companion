@@ -7,13 +7,13 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster';
 import { ProModal } from '@/components/pro-modal';
 
-import '@/app//globals.css'
+import '@/app/globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Companion.AI',
-  description: 'Your customized companion.',
+  title: 'Smarty Clone',
+  description: 'Your customized clone.',
 }
 
 export default function RootLayout({
