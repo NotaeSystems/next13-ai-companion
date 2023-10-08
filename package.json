@@ -10,7 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.23.0",
+    "@clerk/nextjs": "^4.25.3",
     "@clerk/themes": "^1.7.5",
     "@hookform/resolvers": "^3.1.1",
     "@pinecone-database/pinecone": "^0.1.6",
@@ -43,7 +43,7 @@
     "flowise-embed-react": "^1.0.1",
     "langchain": "^0.0.150",
     "lucide-react": "^0.263.0",
-    "next": "^13.4.19",
+    "next": "^13.5.4",
     "next-cloudinary": "^4.16.0",
     "next-themes": "^0.2.1",
     "openai": "^4.7.0",

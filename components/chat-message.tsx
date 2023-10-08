@@ -15,13 +15,15 @@ export interface ChatMessageProps {
   content?: string;
   isLoading?: boolean;
   src?: string;
+  id?: string;
 }
 
 export const ChatMessage = ({
   role,
   content,
   isLoading,
-  src
+  src,
+  id
 }: ChatMessageProps) => {
   const { toast } = useToast();
   const { theme } = useTheme();

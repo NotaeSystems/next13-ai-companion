@@ -84,6 +84,8 @@ Add MySQL Database (I used PlanetScale)
 npx prisma db push
 
 ```
+npx prisma studio
+
 
 Seed categories:
 ```shell

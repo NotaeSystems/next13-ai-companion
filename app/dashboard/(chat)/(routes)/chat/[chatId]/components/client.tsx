@@ -34,7 +34,7 @@ export const ChatClient = ({
     handleSubmit,
     setInput,
   } = useCompletion({
-    api: `${LOCAL_CHAT_API}${companion.id}`,
+    api: `/api/stream/${companion.id}`,
     onFinish(_prompt, completion) {
       const systemMessage: ChatMessageProps = {
         role: "system",
