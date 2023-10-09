@@ -29,7 +29,7 @@ export const Sidebar = ({
     {
       icon: Home,
       href: '/dashboard',
-      label: "Home",
+      label: "Dashboard",
       pro: false,
     },
     {
