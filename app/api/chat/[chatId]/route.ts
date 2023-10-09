@@ -16,6 +16,7 @@ export async function POST(
   { params }: { params: { chatId: string } }
 ) {
   try {
+    console.log(" Inside of api/chat")
     const { prompt } = await request.json();
     const user = await currentUser();
 
