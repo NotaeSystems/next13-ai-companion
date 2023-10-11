@@ -17,7 +17,7 @@ export async function POST(
   { params }: { params: { chatId: string } }
 ) {
   try {
-    console.log(" Inside of api/stream")
+    console.log(" Inside of /api/stream")
     const { prompt } = await request.json();
     const user = await currentUser();
 
@@ -96,11 +96,11 @@ export async function POST(
     // });
 
     // Call OpenAi for inference
-
+    const modelName = process.env.OPENAI_MODEL_NAME
     const model = new OpenAI({
       openAIApiKey: process.env.openAIApiKey,
       temperature: 0.9,
-      modelName: "gpt-3.5-turbo"
+      modelName: modelName
     })
 
     // Turn verbose on for debugging
