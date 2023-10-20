@@ -27,12 +27,15 @@ const CompanionIdPage = async ({
     return redirect("/");
   }
 
-  const companion = await prismadb.companion.findUnique({
+  let companion = null
+  if (params.companionId != 'new'){
+  companion = await prismadb.companion.findUnique({
     where: {
       id: params.companionId,
       userId,
     }
-  });
+  })
+}
 
   const categories = await prismadb.category.findMany();
 
