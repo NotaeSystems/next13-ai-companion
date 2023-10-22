@@ -40,6 +40,14 @@ const formSchema = z.object({
   description: z.string().min(1, {
     message: "Description is required.",
   }),
+  temperature: z.coerce.number()
+  .min(0, {
+    message: "Temperature at least 0.0 required.",
+  })
+  .max(1.0,{ 
+    message: "Temperature must be between 0.0 and 1.0"
+  }),
+
   instructions: z.string().min(200, {
     message: "Instructions require at least 200 characters."
   }),
@@ -71,6 +79,7 @@ export const CompanionForm = ({
     defaultValues: initialData || {
       name: "",
       description: "",
+      temperature: 0.5,
       instructions: "",
       seed: "",
       src: "",
@@ -156,6 +165,22 @@ export const CompanionForm = ({
                   </FormControl>
                   <FormDescription>
                     Short description for your AI Companion
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              name="temperature"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Temperature</FormLabel>
+                  <FormControl>
+                    <Input disabled={isLoading} placeholder="0.5" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Temperature 
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

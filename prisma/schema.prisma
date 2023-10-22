@@ -23,7 +23,7 @@ model Companion {
   name          String 
   description   String
   instructions  String 
-  temperature   Float
+  temperature   Float @default(0.5)
   seed          String 
 
   createdAt     DateTime @default(now())
