@@ -1,10 +1,12 @@
 import { redirect } from "next/navigation";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
-import Image from 'next/image'
+//import Image from 'next/image'
 import ChatComponent from './components/chatComponent'
+//import {StreamingAudioPlayerComponent} from './components/streamingAudioPlayerComponent'
 import prismadb from "@/lib/prismadb";
 
 // export default function Home() {
+
 
 //   // ChatComponent ? Why make a new component?
 //   // ChatComponent -> client, text inputs -> onChange -> we need to make a client side component

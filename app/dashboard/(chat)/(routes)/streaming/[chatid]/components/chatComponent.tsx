@@ -2,6 +2,8 @@
 import { useChat, Message } from "ai/react"
 import { Companion } from "@prisma/client";
 import { ChatHeader } from "@/components/chat-header";
+import { StreamingAudioPlayerComponent } from "./streamingAudioPlayerComponent";
+import {useEffect, useState} from 'react'
 
 interface StreamingProps {
     companion: Companion & {
@@ -16,51 +18,59 @@ interface StreamingProps {
 export default function ChatComponent({
     companion,
   }: StreamingProps) {
+    const [playMessage, setPlayMessage] = useState<Message | null>(null)
     // Vercel AI SDK (ai package) useChat()
     // useChat -> handles messages for us, user input, handling user submits, etc.
     const { input, handleInputChange, handleSubmit, isLoading, messages } = useChat(
-            {api: `/api/streaming/${companion.id}`}
-          );
+             {  api: `/api/streaming/${companion.id}`,
+                onFinish(message: Message) {
+                    setPlayMessage(message)
+                }
+            });
+            
     // messages -> [user asks a question, ai response, user asks again, gpt-4 responds]
 
-    console.log(messages);
-    console.log(input);
-
+    //console.log(messages);
+    //console.log(input);
+   
     return (
         <div>
+            <StreamingAudioPlayerComponent playMessage={playMessage}   />
             {messages.map((message : Message) => {
                 return (
-                    
-                    <div key={message.id}>
+                    <>
+                       
+                        <div key={message.id}>
                         
-                        {/*  Name of person talking */}
-                        {
-                            message.role === "assistant"
-                            ?
-                            <h3 className="text-lg font-semibold mt-2">
-                                {companion.name}
-                            </h3>
-                            :
-                            <h3 className="text-lg font-semibold mt-2 justify-end">
-                                You
-                            </h3>
-                        }
-                        
-                        {/* Formatting the message */}
-                        {message.content.split("\n").map((currentTextBlock: string, index : number) => {
-                            if(currentTextBlock === "") {
-                                return <p key={message.id + index}>&nbsp;</p> // " "
-                            } else {
-                                if (message.role === "assistant"){
-                                    return <p key={message.id + index} className="text-black bg-white">{currentTextBlock}</p> 
-                                }else{
-                                    return <p key={message.id + index} className="text-white bg-black justify-end" >{currentTextBlock}</p>
-                                }
+                            {/*  Name of person talking */}
+                            {
+                                message.role === "assistant"
+                                ?
+                                <h3 className="text-lg font-semibold mt-2">
+                                    {companion.name}
+                                </h3>
+                                :
+                                <h3 className="text-lg font-semibold mt-2 justify-end">
+                                    You
+                                </h3>
                             }
-                        })}
+                            
+                            {/* Formatting the message */}
+                            {message.content.split("\n").map((currentTextBlock: string, index : number) => {
+                                if(currentTextBlock === "") {
+                                    return <p key={message.id + index}>&nbsp;</p> // " "
+                                } else {
+                                    if (message.role === "assistant"){
+                                        return <p key={message.id + index} className="text-black bg-white">{currentTextBlock}</p> 
+                                    }else{
+                                        return <p key={message.id + index} className="text-white bg-black justify-end" >{currentTextBlock}</p>
+                                    }
+                                }
+                            })}
 
 
                     </div>
+                </>
                 )
             })}
             

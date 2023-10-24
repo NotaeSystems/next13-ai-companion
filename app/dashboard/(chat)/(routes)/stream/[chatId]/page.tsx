@@ -3,7 +3,7 @@ import { auth, redirectToSignIn } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 
-import { StreamClient } from "./components/client";
+import  ChatComponent from "./components/client";
 
 interface ChatIdPageProps {
   params: {
@@ -47,7 +47,7 @@ const ChatIdPage = async ({
   }
 
   return (
-    <StreamClient companion={companion} />
+    <ChatComponent companion={companion} />
   );
 }
  

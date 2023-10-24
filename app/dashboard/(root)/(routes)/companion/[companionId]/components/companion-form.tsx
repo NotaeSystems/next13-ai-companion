@@ -51,6 +51,14 @@ const formSchema = z.object({
   instructions: z.string().min(200, {
     message: "Instructions require at least 200 characters."
   }),
+
+  relationship: z.string().min(5, {
+    message: "Relationship context is required."
+  }),
+
+  voiceId: z.string().optional(),
+
+
   seed: z.string().min(200, {
     message: "Seed requires at least 200 characters."
   }),
@@ -82,6 +90,8 @@ export const CompanionForm = ({
       temperature: 0.5,
       instructions: "",
       seed: "",
+      relationship: "",
+      voiceId: "",
       src: "",
       categoryId: undefined,
     },
@@ -248,6 +258,38 @@ export const CompanionForm = ({
                 </FormControl>
                 <FormDescription>
                   Write couple of examples of a human chatting with your AI companion, write expected answers.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="relationship"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Relationship and facts of User to Companion</FormLabel>
+                <FormControl>
+                  <Textarea disabled={isLoading} rows={7} className="bg-background resize-none" placeholder={PREAMBLE} {...field} />
+                </FormControl>
+                <FormDescription>
+                  Describe in detail your relationship with companion and relevant details and knowledge companion has about you.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="voiceId"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Eleven Labs Voice Id</FormLabel>
+                <FormControl>
+                <Input disabled={isLoading} {...field} />
+                </FormControl>
+                <FormDescription>
+                 Eleven Labs Voice Id 
                 </FormDescription>
                 <FormMessage />
               </FormItem>
