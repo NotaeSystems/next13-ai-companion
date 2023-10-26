@@ -69,6 +69,7 @@ export async function POST(  request: Request,
     // createChatCompletion (get response from GPT-3.5)
 
     const systemMessage = companion.instructions + "/n" + companion.seed
+    
     console.log(systemMessage)
 
       console.log("temperature: " + companion.temperature)

@@ -7,6 +7,7 @@ import {type Message} from 'ai'
 //import {cn} from '@/lib/utils'
 import React, {useEffect, useState} from "react";
 
+
 async function playText(text: string, setIsPlaying: (isPlaying: boolean) => void) {
    console.log("inside of playText")
     const response = await fetch('/api/voice', {

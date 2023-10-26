@@ -32,10 +32,11 @@ export default function ChatComponent({
 
     //console.log(messages);
     //console.log(input);
-   
+   const voiceId = companion.voiceId
     return (
         <div>
-            <StreamingAudioPlayerComponent playMessage={playMessage}   />
+            {/*  Need to params voiceId to StreamingAudioPlayer */}
+            <StreamingAudioPlayerComponent playMessage={playMessage}  />
             {messages.map((message : Message) => {
                 return (
                     <>

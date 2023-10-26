@@ -3,23 +3,26 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Poppins } from "next/font/google";
 import { MainNavbar } from "@/components/main-navbar";
+import {Hero}  from "@/components/home-page/hero";
+import {Header}  from "@/components/home-page/header";
+import {Footer}  from "@/components/home-page/footer";
+
 import { useProModal } from "@/hooks/use-pro-modal";
+
 const font = Poppins({ weight: "600", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Smarty Clone',
+  title: 'Smarty Persona - Home page',
 }
  
 export default function Page() {
   return (
     <div>
+  
       <MainNavbar />
-        
-     <div className="gap-18">
-        <h1>
-          Root Landing Page
-        </h1>  
-      </div>
+      <Header />
+      <Hero />
+      <Footer />
       
     </div>
   )
