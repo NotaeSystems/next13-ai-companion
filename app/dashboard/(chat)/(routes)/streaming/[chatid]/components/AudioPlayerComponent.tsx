@@ -8,9 +8,9 @@ import {type Message} from 'ai'
 import React, {useEffect, useState} from "react";
 
 
-async function playText(text: string, setIsPlaying: (isPlaying: boolean) => void) {
+async function playText(text: string, voiceId:string, setIsPlaying: (isPlaying: boolean) => void) {
    console.log("inside of playText")
-    const response = await fetch('/api/voice', {
+    const response = await fetch(`/api/voice/${voiceId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -36,10 +36,15 @@ async function playText(text: string, setIsPlaying: (isPlaying: boolean) => void
     }
 }
 
-export function StreamingAudioPlayerComponent({
-                                         playMessage,
-    }: { playMessage: Message | null }) 
+
+interface AudioPlayerProps {
+    playMessage : Message | null
+    voiceId : string
+  };
+
+export function AudioPlayerComponent(props : AudioPlayerProps) 
     {
+        const {playMessage, voiceId} = props
 
         const [isPlaying, setIsPlaying] = useState<boolean>(false)
 
@@ -61,7 +66,7 @@ export function StreamingAudioPlayerComponent({
             if (plays >= maxPlay || playMessage === null || playMessage.role !== "assistant") {
                 return
             }
-            playText(playMessage.content, setIsPlaying)
+            playText(playMessage.content, voiceId, setIsPlaying)
         }, [playMessage?.content, setIsPlaying])
 
         

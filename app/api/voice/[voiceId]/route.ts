@@ -59,14 +59,15 @@ const textToSpeech = async (
     }
 };
 
-export async function POST(req: Request,{ params }: { params: { voiceId: string } }){
-    console.log("inside of /api/voice/[voiceId")
+export async function POST(req: Request,{ params }: { params: { voiceId: string} }){
+    console.log("inside of /api/voice/[voiceId]")
     
     const json = await req.json()
     const { text } = json
     console.log("message: " + text )
     const apiKey = process.env.ELEVEN_LABS_API_KEY
-    const voiceID = "IKne3meq5aSn9XLyUdCD"
+   // const voiceID = "IKne3meq5aSn9XLyUdCD"
+    const voiceID = params.voiceId
     const filePath = "./tmp/audio.mp3";
 
     try {

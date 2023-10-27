@@ -2,7 +2,7 @@
 import { useChat, Message } from "ai/react"
 import { Companion } from "@prisma/client";
 import { ChatHeader } from "@/components/chat-header";
-import { StreamingAudioPlayerComponent } from "./streamingAudioPlayerComponent";
+import { AudioPlayerComponent } from "./AudioPlayerComponent";
 import {useEffect, useState} from 'react'
 
 interface StreamingProps {
@@ -32,11 +32,11 @@ export default function ChatComponent({
 
     //console.log(messages);
     //console.log(input);
-   const voiceId = companion.voiceId
+   const voiceId :string = companion.voiceId
     return (
         <div>
             {/*  Need to params voiceId to StreamingAudioPlayer */}
-            <StreamingAudioPlayerComponent playMessage={playMessage}  />
+            <AudioPlayerComponent playMessage={playMessage} voiceId={voiceId}  />
             {messages.map((message : Message) => {
                 return (
                     <>
