@@ -1,12 +1,14 @@
+// /dashboard/streaming/[chatid]
+// streams elevenlabs voice back
+
 import { redirect } from "next/navigation";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 //import Image from 'next/image'
-import ChatComponent from './components/chatComponent'
+import ChatComponent from "./components/chatComponent";
 //import {StreamingAudioPlayerComponent} from './components/streamingAudioPlayerComponent'
 import prismadb from "@/lib/prismadb";
 import { MainNavbar } from "@/components/main-navbar";
 // export default function Home() {
-
 
 //   // ChatComponent ? Why make a new component?
 //   // ChatComponent -> client, text inputs -> onChange -> we need to make a client side component
@@ -24,12 +26,10 @@ import { MainNavbar } from "@/components/main-navbar";
 interface StreamingPageProps {
   params: {
     chatid: string;
-  }
+  };
 }
 
-const StreamingPage = async ({
-  params
-}: StreamingPageProps) => {
+const StreamingPage = async ({ params }: StreamingPageProps) => {
   const { userId } = auth();
 
   if (!userId) {
@@ -38,12 +38,12 @@ const StreamingPage = async ({
 
   const companion = await prismadb.companion.findUnique({
     where: {
-      id: params.chatid
+      id: params.chatid,
     },
     include: {
       messages: {
         orderBy: {
-          createdAt: "asc"
+          createdAt: "asc",
         },
         where: {
           userId,
@@ -52,9 +52,9 @@ const StreamingPage = async ({
       _count: {
         select: {
           messages: true,
-        }
-      }
-    }
+        },
+      },
+    },
   });
 
   if (!companion) {
@@ -63,16 +63,16 @@ const StreamingPage = async ({
 
   return (
     <>
-    <MainNavbar />
+      <MainNavbar />
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <div className="bg-slate-800 p-3 w-[800px] rounded-md text-white">
           <h2 className="text-2xl">{companion.name}</h2>
-          
-          <ChatComponent companion={companion}   />
+
+          <ChatComponent companion={companion} />
         </div>
       </main>
     </>
   );
-}
-  
-  export default StreamingPage;
+};
+
+export default StreamingPage;

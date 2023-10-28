@@ -26,7 +26,7 @@ model Companion {
   temperature   Float @default(0.5)
   seed          String 
   relationship  String @default("User is a stranger to companion")
-  voiceId       String
+  voiceId       String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 

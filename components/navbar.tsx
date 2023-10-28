@@ -27,7 +27,7 @@ export const Navbar = ({
         <MobileSidebar isPro={isPro} />
         <Link href="/">
           <h1 className={cn("hidden md:block text-xl md:text-3xl font-bold text-primary", font.className)}>
-            Smarty Clone
+            Smarty Persona
           </h1>
         </Link>
       </div>

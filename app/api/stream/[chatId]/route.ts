@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { StreamingTextResponse, LangChainStream } from "ai";
 import { auth, currentUser } from "@clerk/nextjs";
 //import { Replicate } from "langchain/llms/replicate";
-import { OpenAI } from "langchain/llms/openai"
+import { OpenAI } from "langchain/llms/openai";
 import { CallbackManager } from "langchain/callbacks";
 import { NextResponse } from "next/server";
 
@@ -17,7 +17,7 @@ export async function POST(
   { params }: { params: { chatId: string } }
 ) {
   try {
-    console.log(" Inside of /api/stream")
+    console.log(" Inside of /api/stream");
     const { prompt } = await request.json();
     const user = await currentUser();
 
@@ -34,7 +34,7 @@ export async function POST(
 
     const companion = await prismadb.companion.update({
       where: {
-        id: params.chatId
+        id: params.chatId,
       },
       data: {
         messages: {
@@ -44,7 +44,7 @@ export async function POST(
             userId: user.id,
           },
         },
-      }
+      },
     });
 
     if (!companion) {
@@ -69,7 +69,9 @@ export async function POST(
 
     // Query Pinecone
 
-    const recentChatHistory = await memoryManager.readLatestHistory(companionKey);
+    const recentChatHistory = await memoryManager.readLatestHistory(
+      companionKey
+    );
 
     // Right now the preamble is included in the similarity search, but that
     // shouldn't be an issue
@@ -96,16 +98,16 @@ export async function POST(
     // });
 
     // Call OpenAi for inference
-    const modelName = process.env.OPENAI_MODEL_NAME
+    const modelName = process.env.OPENAI_MODEL_NAME;
     const model = new OpenAI({
       openAIApiKey: process.env.openAIApiKey,
       temperature: 0.9,
-      modelName: modelName
-    })
+      modelName: modelName,
+    });
 
     // Turn verbose on for debugging
     //model.verbose = true;
-    model.verbose = (process.env.DEBUGGING === "true");
+    model.verbose = process.env.DEBUGGING === "true";
 
     const resp = String(
       await model
@@ -139,7 +141,7 @@ export async function POST(
 
       await prismadb.companion.update({
         where: {
-          id: params.chatId
+          id: params.chatId,
         },
         data: {
           messages: {
@@ -149,7 +151,7 @@ export async function POST(
               userId: user.id,
             },
           },
-        }
+        },
       });
     }
 
@@ -157,5 +159,4 @@ export async function POST(
   } catch (error) {
     return new NextResponse("Internal Error", { status: 500 });
   }
-};
-
+}
