@@ -5,6 +5,7 @@ import { OpenAIStream, StreamingTextResponse } from "ai";
 import { NextResponse } from "next/server";
 import { auth, currentUser } from "@clerk/nextjs";
 import { rateLimit } from "@/lib/rate-limit";
+import { buildContext } from "@/lib/context/build-context";
 import prismadb from "@/lib/prismadb";
 // edge causes problems getting .env for production?
 //export const runtime = 'edge'; // Provide optimal infrastructure for our API route (https://edge-runtime.vercel.app/)
@@ -42,6 +43,7 @@ export async function POST(
     const { success } = await rateLimit(identifier);
 
     if (!success) {
+      console.log("Rate limit exceeded");
       return new NextResponse("Rate limit exceeded", { status: 429 });
     }
 
@@ -70,7 +72,7 @@ export async function POST(
 
     // createChatCompletion (get response from GPT-3.5)
 
-    const systemMessage = companion.instructions + "/n" + companion.seed;
+    const systemMessage = buildContext(companion);
 
     console.log(systemMessage);
 

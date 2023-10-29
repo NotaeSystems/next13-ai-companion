@@ -16,7 +16,7 @@ model Category {
 }
 
 model Companion {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
   userId        String
   userName      String
   src           String
@@ -25,15 +25,17 @@ model Companion {
   instructions  String 
   temperature   Float @default(0.5)
   seed          String 
-  relationship  String @default("User is a stranger to companion")
-  voiceId       String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
+  relationship  String @default("User is a stranger and a fan to companion")
+  voiceId       String @default("2Egq65mAdch3uRX23oDd")
+  pineconeIndex String
   category      Category @relation(fields: [categoryId], references: [id])
   categoryId    String @db.ObjectId
 
   messages      Message[]
+  relationships Relationship[]
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@index([categoryId])
   @@fulltext([name])
@@ -45,7 +47,7 @@ enum Role {
 }
 
 model Message {
-   id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   role        Role   
   content     String   
   createdAt   DateTime @default(now())
@@ -59,8 +61,47 @@ model Message {
   @@index([companionId])
 }
 
+model Relationship {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  role          String   
+  content       String   
+  temperature   Float @default(0.5)
+  pineconeIndex String
+ 
+  companionId   String  @db.ObjectId
+  companion     Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
+  
+  userId        String @db.ObjectId
+  user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([companionId])
+  @@index([userId])
+}
+
+model User {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  role        String
+  name        String
+  email       String
+  encrypted_password  String   
+  content     String   
+
+  //companionId String  @db.ObjectId
+  //userId      String
+  relationships Relationship[]
+  
+  //companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  //@@index([companionId])
+}
+
 model UserSubscription {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                        String    @id @default(auto()) @map("_id") @db.ObjectId
   userId                    String    @unique
   stripeCustomerId          String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId      String?   @unique @map(name: "stripe_subscription_id")

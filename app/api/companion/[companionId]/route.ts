@@ -11,9 +11,20 @@ export async function PATCH(
   try {
     const body = await req.json();
     const user = await currentUser();
-    const { src, name, description, instructions, temperature, seed, relationship, voiceId, categoryId } = body;
-    
-    console.log("relationship: " + relationship)
+    const {
+      src,
+      name,
+      description,
+      instructions,
+      temperature,
+      seed,
+      relationship,
+      pineconeIndex,
+      voiceId,
+      categoryId,
+    } = body;
+
+    console.log("relationship: " + relationship);
 
     if (!params.companionId) {
       return new NextResponse("Companion ID required", { status: 400 });
@@ -23,9 +34,16 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!src || !name || !description || !instructions || !seed || !categoryId) {
+    if (
+      !src ||
+      !name ||
+      !description ||
+      !instructions ||
+      !seed ||
+      !categoryId
+    ) {
       return new NextResponse("Missing required fields", { status: 400 });
-    };
+    }
 
     const isPro = await checkSubscription();
 
@@ -46,11 +64,12 @@ export async function PATCH(
         name,
         description,
         instructions,
+        pineconeIndex,
         temperature,
         seed,
         relationship,
-        voiceId
-      }
+        voiceId,
+      },
     });
 
     return NextResponse.json(companion);
@@ -58,7 +77,7 @@ export async function PATCH(
     console.log("[COMPANION_PATCH]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
-};
+}
 
 export async function DELETE(
   request: Request,
@@ -74,8 +93,8 @@ export async function DELETE(
     const companion = await prismadb.companion.delete({
       where: {
         userId,
-        id: params.companionId
-      }
+        id: params.companionId,
+      },
     });
 
     return NextResponse.json(companion);
@@ -83,4 +102,4 @@ export async function DELETE(
     console.log("[COMPANION_DELETE]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
-};
+}

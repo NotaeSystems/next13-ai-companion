@@ -8,14 +8,28 @@ import { useRouter } from "next/navigation";
 import { Wand2 } from "lucide-react";
 import { Category, Companion } from "@prisma/client";
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/image-upload";
 import { useToast } from "@/components/ui/use-toast";
 import { Separator } from "@/components/ui/separator";
-import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  SelectTrigger,
+} from "@/components/ui/select";
 
 const PREAMBLE = `You are a fictional character whose name is Elon. You are a visionary entrepreneur and inventor. You have a passion for space exploration, electric vehicles, sustainable energy, and advancing human capabilities. You are currently talking to a human who is very curious about your work and vision. You are ambitious and forward-thinking, with a touch of wit. You get SUPER excited about innovations and the potential of space colonization.
 `;
@@ -40,30 +54,32 @@ const formSchema = z.object({
   description: z.string().min(1, {
     message: "Description is required.",
   }),
-  temperature: z.coerce.number()
-  .min(0, {
-    message: "Temperature at least 0.0 required.",
-  })
-  .max(1.0,{ 
-    message: "Temperature must be between 0.0 and 1.0"
-  }),
+  temperature: z.coerce
+    .number()
+    .min(0, {
+      message: "Temperature at least 0.0 required.",
+    })
+    .max(1.0, {
+      message: "Temperature must be between 0.0 and 1.0",
+    }),
 
-  instructions: z.string().min(200, {
-    message: "Instructions require at least 200 characters."
+  instructions: z.string().min(100, {
+    message: "Instructions require at least 100 characters.",
   }),
 
   relationship: z.string().min(5, {
-    message: "Relationship context is required."
+    message: "Relationship context is required.",
   }),
 
   voiceId: z.string().optional(),
 
+  pineconeIndex: z.string().optional(),
 
   seed: z.string().min(200, {
-    message: "Seed requires at least 200 characters."
+    message: "Seed requires at least 200 characters.",
   }),
   src: z.string().min(1, {
-    message: "Image is required."
+    message: "Image is required.",
   }),
   categoryId: z.string().min(1, {
     message: "Category is required",
@@ -73,11 +89,11 @@ const formSchema = z.object({
 interface CompanionFormProps {
   categories: Category[];
   initialData: Companion | null;
-};
+}
 
 export const CompanionForm = ({
   categories,
-  initialData
+  initialData,
 }: CompanionFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
@@ -123,10 +139,13 @@ export const CompanionForm = ({
     }
   };
 
-  return ( 
+  return (
     <div className="h-full p-4 space-y-2 max-w-3xl mx-auto">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pb-10">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 pb-10"
+        >
           <div className="space-y-2 w-full col-span-2">
             <div>
               <h3 className="text-lg font-medium">General Information</h3>
@@ -141,7 +160,11 @@ export const CompanionForm = ({
             render={({ field }) => (
               <FormItem className="flex flex-col items-center justify-center space-y-4 col-span-2">
                 <FormControl>
-                  <ImageUpload disabled={isLoading} onChange={field.onChange} value={field.value} />
+                  <ImageUpload
+                    disabled={isLoading}
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -155,7 +178,11 @@ export const CompanionForm = ({
                 <FormItem className="col-span-2 md:col-span-1">
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input disabled={isLoading} placeholder="Elon Musk" {...field} />
+                    <Input
+                      disabled={isLoading}
+                      placeholder="Elon Musk"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
                     This is how your AI Companion will be named.
@@ -171,7 +198,11 @@ export const CompanionForm = ({
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input disabled={isLoading} placeholder="CEO & Founder of Tesla, SpaceX" {...field} />
+                    <Input
+                      disabled={isLoading}
+                      placeholder="CEO & Founder of Tesla, SpaceX"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
                     Short description for your AI Companion
@@ -180,7 +211,25 @@ export const CompanionForm = ({
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
+              name="pineconeIndex"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="col-span-2 md:col-span-1">
+                  <FormLabel>Pine Cone Index</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="Pinecone Index name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>The Pine Cone Index Name</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
               name="temperature"
               control={form.control}
               render={({ field }) => (
@@ -189,9 +238,7 @@ export const CompanionForm = ({
                   <FormControl>
                     <Input disabled={isLoading} placeholder="0.5" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Temperature 
-                  </FormDescription>
+                  <FormDescription>Temperature</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -202,15 +249,25 @@ export const CompanionForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
-                  <Select disabled={isLoading} onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
+                  <Select
+                    disabled={isLoading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger className="bg-background">
-                        <SelectValue defaultValue={field.value} placeholder="Select a category" />
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a category"
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -238,10 +295,17 @@ export const CompanionForm = ({
               <FormItem>
                 <FormLabel>Instructions</FormLabel>
                 <FormControl>
-                  <Textarea disabled={isLoading} rows={7} className="bg-background resize-none" placeholder={PREAMBLE} {...field} />
+                  <Textarea
+                    disabled={isLoading}
+                    rows={7}
+                    className="bg-background resize-none"
+                    placeholder={PREAMBLE}
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
-                  Describe in detail your companion&apos;s backstory and relevant details.
+                  Describe in detail your companion&apos;s backstory and
+                  relevant details.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -254,10 +318,17 @@ export const CompanionForm = ({
               <FormItem>
                 <FormLabel>Example Conversation</FormLabel>
                 <FormControl>
-                  <Textarea disabled={isLoading} rows={7} className="bg-background resize-none" placeholder={SEED_CHAT} {...field} />
+                  <Textarea
+                    disabled={isLoading}
+                    rows={7}
+                    className="bg-background resize-none"
+                    placeholder={SEED_CHAT}
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
-                  Write couple of examples of a human chatting with your AI companion, write expected answers.
+                  Write couple of examples of a human chatting with your AI
+                  companion, write expected answers.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -268,12 +339,21 @@ export const CompanionForm = ({
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Relationship and facts of User to Companion</FormLabel>
+                <FormLabel>
+                  Relationship and facts of User to Companion
+                </FormLabel>
                 <FormControl>
-                  <Textarea disabled={isLoading} rows={7} className="bg-background resize-none" placeholder={PREAMBLE} {...field} />
+                  <Textarea
+                    disabled={isLoading}
+                    rows={7}
+                    className="bg-background resize-none"
+                    placeholder={PREAMBLE}
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
-                  Describe in detail your relationship with companion and relevant details and knowledge companion has about you.
+                  Describe in detail your relationship with companion and
+                  relevant details and knowledge companion has about you.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -286,11 +366,9 @@ export const CompanionForm = ({
               <FormItem>
                 <FormLabel>Eleven Labs Voice Id</FormLabel>
                 <FormControl>
-                <Input disabled={isLoading} {...field} />
+                  <Input disabled={isLoading} {...field} />
                 </FormControl>
-                <FormDescription>
-                 Eleven Labs Voice Id 
-                </FormDescription>
+                <FormDescription>Eleven Labs Voice Id</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -304,5 +382,5 @@ export const CompanionForm = ({
         </form>
       </Form>
     </div>
-   );
+  );
 };
