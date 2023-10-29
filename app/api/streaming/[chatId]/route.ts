@@ -24,9 +24,13 @@ export async function POST(
   try {
     console.log("inside of /api/streaming/[companion_id]");
     const { messages } = await request.json(); // { messages: [] }
+    //const message = messages.at(-1);
+    const message = messages[messages.length - 1];
+    const lastUserMessage = message.content;
 
+    console.log("last User Message: " + lastUserMessage);
     // messages [{ user and he says "hello there" }]
-    console.log(messages);
+    //console.log(messages.last);
     console.log(params.chatId);
 
     // BOMBs out here if on edge****
@@ -72,9 +76,10 @@ export async function POST(
 
     // createChatCompletion (get response from GPT-3.5)
 
-    const systemMessage = buildContext(companion);
+    console.log("Sending lastUserMessage to buildcontest: " + lastUserMessage);
+    const systemMessage = await buildContext(companion, lastUserMessage);
 
-    console.log(systemMessage);
+    // console.log(systemMessage);
 
     console.log("temperature: " + companion.temperature);
     const response = await openai.createChatCompletion({

@@ -3,10 +3,14 @@ import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { PineconeClient } from "@pinecone-database/pinecone";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { Companion, User, Relationship } from "@prisma/client";
+import { getPineConeRelevant } from "@/lib/context/pinecone";
 
-export function buildContext(companion: Companion) {
+export async function buildContext(
+  companion: Companion,
+  lastUserMessage: string
+) {
   // this will build the system message or context to pass to the LLM
-
+  console.log("inside of buildContext. lastUserMessage: " + lastUserMessage);
   let context = companion.instructions + "/n" + companion.seed;
 
   // lets check and see if there is a pineconeIndex pointing to a vectorized pinecone document
@@ -16,7 +20,11 @@ export function buildContext(companion: Companion) {
     console.log(
       "there is a pineconeIndex for Companion: " + companion.pineconeIndex
     );
-
+    // const relevantDocs = await getPineConeRelevant(
+    //   companion.pineconeIndex,
+    //   lastUserMessage
+    // );
+    // console.log("Relevant Docs: " + JSON.stringify(relevantDocs));
     //TODO pass message to companion pinecone document
   } else {
     // pass message to pinecone

@@ -107,6 +107,7 @@ export const CompanionForm = ({
       instructions: "",
       seed: "",
       relationship: "",
+      pineconeIndex: "",
       voiceId: "",
       src: "",
       categoryId: undefined,
