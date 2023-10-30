@@ -317,11 +317,11 @@ export const CompanionForm = ({
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Example Conversation</FormLabel>
+                <FormLabel>Seed</FormLabel>
                 <FormControl>
                   <Textarea
                     disabled={isLoading}
-                    rows={7}
+                    rows={30}
                     className="bg-background resize-none"
                     placeholder={SEED_CHAT}
                     {...field}

@@ -70,18 +70,21 @@ export async function POST(
       return new NextResponse("Companion not found", { status: 404 });
     }
 
-    // GPT-4 system message
-    // system message tells GPT-4 how to act
+    // system message
+    // system message tells LLM how to act
     // it should always be at the front of your array
 
     // createChatCompletion (get response from GPT-3.5)
 
+    // buildContext builds the system message for the LLM
     console.log("Sending lastUserMessage to buildcontest: " + lastUserMessage);
+    
     const systemMessage = await buildContext(companion, lastUserMessage);
 
     // console.log(systemMessage);
 
-    console.log("temperature: " + companion.temperature);
+    //console.log("temperature: " + companion.temperature);
+
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       stream: true,
