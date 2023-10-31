@@ -41,6 +41,7 @@ export async function POST(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    // if there is a user then find the relationship data for that user and companion
     console.log(user.firstName);
 
     const identifier = request.url + "-" + user.id;
@@ -70,6 +71,8 @@ export async function POST(
       return new NextResponse("Companion not found", { status: 404 });
     }
 
+    // TODO if there is a user and a companion then find the relationship data for that user and companion
+
     // system message
     // system message tells LLM how to act
     // it should always be at the front of your array
@@ -78,8 +81,12 @@ export async function POST(
 
     // buildContext builds the system message for the LLM
     console.log("Sending lastUserMessage to buildcontest: " + lastUserMessage);
-    
-    const systemMessage = await buildContext(companion, lastUserMessage);
+
+    const systemMessage = await buildContext(
+      companion,
+      lastUserMessage,
+      user.id
+    );
 
     // console.log(systemMessage);
 

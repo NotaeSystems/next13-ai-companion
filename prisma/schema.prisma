@@ -63,17 +63,16 @@ model Message {
 
 model Relationship {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  role          String   
-  content       String   
+  role          String?  
+  content       String?   
   temperature   Float @default(0.5)
-  pineconeIndex String
+  pineconeIndex String?
  
   companionId   String  @db.ObjectId
   companion     Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
   
-  userId        String @db.ObjectId
-  user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  userId        String 
+
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -91,7 +90,7 @@ model User {
 
   //companionId String  @db.ObjectId
   //userId      String
-  relationships Relationship[]
+  //relationships Relationship[]
   
   //companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
