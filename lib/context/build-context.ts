@@ -38,24 +38,16 @@ export async function buildContext(
 
   // TODO if there is a user then find the relationship data for that user and companion
 
-  let relationship : any
+  let relationship : Relationship
   relationship = await findRelationship(userId, companion )
-  console.log("Relationship content: " + relationship.content)
+  //console.log("Relationship content: " + relationship.content)
+  
+  if (relationship.conversations > relationship.conversationsLimit){
+    console.log("conversational Limit of " +   relationship.conversationsLimit +  " reached")
+  }
  ;
-
-  // const relationship = await prismadb.relationship.findFirst({
-  //   where: {
-  //     userId: userId,
-  //     companionId: companion.id,
-  //   },
-  // });
-
-  // if (relationship) {
-  //   // TODO create relationship  record
-  //   relationshipContent = relationship.content;
-  // }
-
-  // check to see if there is a pineconeIndex document
+   
+  // check to see if there is a pineconeIndex document for Persona
   if (companion.pineconeIndex) {
     console.log(
       "there is a pineconeIndex for Companion: " + companion.pineconeIndex

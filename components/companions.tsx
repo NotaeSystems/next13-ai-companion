@@ -5,7 +5,7 @@ import { MessagesSquare } from "lucide-react";
 
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 
-const chatLink = process.env.COMPANION_CHAT_LINK;
+//const chatLink = process.env.COMPANION_CHAT_LINK;
 
 interface CompanionsProps {
   data: (Companion & {
@@ -34,7 +34,7 @@ export const Companions = ({ data }: CompanionsProps) => {
           key={item.name}
           className="bg-primary/10 rounded-xl cursor-pointer hover:opacity-75 transition border-0"
         >
-          <Link href={`/dashboard/${chatLink}/${item.id}`}>
+          <Link href={`/dashboard/${item.chatLink}/${item.id}`}>
             <CardHeader className="flex items-center justify-center text-center text-muted-foreground">
               <div className="relative w-32 h-32">
                 <Image
