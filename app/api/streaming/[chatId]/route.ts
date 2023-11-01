@@ -82,7 +82,7 @@ export async function POST(
     // buildContext builds the system message for the LLM
     console.log("Sending lastUserMessage to buildcontest: " + lastUserMessage);
 
-    const systemMessage = await buildContext(
+    const {context, temperature} = await buildContext(
       companion,
       lastUserMessage,
       user.id
@@ -95,8 +95,8 @@ export async function POST(
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       stream: true,
-      temperature: companion.temperature,
-      messages: [{ role: "system", content: systemMessage }, ...messages],
+      temperature: temperature,
+      messages: [{ role: "system", content: context }, ...messages],
     });
 
     // create a stream of data from OpenAI (stream data to the frontend)

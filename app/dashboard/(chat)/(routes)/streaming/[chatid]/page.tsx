@@ -61,31 +61,7 @@ const StreamingPage = async ({ params }: StreamingPageProps) => {
     return redirect("/dashboard");
   }
 
-  const relationship = await prismadb.relationship.findFirst({
-    where: {
-      userId: userId,
-      companionId: companion.id,
-    },
-  });
-
-  if (!relationship) {
-    // TODO create relationship  record
-    console.log(
-      "No relationship with " +
-        companion.name +
-        " found. Creating new relationship"
-    );
-
-    const relationship = await prismadb.relationship.create({
-      data: {
-        userId: userId,
-        companionId: companion.id,
-      },
-    });
-  } else {
-    console.log("found relationship");
-  }
-
+  
   return (
     <>
       <MainNavbar />

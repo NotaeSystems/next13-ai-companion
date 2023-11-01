@@ -4,6 +4,7 @@
 //import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { Companion, User, Relationship } from "@prisma/client";
 import { getPineConeRelevant } from "@/lib/context/pinecone";
+import { findRelationship } from "@/lib/context/findRelationship";
 import prismadb from "@/lib/prismadb";
 //import { cp } from "fs";
 
@@ -37,19 +38,22 @@ export async function buildContext(
 
   // TODO if there is a user then find the relationship data for that user and companion
 
-  let relationshipContent: any;
+  let relationship : any
+  relationship = await findRelationship(userId, companion )
+  console.log("Relationship content: " + relationship.content)
+ ;
 
-  const relationship = await prismadb.relationship.findFirst({
-    where: {
-      userId: userId,
-      companionId: companion.id,
-    },
-  });
+  // const relationship = await prismadb.relationship.findFirst({
+  //   where: {
+  //     userId: userId,
+  //     companionId: companion.id,
+  //   },
+  // });
 
-  if (relationship) {
-    // TODO create relationship  record
-    relationshipContent = relationship.content;
-  }
+  // if (relationship) {
+  //   // TODO create relationship  record
+  //   relationshipContent = relationship.content;
+  // }
 
   // check to see if there is a pineconeIndex document
   if (companion.pineconeIndex) {
@@ -71,20 +75,21 @@ export async function buildContext(
   let context =
     `ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix.` +
     "companion instructions" +
+
     companion.instructions +
     "/n" +
-    "companion relationship: /n" +
-    companion.relationship +
-    "/n" +
+
     "user relationship: /n" +
-    relationshipContent +
+    relationship.content +
     "/n" +
+
     "Below are facts, if any,  about you. Treat these as facts" +
     companion.seed +
     "/n" +
+
     JSON.stringify(relevantDocs);
   +"Below are relevant details about the conversation you are in.";
 
   //console.log("the full context is: " + context)
-  return context;
+  return {context: context, temperature: relationship.temperature};
 }
