@@ -61,10 +61,8 @@ const StreamingPage = async ({ params }: StreamingPageProps) => {
     return redirect("/dashboard");
   }
 
-  
   return (
     <>
-      <MainNavbar />
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <div className="bg-slate-800 p-3 w-[800px] rounded-md text-white">
           <h2 className="text-2xl">{companion.name}</h2>

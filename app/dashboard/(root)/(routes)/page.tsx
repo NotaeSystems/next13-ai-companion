@@ -1,18 +1,19 @@
-import prismadb from "@/lib/prismadb"
-import { Categories } from "@/components/categories"
-import { Companions } from "@/components/companions"
-import { SearchInput } from "@/components/search-input"
-
+import prismadb from "@/lib/prismadb";
+import { Categories } from "@/components/categories";
+import { Companions } from "@/components/companions";
+import { SearchInput } from "@/components/search-input";
+import { MainNavbar } from "@/components/main-navbar";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { auth, redirectToSignIn } from "@clerk/nextjs";
 interface RootPageProps {
   searchParams: {
     categoryId: string;
     name: string;
   };
-};
+}
 
-const RootPage = async ({
-  searchParams
-}: RootPageProps) => {
+const RootPage = async ({ searchParams }: RootPageProps) => {
   const data = await prismadb.companion.findMany({
     where: {
       categoryId: searchParams.categoryId,
@@ -21,26 +22,32 @@ const RootPage = async ({
       },
     },
     orderBy: {
-      createdAt: "desc"
+      createdAt: "desc",
     },
     include: {
       _count: {
         select: {
           messages: true,
-        }
-      }
+        },
+      },
     },
   });
 
   const categories = await prismadb.category.findMany();
-
+  const { userId } = auth();
+  console.log(userId);
+  if (!userId) {
+    return redirectToSignIn();
+  }
   return (
     <div className="h-full p-4 space-y-2">
-      <SearchInput />
-      <Categories data={categories} />
+      <Link href="/dashboard/profile/{userId}">Profile- {userId}</Link>
+
+      {/* <SearchInput /> */}
+      {/* <Categories data={categories} /> */}
       <Companions data={data} />
     </div>
-  )
-}
+  );
+};
 
-export default RootPage
+export default RootPage;
