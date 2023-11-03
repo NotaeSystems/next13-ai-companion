@@ -40,6 +40,10 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
   return (
     <div>
       <h1>Profile Page</h1>
+      <p className="max-w-prose text-center gap-5">
+        Give some information about you so that your Persona can better converse
+        with you.
+      </p>
       <ul>
         <li>
           {profile.firstName} {profile.lastName}{" "}

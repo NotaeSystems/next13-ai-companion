@@ -1,27 +1,47 @@
-import { Metadata } from "next";
+import prismadb from "@/lib/prismadb";
+import { Categories } from "@/components/categories";
+import { Companions } from "@/components/companions";
+import { SearchInput } from "@/components/search-input";
+import { MainNavbar } from "@/components/main-navbar";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Poppins } from "next/font/google";
-import { MainNavbar } from "@/components/main-navbar";
-import { Hero } from "@/components/home-page/hero";
-import { Header } from "@/components/home-page/header";
-import { Footer } from "@/components/home-page/footer";
+import { auth, redirectToSignIn } from "@clerk/nextjs";
+interface RootPageProps {
+  searchParams: {
+    categoryId: string;
+    name: string;
+  };
+}
 
-import { useProModal } from "@/hooks/use-pro-modal";
+const RootPage = async ({ searchParams }: RootPageProps) => {
+  const data = await prismadb.companion.findMany({
+    where: {
+      categoryId: searchParams.categoryId,
+      // name: {
+      //   search: searchParams.name,
+      // },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      _count: {
+        select: {
+          messages: true,
+        },
+      },
+    },
+  });
 
-const font = Poppins({ weight: "600", subsets: ["latin"] });
+  const categories = await prismadb.category.findMany();
 
-export const metadata: Metadata = {
-  title: "Smarty Persona - Home page",
-};
-
-export default function Page() {
   return (
-    <div>
-      <h1>Coming Soon!</h1>
-      {/* <Header />
-      <Hero />
-      <Footer /> */}
+    <div className="h-full p-4 space-y-2">
+      {/* <SearchInput /> */}
+      {/* <Categories data={categories} /> */}
+      <Companions data={data} />
     </div>
   );
-}
+};
+
+export default RootPage;

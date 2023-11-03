@@ -1,42 +1,42 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
-  provider = "mongodb"
-  url = env("DATABASE_URL")
+  provider     = "mongodb"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 model Category {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  companions    Companion[]
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  companions Companion[]
 }
 
 model Companion {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   userId        String
   userName      String
   src           String
-  name          String 
+  name          String
   description   String
-  instructions  String 
-  temperature   Float @default(0.5)
-  seed          String 
-  relationship  String @default("User is a stranger and a fan to companion")
-  voiceId       String @default("2Egq65mAdch3uRX23oDd")
+  instructions  String
+  temperature   Float          @default(0.5)
+  seed          String
+  relationship  String         @default("User is a stranger and a fan to companion")
+  voiceId       String         @default("2Egq65mAdch3uRX23oDd")
   pineconeIndex String?
-  category      Category @relation(fields: [categoryId], references: [id])
-  categoryId    String @db.ObjectId
-  localChatApi  String @default("/api/streaming")
-  chatLink      String @default("chat")
+  category      Category       @relation(fields: [categoryId], references: [id])
+  categoryId    String         @db.ObjectId
+  localChatApi  String         @default("/api/streaming")
+  chatLink      String         @default("chat")
   messages      Message[]
   relationships Relationship[]
-  
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  notes Notes[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([categoryId])
   @@fulltext([name])
@@ -48,89 +48,105 @@ enum Role {
 }
 
 model Message {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  role        Role   
-  content     String   
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  role      Role
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  companionId String  @db.ObjectId
+  companionId String @db.ObjectId
   userId      String
 
-  companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
-  
+  companion Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
+
   @@index([companionId])
 }
 
 model Relationship {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  role          String?  
-  content       String?   
-  temperature   Float @default(0.5)
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  role          String?
+  content       String?
+  temperature   Float   @default(0.5)
   pineconeIndex String?
- 
-  companionId   String  @db.ObjectId
-  companion     Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
+
+  companionId String    @db.ObjectId
+  companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
   
-  userId        String 
+  userId String
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  conversations Int  @default(0)
-  conversationsLimit Int  @default(0)
+  conversations      Int @default(0)
+  conversationsLimit Int @default(0)
 
   @@index([companionId])
   @@index([userId])
 }
 
 model User {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  role        String
-  name        String
-  email       String
-  encrypted_password  String   
-  content     String   
-  conversations Int  @default(0)
-  conversationsLimit Int  @default(10)
+  id                 String @id @default(auto()) @map("_id") @db.ObjectId
+  role               String
+  name               String
+  email              String
+  encrypted_password String
+  content            String
+  conversations      Int    @default(0)
+  conversationsLimit Int    @default(10)
   //companionId String  @db.ObjectId
   //userId      String
   //relationships Relationship[]
-  
+
   //companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   //@@index([companionId])
 }
 
 model Profile {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String    @unique
-  role        String    @default("user")
-  firstName   String  @default("unknown")
-  lastName    String  @default("unknown")
-  nickNames    String  @default("friend")
-  email       String?
-  phone       String?
-  content     String? 
-  gender      String? @default("unknown")
-  educationLevel    String? @default("High School")
-  ageLevel   String? @default("unknown")
-  conversations Int       @default(0)
-  conversationsLimit Int  @default(10)
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String  @unique
+  role               String  @default("user")
+  firstName          String  @default("unknown")
+  lastName           String  @default("unknown")
+  nickNames          String  @default("friend")
+  email              String?
+  phone              String?
+  content            String?
+  gender             String? @default("unknown")
+  educationLevel     String? @default("High School")
+  ageLevel           String? @default("unknown")
+  conversations      Int     @default(0)
+  conversationsLimit Int     @default(10)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   //@@index([companionId])
 }
 
 model UserSubscription {
-  id                        String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId                    String    @unique
-  stripeCustomerId          String?   @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId      String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId             String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd    DateTime? @map(name: "stripe_current_period_end")
+  id                     String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId                 String    @unique
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+}
+model Notes {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  content       String
+
+  companionId   String  @db.ObjectId
+  companion     Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
+ 
+  userId        String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("notes")
+  @@index([companionId])
+  @@index([userId])
 }
