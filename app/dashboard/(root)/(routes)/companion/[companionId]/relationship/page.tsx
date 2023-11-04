@@ -5,7 +5,7 @@ import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 import { exists } from "@pinecone-database/pinecone/dist/pinecone-generated-ts-fetch";
 
-//import { CompanionForm } from "@/components/companion-form";
+import { RelationshipForm } from "./components/relationship-form";
 
 interface CompanionIdPageProps {
   params: {
@@ -13,7 +13,7 @@ interface CompanionIdPageProps {
   };
 }
 
-const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
+const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
   const { userId } = auth();
 
   if (!userId) {
@@ -51,25 +51,32 @@ const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
       userId: userId,
     },
   });
-  if (relationship) {
-    return (
-      <>
-        <h1>You are already in a Relationship with {companion.name}</h1>
-      </>
-    );
-  }
+  // if (relationship) {
+  //   return (
+  //     <>
+  //       <h1>You are already in a Relationship with {companion.name}</h1>
+  //     </>
+  //   );
+  // }
   // Create relationship between user and companion
-  relationship = await prismadb.relationship.create({
-    data: {
-      userId: userId,
-      companionId: companion.id,
-      role: "user",
-      content: "You are a friendly stranger to Assistant",
-    },
-  });
+  if (!relationship) {
+    relationship = await prismadb.relationship.create({
+      data: {
+        userId: userId,
+        companionId: companion.id,
+        role: "user",
+        content: "You are a friendly stranger to Assistant",
+      },
+    });
+  }
   //const categories = await prismadb.category.findMany();
 
-  return <h1>You are now in a Relationship with Companion-{companion.name}</h1>;
+  return (
+    <>
+      <h1>You are now in a Relationship with Companion-{companion.name}</h1>
+      <RelationshipForm Companion={companion} Relationship={relationship} />;
+    </>
+  );
 };
 
-export default CompanionIdPage;
+export default RelationshipPage;

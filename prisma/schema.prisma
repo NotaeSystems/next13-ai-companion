@@ -71,6 +71,8 @@ model Relationship {
 
   userId        String  // clerk's authenication userId of logged-in user
   
+  status        String  @default("Active")
+  
   companionId   String    @db.ObjectId
   companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
   
