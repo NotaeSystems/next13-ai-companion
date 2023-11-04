@@ -40,11 +40,15 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
     return redirectToSignIn();
   }
 
+  // find all the active relationships between logged-in user and companion
+  // TODO only find companions that status: Active
+
   const relationships = await prismadb.relationship.findMany({
     where: { userId: userId },
 
     include: { companion: true },
   });
+
   console.log(
     "relationships: " + JSON.stringify(relationships[1].companion.name)
   );

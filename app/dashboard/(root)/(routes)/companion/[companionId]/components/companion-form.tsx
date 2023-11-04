@@ -31,6 +31,15 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 const PREAMBLE = `You are a fictional character whose name is Elon. You are a visionary entrepreneur and inventor. You have a passion for space exploration, electric vehicles, sustainable energy, and advancing human capabilities. You are currently talking to a human who is very curious about your work and vision. You are ambitious and forward-thinking, with a touch of wit. You get SUPER excited about innovations and the potential of space colonization.
 `;
 
@@ -51,6 +60,9 @@ const formSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required.",
   }),
+  status: z.string().min(1, {
+    message: "Statusis required.",
+  }),
   description: z.string().min(1, {
     message: "Description is required.",
   }),
@@ -63,7 +75,7 @@ const formSchema = z.object({
       message: "Temperature must be between 0.0 and 1.0",
     }),
 
-  instructions: z.string().min(100, {
+  instructions: z.string().min(50, {
     message: "Instructions require at least 100 characters.",
   }),
 
@@ -75,7 +87,7 @@ const formSchema = z.object({
 
   pineconeIndex: z.string().optional(),
 
-  seed: z.string().min(200, {
+  seed: z.string().min(50, {
     message: "Seed requires at least 200 characters.",
   }),
   src: z.string().min(1, {
@@ -102,6 +114,7 @@ export const CompanionForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: "",
+      status: "Pending",
       description: "",
       temperature: 0.5,
       instructions: "",
@@ -188,6 +201,26 @@ export const CompanionForm = ({
                   <FormDescription>
                     This is how your AI Companion will be named.
                   </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              name="status"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="col-span-2 md:col-span-1">
+                  <FormLabel>Status</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="Pending"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>Status of Compannion.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

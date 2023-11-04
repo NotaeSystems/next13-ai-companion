@@ -17,7 +17,10 @@ model Category {
 
 model Companion {
   id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String
+  status        String         @default("Pending")   // Pending, Active, Deleted, Suspended
+  public        Boolean         @default(true)   // companion can be available to public or private
+
+  userId        String          // the root owner of this persona, can delete and edit
   userName      String
   src           String
   name          String
@@ -27,7 +30,7 @@ model Companion {
   seed          String
   relationship  String         @default("User is a stranger and a fan to companion")
   voiceId       String         @default("2Egq65mAdch3uRX23oDd")
-  pineconeIndex String?
+  pineconeIndex String         
   category      Category       @relation(fields: [categoryId], references: [id])
   categoryId    String         @db.ObjectId
   localChatApi  String         @default("/api/streaming")
@@ -62,23 +65,31 @@ model Message {
   @@index([companionId])
 }
 
+// the relationship between the user and the persona-companion
 model Relationship {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  role          String?
-  content       String?
-  temperature   Float   @default(0.5)
-  pineconeIndex String?
 
-  companionId String    @db.ObjectId
+  userId        String  // clerk's authenication userId of logged-in user
+  
+  companionId   String    @db.ObjectId
   companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
   
-  userId String
+  title         String? @default("")
+  
+  // determing the context between user and persona
+  role          String  @default("You are a friendly stranger to user")   //role of the user: User, Admin, Manager
+  content       String?  // starting context of the persona from profile of the user
+  temperature   Float   @default(0.5) // the temperature of the relationship between user and persona
+  pineconeIndex String? // if there is a pinconeIndex then additonal context about user from pinecone will be used 
+
+  // for billing purposes
+  conversations      Int @default(0)
+  conversationsLimit Int @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  conversations      Int @default(0)
-  conversationsLimit Int @default(0)
+
 
   @@index([companionId])
   @@index([userId])
@@ -104,6 +115,7 @@ model User {
   //@@index([companionId])
 }
 
+// profile contains the default notes about a user and any persona subscribed 
 model Profile {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   userId             String  @unique
@@ -136,6 +148,7 @@ model UserSubscription {
 }
 model Notes {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  title         String @default("title")
   content       String
 
   companionId   String  @db.ObjectId

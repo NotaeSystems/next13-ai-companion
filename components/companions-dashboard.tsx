@@ -23,6 +23,8 @@ export const CompanionsDashboard = ({ data }: CompanionsProps) => {
     );
   }
 
+  // determine if user is owner
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 pb-10">
       {data.map((item: any) => (
@@ -44,9 +46,11 @@ export const CompanionsDashboard = ({ data }: CompanionsProps) => {
               </div>
               <p className="font-bold">{item.companion.name}</p>
               <p className="text-xs">{item.companion.description}</p>
+              <p> Status: {item.companion.status} </p>
             </CardHeader>
             <CardFooter className="flex items-center justify-between text-xs text-muted-foreground">
               <p className="lowercase">@{item.companion.userName}</p>
+
               {/* <div className="flex items-center">
                 <MessagesSquare className="w-3 h-3 mr-1" />
                 {item._count.messages}

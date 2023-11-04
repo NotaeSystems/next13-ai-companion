@@ -14,6 +14,7 @@ export async function PATCH(
     const {
       src,
       name,
+      status,
       description,
       instructions,
       temperature,
@@ -37,6 +38,7 @@ export async function PATCH(
     if (
       !src ||
       !name ||
+      !status ||
       !description ||
       !instructions ||
       !seed ||
@@ -62,6 +64,7 @@ export async function PATCH(
         userName: user.firstName,
         src,
         name,
+        status,
         description,
         instructions,
         pineconeIndex,
