@@ -4,6 +4,7 @@ import { CompanionsDashboard } from "@/components/companions-dashboard";
 import { SearchInput } from "@/components/search-input";
 import { MainNavbar } from "@/components/main-navbar";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 interface RootPageProps {
@@ -55,8 +56,12 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
   const data: any = relationships;
   return (
     <div className="h-full p-4 space-y-2">
-      <Link href="/dashboard/profile/{userId}">Profile- {userId}</Link>
-
+      <Button>
+        <Link href="/dashboard/profile/{userId}">Your Profile</Link>
+      </Button>
+      <Button>
+        <Link href="/dashboard/settings">Billing</Link>
+      </Button>
       {/* <SearchInput /> */}
       {/* <Categories data={categories} /> */}
       <CompanionsDashboard data={data} />

@@ -6,6 +6,9 @@ import { checkSubscription } from "@/lib/subscription";
 import { exists } from "@pinecone-database/pinecone/dist/pinecone-generated-ts-fetch";
 
 import { RelationshipForm } from "./components/relationship-form";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 interface CompanionIdPageProps {
   params: {
@@ -74,6 +77,17 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
   return (
     <>
       <h1>You are now in a Relationship with Companion-{companion.name}</h1>
+      <div className="flex justify-center col-auto">
+        <h1>{companion.name}</h1>
+      </div>
+      <div className="flex justify-center col-auto">
+        <Image
+          src={companion.src}
+          width={125}
+          height={125}
+          alt="Picture of the author"
+        />
+      </div>
       <RelationshipForm Companion={companion} Relationship={relationship} />;
     </>
   );

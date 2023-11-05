@@ -47,7 +47,7 @@
     "flowise-embed-react": "^1.0.1",
     "langchain": "^0.0.175",
     "lucide-react": "^0.263.0",
-    "next": "^14.0.1",
+    "next": "^13.5.4",
     "next-auth": "^4.24.4",
     "next-cloudinary": "^4.16.0",
     "next-themes": "^0.2.1",

@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { ImageUpload } from "@/components/image-upload";
 import { useToast } from "@/components/ui/use-toast";
 import { Separator } from "@/components/ui/separator";
@@ -104,6 +105,9 @@ export const RelationshipForm = ({
 
   return (
     <div className="h-full p-4 space-y-2 max-w-3xl mx-auto">
+      <Button variant="destructive">
+        <Link href={`/dashboard/companion/relationship`}>End Relationship</Link>
+      </Button>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

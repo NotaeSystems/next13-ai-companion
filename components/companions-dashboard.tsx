@@ -33,7 +33,8 @@ export const CompanionsDashboard = ({ data }: CompanionsProps) => {
           className="bg-primary/10 rounded-xl cursor-pointer hover:opacity-75 transition border-0"
         >
           <Link
-            href={`/dashboard/${item.companion.chatLink}/${item.companion.id}`}
+            // href={`/dashboard/${item.companion.chatLink}/${item.companion.id}`}
+            href={`/dashboard/companion/${item.companion.id}`}
           >
             <CardHeader className="flex items-center justify-center text-center text-muted-foreground">
               <div className="relative w-32 h-32">
