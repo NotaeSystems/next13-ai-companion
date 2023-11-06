@@ -2,7 +2,7 @@ import prismadb from "@/lib/prismadb";
 import { Categories } from "@/components/categories";
 import { Companions } from "@/components/companions";
 import { SearchInput } from "@/components/search-input";
-import { MainNavbar } from "@/components/main-navbar";
+import { MainNavbar } from "@/components/navbars/main-navbar";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { auth, redirectToSignIn } from "@clerk/nextjs";

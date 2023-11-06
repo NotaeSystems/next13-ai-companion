@@ -8,6 +8,7 @@ import { CompanionForm } from "./components/companion-form";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { CompanionNavbar } from "@/components/navbars/companion-navbar";
 interface CompanionIdPageProps {
   params: {
     companionId: string;
@@ -44,27 +45,9 @@ const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
 
   return (
     <>
+      <CompanionNavbar companion={companion} />
       <h1>{companion.name}</h1>
-      <Image
-        src={companion.src}
-        width={250}
-        height={250}
-        alt="Picture of the author"
-      />
-      <Button>
-        <Link href={`/dashboard/companion/${companion.id}/relationship`}>
-          Relationship
-        </Link>
-      </Button>
-      <Button>
-        <Link href={`/dashboard/${companion.chatLink}/${companion.id}`}>
-          Chat
-        </Link>
-      </Button>
-      <Button>
-        <Link href={`/dashboard/companion/${companion.id}/edit`}>Edit</Link>
-      </Button>
-      {/* <CompanionForm initialData={companion} categories={categories} /> */}
+      <p>{companion.description}</p>
     </>
   );
 };

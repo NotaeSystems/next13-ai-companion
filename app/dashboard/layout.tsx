@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ProModal } from "@/components/pro-modal";
+import { DashboardNavbar } from "@/components/navbars/dashboard-navbar";
 
 import "..//globals.css";
 
@@ -23,6 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+      <DashboardNavbar />
       <ProModal />
       {children}
       <Toaster />

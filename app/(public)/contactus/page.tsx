@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { MainNavbar } from "@/components/main-navbar";
+import { MainNavbar } from "@/components/navbars/main-navbar";
 
 export const metadata: Metadata = {
   title: "Smarty Clone-Contact Us",

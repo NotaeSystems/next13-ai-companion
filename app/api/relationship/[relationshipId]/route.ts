@@ -6,44 +6,33 @@ import { checkSubscription } from "@/lib/subscription";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { companionId: string } }
+  { params }: { params: { relationshipId: string } }
 ) {
   try {
+    console.log("inside of /api/relationship");
     const body = await req.json();
     const user = await currentUser();
     const {
-      src,
-      name,
       status,
-      description,
-      instructions,
-      temperature,
-      seed,
-      relationship,
+
+      content,
+      //temperature,
+
       pineconeIndex,
-      voiceId,
-      categoryId,
     } = body;
 
-    console.log("relationship: " + relationship);
+    //console.log("relationship: " + relationship);
 
-    if (!params.companionId) {
-      return new NextResponse("Companion ID required", { status: 400 });
+    if (!params.relationshipId) {
+      return new NextResponse("Relationship ID required", { status: 400 });
     }
 
     if (!user || !user.id || !user.firstName) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (
-      !src ||
-      !name ||
-      !status ||
-      !description ||
-      !instructions ||
-      !seed ||
-      !categoryId
-    ) {
+    if (!status) {
+      console.log("missing fields");
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
@@ -53,31 +42,23 @@ export async function PATCH(
       return new NextResponse("Pro subscription required", { status: 403 });
     }
 
-    const companion = await prismadb.companion.update({
+    let relationship = null;
+    relationship = await prismadb.relationship.update({
       where: {
-        id: params.companionId,
-        userId: user.id,
+        id: params.relationshipId,
       },
       data: {
-        categoryId,
-        userId: user.id,
-        userName: user.firstName,
-        src,
-        name,
         status,
-        description,
-        instructions,
+        content,
+        // instructions,
         pineconeIndex,
-        temperature,
-        seed,
-        relationship,
-        voiceId,
+        //temperature,
       },
     });
 
-    return NextResponse.json(companion);
+    return NextResponse.json(relationship);
   } catch (error) {
-    console.log("[COMPANION_PATCH]", error);
+    // console.log("[COMPANION_PATCH]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 //import { ProModal } from '@/components/pro-modal';
-import { MainNavbar } from "@/components/main-navbar";
+import { MainNavbar } from "@/components/navbars/main-navbar";
 
 import "./globals.css";
 

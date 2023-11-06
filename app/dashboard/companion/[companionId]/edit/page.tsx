@@ -5,17 +5,16 @@ import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 
 import { CompanionForm } from "./components/companion-form";
-
+import { CompanionNavbar } from "@/components/navbars/companion-navbar";
 interface CompanionIdPageProps {
   params: {
     companionId: string;
   };
-};
+}
 
-const CompanionIdPage = async ({
-  params
-}: CompanionIdPageProps) => {
+const EditCompanionPage = async ({ params }: CompanionIdPageProps) => {
   const { userId } = auth();
+  console.log("inside of EditCompanionPage");
 
   if (!userId) {
     return redirectToSignIn();
@@ -23,25 +22,33 @@ const CompanionIdPage = async ({
 
   const validSubscription = await checkSubscription();
 
-  if (!validSubscription) {
-    return redirect("/");
+  // if (!validSubscription) {
+  //   return redirect("/");
+  // }
+
+  let companion = null;
+  if (params.companionId != "new") {
+    companion = await prismadb.companion.findUnique({
+      where: {
+        id: params.companionId,
+        userId,
+      },
+    });
   }
-
-  let companion = null
-  if (params.companionId != 'new'){
-  companion = await prismadb.companion.findUnique({
-    where: {
-      id: params.companionId,
-      userId,
-    }
-  })
-}
-
+  if (!companion) {
+    console.log("companion Not Found");
+    return redirect("/dashboard");
+  }
   const categories = await prismadb.category.findMany();
 
-  return ( 
-    <CompanionForm initialData={companion} categories={categories} />
+  console.log("getting ready to return");
+  return (
+    <>
+      <CompanionNavbar companion={companion} />
+      <h1> Edit Companion</h1>
+      <CompanionForm initialData={companion} categories={categories} />
+    </>
   );
-}
- 
-export default CompanionIdPage;
+};
+
+export default EditCompanionPage;

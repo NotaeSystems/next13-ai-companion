@@ -34,23 +34,16 @@ import {
 } from "@/components/ui/select";
 
 const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Name is required.",
-  }),
+  // name: z.string().min(1, {
+  //   message: "Name is required.",
+  // }),
   status: z.string().min(1, {
     message: "Status is required.",
   }),
 
-  temperature: z.coerce
-    .number()
-    .min(0, {
-      message: "Temperature at least 0.0 required.",
-    })
-    .max(1.0, {
-      message: "Temperature must be between 0.0 and 1.0",
-    }),
+  //temperature: z.string(),
 
-  content: z.string().min(50, {
+  content: z.string().min(25, {
     message: "Instructions require at least 100 characters.",
   }),
 
@@ -76,7 +69,7 @@ export const RelationshipForm = ({
       name: "",
       status: "Pending",
       content: "",
-      temperature: "0.5",
+      //temperature: 0.5,
       pineconeIndex: "",
     },
   });
@@ -85,6 +78,7 @@ export const RelationshipForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      console.log("inside of submit");
       await axios.patch(`/api/relationship/${Relationship.id}`, values);
 
       toast({
@@ -93,7 +87,7 @@ export const RelationshipForm = ({
       });
 
       router.refresh();
-      router.push("/");
+      router.push(`/dashboard/companion/${Relationship.companionId}`);
     } catch (error) {
       toast({
         variant: "destructive",
@@ -181,16 +175,14 @@ export const RelationshipForm = ({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="temperature"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Temperature</FormLabel>
                   <Select
-                    disabled={isLoading}
                     onValueChange={field.onChange}
-                    value={field.value}
                     defaultValue={field.value}
                   >
                     <FormControl>
@@ -202,19 +194,27 @@ export const RelationshipForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value={"0.0"}>{"Blunt"}</SelectItem>
+                      <SelectItem value="0.0">{"Very Blunt"}</SelectItem>
+                      <SelectItem value="0.1">{"Blunt"}</SelectItem>
+                      <SelectItem value="0.2">{"Very Quiet"}</SelectItem>
+                      <SelectItem value="0.3">{"Quiet"}</SelectItem>
+                      <SelectItem value="0.4">{"Reserved"}</SelectItem>
+                      <SelectItem value="0.5">{"Less Reserved"}</SelectItem>
+                      <SelectItem value="0.6">{"Average"}</SelectItem>
+                      <SelectItem value="0.7">{"Friendly"}</SelectItem>
+                      <SelectItem value="0.8">{"More Friendly"}</SelectItem>
 
-                      <SelectItem value={"0.0"}>{"Very Talkative"}</SelectItem>
+                      <SelectItem value="0.9">{"Talkative"}</SelectItem>
+                      <SelectItem value={"1.0"}>{"Very Talkative"}</SelectItem>
                     </SelectContent>
                   </Select>
-
                   <FormDescription>
                     Select a temperature for your AI
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage />y
                 </FormItem>
               )}
-            />
+            /> */}
           </div>
 
           <div className="w-full flex justify-center">

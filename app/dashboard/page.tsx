@@ -2,7 +2,7 @@ import prismadb from "@/lib/prismadb";
 import { Categories } from "@/components/categories";
 import { CompanionsDashboard } from "@/components/companions-dashboard";
 import { SearchInput } from "@/components/search-input";
-import { MainNavbar } from "@/components/main-navbar";
+import { MainNavbar } from "@/components/navbars/main-navbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -56,15 +56,15 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
   const data: any = relationships;
   return (
     <div className="h-full p-4 space-y-2">
-      <Button>
+      {/* <Button>
         <Link href="/dashboard/profile/{userId}">Your Profile</Link>
       </Button>
       <Button>
         <Link href="/dashboard/settings">Billing</Link>
-      </Button>
-      {/* <SearchInput /> */}
-      {/* <Categories data={categories} /> */}
+      </Button> */}
       <CompanionsDashboard data={data} />
+      {/* <SearchInput /> 
+      {<Categories data={categories} />} */}
     </div>
   );
 };
