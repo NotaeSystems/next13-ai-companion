@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Profile } from "@prisma/client";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 import prismadb from "@/lib/prismadb";
+import { ProfileForm } from "./components/profile-form";
 
 export const metadata: Metadata = {
   title: "Smarty Persona-Profile",
@@ -44,18 +45,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
         Give some information about you so that your Persona can better converse
         with you.
       </p>
-      <ul>
-        <li>
-          {profile.firstName} {profile.lastName}{" "}
-        </li>
-        <li>Gender: {profile.gender}</li>
-        <li>Nicknames: {profile.nickNames}</li>
-        <li>Email: {profile.email}</li>
-        <li>Education Level: {profile.educationLevel}</li>
-        <li>Email: {profile.ageLevel}</li>
-        <li>Conversations: {profile.conversations}</li>
-        <li>ConversationsLimit: {profile.conversationsLimit}</li>
-      </ul>
+      <ProfileForm Profile={profile} />
     </div>
   );
 };

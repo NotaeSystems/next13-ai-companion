@@ -41,7 +41,14 @@ const formSchema = z.object({
     message: "Status is required.",
   }),
 
-  //temperature: z.string(),
+  temperature: z.coerce
+    .number()
+    .min(0, {
+      message: "Temperature at least 0.0 required.",
+    })
+    .max(1.0, {
+      message: "Temperature must be between 0.0 and 1.0",
+    }),
 
   content: z.string().min(25, {
     message: "Instructions require at least 100 characters.",
@@ -69,8 +76,8 @@ export const RelationshipForm = ({
       name: "",
       status: "Pending",
       content: "",
-      //temperature: 0.5,
-      pineconeIndex: "",
+      temperature: "0.5",
+      pineconeIndex: "none",
     },
   });
 
@@ -119,24 +126,36 @@ export const RelationshipForm = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
-              name="status"
               control={form.control}
+              name="status"
               render={({ field }) => (
-                <FormItem className="col-span-2 md:col-span-1">
+                <FormItem>
                   <FormLabel>Status</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="Pending"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Status of Compannion.</FormDescription>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a temperature"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Pending">Pending</SelectItem>
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="Suspended">Suspended</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select a temperature for your AI
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               name="pineconeIndex"
               control={form.control}
@@ -155,21 +174,19 @@ export const RelationshipForm = ({
                 </FormItem>
               )}
             />
+
             <FormField
-              name="content"
+              name="temperature"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="col-span-2 md:col-span-1">
-                  <FormLabel>Facts about your relationship</FormLabel>
+                <FormItem>
+                  <FormLabel>Temperature</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="I am a great fan of you"
-                      {...field}
-                    />
+                    <Input disabled={isLoading} placeholder="0.5" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Facts about your relationship.
+                    Select a temperature from 0.0 to 1.0 with 0.0 being Blunt
+                    and 1.0 being very Talkative
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -205,18 +222,42 @@ export const RelationshipForm = ({
                       <SelectItem value="0.8">{"More Friendly"}</SelectItem>
 
                       <SelectItem value="0.9">{"Talkative"}</SelectItem>
-                      <SelectItem value={"1.0"}>{"Very Talkative"}</SelectItem>
+                      <SelectItem value="1.0">{"Very Talkative"}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>
                     Select a temperature for your AI
                   </FormDescription>
-                  <FormMessage />y
+                  <FormMessage />
                 </FormItem>
               )}
             /> */}
           </div>
-
+          <div>
+            <FormField
+              name="content"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Facts About Relationship</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      disabled={isLoading}
+                      rows={15}
+                      className="bg-background resize-none"
+                      //placeholder={PREAMBLE}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Describe in detail your relationship with Companion and
+                    relevant details.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <div className="w-full flex justify-center">
             <Button size="lg" disabled={isLoading}>
               Edit your relationship

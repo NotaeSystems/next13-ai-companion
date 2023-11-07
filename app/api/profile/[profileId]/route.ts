@@ -6,24 +6,17 @@ import { checkSubscription } from "@/lib/subscription";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { relationshipId: string } }
+  { params }: { params: { profileId: string } }
 ) {
   try {
-    console.log("inside of /api/relationship");
+    console.log("inside of /api/profile");
     const body = await req.json();
     const user = await currentUser();
-    const {
-      status,
-
-      content,
-      temperature,
-
-      pineconeIndex,
-    } = body;
+    const { firstName, lastName, gender, educationLevel, ageLevel } = body;
 
     //console.log("relationship: " + relationship);
 
-    if (!params.relationshipId) {
+    if (!params.profileId) {
       return new NextResponse("Relationship ID required", { status: 400 });
     }
 
@@ -31,32 +24,32 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!status) {
-      console.log("missing fields");
-      return new NextResponse("Missing required fields", { status: 400 });
-    }
+    // if (!status) {
+    //   console.log("missing fields");
+    //   return new NextResponse("Missing required fields", { status: 400 });
+    // }
 
-    const isPro = await checkSubscription();
+    // const isPro = await checkSubscription();
 
-    if (!isPro) {
-      return new NextResponse("Pro subscription required", { status: 403 });
-    }
+    // if (!isPro) {
+    //   return new NextResponse("Pro subscription required", { status: 403 });
+    // }
 
-    let relationship = null;
-    relationship = await prismadb.relationship.update({
+    let profile = null;
+    profile = await prismadb.profile.update({
       where: {
-        id: params.relationshipId,
+        id: params.profileId,
       },
       data: {
-        status,
-        content,
-        // instructions,
-        pineconeIndex,
-        temperature: Number(temperature),
+        lastName,
+        firstName,
+        gender,
+        educationLevel,
+        ageLevel,
       },
     });
-    console.log(relationship);
-    return NextResponse.json(relationship);
+    console.log(profile);
+    return NextResponse.json(profile);
   } catch (error) {
     // console.log("[COMPANION_PATCH]", error);
     return new NextResponse("Internal Error", { status: 500 });
@@ -65,7 +58,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { companionId: string } }
+  { params }: { params: { profileId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -74,16 +67,16 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const companion = await prismadb.companion.delete({
+    const cprofile = await prismadb.companion.delete({
       where: {
         userId,
-        id: params.companionId,
+        id: params.profileId,
       },
     });
 
-    return NextResponse.json(companion);
+    return NextResponse.json(profile);
   } catch (error) {
-    console.log("[COMPANION_DELETE]", error);
+    // console.log("[COMPANION_DELETE]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

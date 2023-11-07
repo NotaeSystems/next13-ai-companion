@@ -80,9 +80,9 @@ model Relationship {
   
   // determing the context between user and persona
   role          String  @default("You are a friendly stranger to user")   //role of the user: User, Admin, Manager
-  content       String @default("I am the ex-wife of Jimmy")  // starting context of the persona from profile of the user
-  // temperature   Float   @default(0.5) // the temperature of the relationship between user and persona
-  pineconeIndex String  @default("") // if there is a pinconeIndex then additonal context about user from pinecone will be used 
+  content       String @default("I am a great fan of yours.")  // starting context of the persona from profile of the user
+  temperature   Float   @default(0.5) // the temperature of the relationship between user and persona
+  pineconeIndex String   @default("None")  // if there is a pineconeIndex then additonal context about user from pinecone will be used 
 
   // for billing purposes
   conversations      Int @default(0)
@@ -129,7 +129,7 @@ model Profile {
   phone              String?
   content            String?
   gender             String? @default("unknown")
-  educationLevel     String? @default("High School")
+  educationLevel     String? @default("unknown")
   ageLevel           String? @default("unknown")
   conversations      Int     @default(0)
   conversationsLimit Int     @default(10)

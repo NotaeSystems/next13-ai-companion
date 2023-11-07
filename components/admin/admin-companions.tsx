@@ -11,7 +11,7 @@ interface CompanionsProps {
   data: any;
 }
 
-export const CompanionsDashboard = ({ data }: CompanionsProps) => {
+export const AdminCompanions = ({ data }: CompanionsProps) => {
   if (data.length === 0) {
     return (
       <div className="pt-10 flex flex-col items-center justify-center space-y-3">
@@ -32,25 +32,23 @@ export const CompanionsDashboard = ({ data }: CompanionsProps) => {
           key={item.id}
           className="bg-primary/10 rounded-xl cursor-pointer hover:opacity-75 transition border-0"
         >
-          <Link
-            // href={`/dashboard/${item.companion.chatLink}/${item.companion.id}`}
-            href={`/dashboard/companion/${item.id}`}
-          >
+          <Link href={`/admin/companion/${item.id}`}>
             <CardHeader className="flex items-center justify-center text-center text-muted-foreground">
               <div className="relative w-32 h-32">
                 <Image
-                  src={item.companion.src}
+                  src={item.src}
                   fill
                   className="rounded-xl object-cover"
                   alt="Character"
                 />
               </div>
-              <p className="font-bold">{item.companion.name}</p>
-              <p className="text-xs">{item.companion.description}</p>
-              <p> Status: {item.companion.status} </p>
+              <p className="font-bold">{item.name}</p>
+              <p className="text-xs">{item.description}</p>
+              <p> Status: {item.status} </p>
+              <p> Public: {item.public} </p>
             </CardHeader>
             <CardFooter className="flex items-center justify-between text-xs text-muted-foreground">
-              <p className="lowercase">@{item.companion.userName}</p>
+              <p className="lowercase">@{item.userName}</p>
 
               {/* <div className="flex items-center">
                 <MessagesSquare className="w-3 h-3 mr-1" />
