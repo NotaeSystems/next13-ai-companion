@@ -37,6 +37,7 @@ model Companion {
   chatLink      String         @default("chat")
   messages      Message[]
   relationships Relationship[]
+  groups        Group[]
   notes Notes[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -76,6 +77,9 @@ model Relationship {
   companionId   String    @db.ObjectId
   companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
   
+  // profileId   String    @db.ObjectId
+  // profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
   title         String? @default("")
   
   // determing the context between user and persona
@@ -92,6 +96,29 @@ model Relationship {
   updatedAt DateTime @updatedAt
 
 
+
+  @@index([companionId])
+  @@index([userId])
+}
+
+// the relationship between the user and the persona-companion
+model Group {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  status        String  @default("Active")
+  name          String @default("Group")
+
+  userId        String  // clerk's authenication userId of logged-in user
+  role          String @default("Member") // Admin, Member
+ 
+  companionId   String    @db.ObjectId
+  companion     Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
+  
+  // for billing purposes
+  conversations      Int @default(0)
+  conversationsLimit Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([companionId])
   @@index([userId])
@@ -120,6 +147,7 @@ model User {
 // profile contains the default notes about a user and any persona subscribed 
 model Profile {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  status              String @default("Active")
   userId             String  @unique
   role               String  @default("user")
   firstName          String  @default("unknown")
@@ -133,6 +161,10 @@ model Profile {
   ageLevel           String? @default("unknown")
   conversations      Int     @default(0)
   conversationsLimit Int     @default(10)
+
+  
+  // relationships    Relationship[]
+  
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

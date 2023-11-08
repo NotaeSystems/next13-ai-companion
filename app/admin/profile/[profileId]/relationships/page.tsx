@@ -10,43 +10,42 @@ import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { AdminCompanionNavbar } from "@/components/navbars/admin-companion-navbar";
 
-interface CompanionIdPageProps {
+interface ProfileRelationshipsAdminPageProps {
   params: {
-    companionId: string;
+    profileId: string;
   };
 }
 
-const CompanionPage = async ({ params }: CompanionIdPageProps) => {
+const ProfileRelationshipsAdminPage = async ({
+  params,
+}: ProfileRelationshipsAdminPageProps) => {
   const { userId } = auth();
   console.log(userId);
   if (!userId) {
     return redirectToSignIn();
   }
 
-  let companion = null;
+  let profile = null;
 
-  companion = await prismadb.companion.findUnique({
+  profile = await prismadb.profile.findUnique({
     where: {
-      id: params.companionId,
-      userId,
+      id: params.profileId,
     },
   });
-
-  if (!companion) {
-    return redirect("/admin");
-  }
+  // console.log("profile relationships: " + profile.relationships);
+  // if (!companion) {
+  //   return redirect("/admin");
+  // }
 
   return (
     <>
       <div className="h-full p-4 space-y-2">
-        <AdminCompanionNavbar companion={companion} />
-        <h1>Companion: {companion.name}</h1>
-        <ul>
-          <li></li>
-        </ul>
+        {/* <AdminCompanionNavbar companion={companion} />
+        <h1>Chat with {companion.name}</h1> */}
+        <h2>Under Construction</h2>
       </div>
     </>
   );
 };
 
-export default CompanionPage;
+export default ProfileRelationshipsAdminPage;

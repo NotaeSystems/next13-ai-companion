@@ -5,9 +5,6 @@ import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 
 import { CompanionForm } from "./components/companion-form";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
 interface CompanionIdPageProps {
   params: {
@@ -15,9 +12,9 @@ interface CompanionIdPageProps {
   };
 }
 
-const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
-  console.log("made it to /dashboard/companion/[companionId]");
+const EditCompanionPage = async ({ params }: CompanionIdPageProps) => {
   const { userId } = auth();
+  console.log("inside of EditCompanionPage");
 
   if (!userId) {
     return redirectToSignIn();
@@ -25,32 +22,33 @@ const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
 
   const validSubscription = await checkSubscription();
 
-  if (!validSubscription) {
-    console.log("redirecting to /dashboard did not find subscription");
-    return redirect("/");
-  }
+  // if (!validSubscription) {
+  //   return redirect("/");
+  // }
 
   let companion = null;
-
-  companion = await prismadb.companion.findUnique({
-    where: {
-      id: params.companionId,
-    },
-  });
-
+  if (params.companionId != "new") {
+    companion = await prismadb.companion.findUnique({
+      where: {
+        id: params.companionId,
+        userId,
+      },
+    });
+  }
   if (!companion) {
-    console.log("redirecting to /dashboard did not find companion");
+    console.log("companion Not Found");
     return redirect("/dashboard");
   }
   const categories = await prismadb.category.findMany();
 
+  console.log("getting ready to return");
   return (
     <>
       <CompanionNavbar companion={companion} />
-      <h1>{companion.name}</h1>
-      <p>{companion.description}</p>
+      <h1> Edit Companion</h1>
+      <CompanionForm initialData={companion} categories={categories} />
     </>
   );
 };
 
-export default CompanionIdPage;
+export default EditCompanionPage;

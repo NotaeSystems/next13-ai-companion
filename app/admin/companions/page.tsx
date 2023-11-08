@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
+import { AdminCompanions } from "@/components/admin/admin-companions";
 interface RootPageProps {
   searchParams: {
     categoryId: string;
@@ -15,25 +16,6 @@ interface RootPageProps {
 }
 
 const RootPage = async ({ searchParams }: RootPageProps) => {
-  // const data = await prismadb.companion.findMany({
-  //   where: {
-  //     categoryId: searchParams.categoryId,
-  //     // name: {
-  //     //   search: searchParams.name,
-  //     // },
-  //   },
-  //   orderBy: {
-  //     createdAt: "desc",
-  //   },
-  //   include: {
-  //     _count: {
-  //       select: {
-  //         messages: true,
-  //       },
-  //     },
-  //   },
-  // });
-
   const categories = await prismadb.category.findMany();
   const { userId } = auth();
   console.log(userId);
@@ -50,10 +32,9 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
     include: { companion: true },
   });
 
-  // console.log(
-  //   "relationships: " + JSON.stringify(relationships[1].companion.name)
-  // );
-  const data: any = relationships;
+  const companions = await prismadb.companion.findMany({});
+
+  const data: any = companions;
   return (
     <div className="h-full p-4 space-y-2">
       {/* <Button>
@@ -62,7 +43,8 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
       <Button>
         <Link href="/dashboard/settings">Billing</Link>
       </Button> */}
-      <CompanionsDashboard data={data} />
+      {/* <CompanionsDashboard data={data} /> */}
+      <AdminCompanions data={companions} />
       {/* <SearchInput /> 
       {<Categories data={categories} />} */}
     </div>

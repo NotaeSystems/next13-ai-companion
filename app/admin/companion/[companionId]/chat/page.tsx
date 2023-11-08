@@ -10,13 +10,13 @@ import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { AdminCompanionNavbar } from "@/components/navbars/admin-companion-navbar";
 
-interface CompanionIdPageProps {
+interface ChatAdminPageProps {
   params: {
     companionId: string;
   };
 }
 
-const CompanionPage = async ({ params }: CompanionIdPageProps) => {
+const CompanionPage = async ({ params }: ChatAdminPageProps) => {
   const { userId } = auth();
   console.log(userId);
   if (!userId) {
@@ -40,10 +40,8 @@ const CompanionPage = async ({ params }: CompanionIdPageProps) => {
     <>
       <div className="h-full p-4 space-y-2">
         <AdminCompanionNavbar companion={companion} />
-        <h1>Companion: {companion.name}</h1>
-        <ul>
-          <li></li>
-        </ul>
+        <h1>Chat with {companion.name}</h1>
+        <h2>Under Construction</h2>
       </div>
     </>
   );

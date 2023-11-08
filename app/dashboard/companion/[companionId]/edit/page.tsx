@@ -26,6 +26,7 @@ const EditCompanionPage = async ({ params }: CompanionIdPageProps) => {
   //   return redirect("/");
   // }
 
+  // looking up companion, if userId of companion is the same as logged-in user then can edit
   let companion = null;
   if (params.companionId != "new") {
     companion = await prismadb.companion.findUnique({
@@ -36,7 +37,7 @@ const EditCompanionPage = async ({ params }: CompanionIdPageProps) => {
     });
   }
   if (!companion) {
-    console.log("companion Not Found");
+    console.log("companion Not Found. Is user the owner of the companion?");
     return redirect("/dashboard");
   }
   const categories = await prismadb.category.findMany();
