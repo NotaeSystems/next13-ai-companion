@@ -60,9 +60,9 @@ const formSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required.",
   }),
-  status: z.string().min(1, {
-    message: "Statusis required.",
-  }),
+  // status: z.string().min(1, {
+  //   message: "Status is required.",
+  // }),
   description: z.string().min(1, {
     message: "Description is required.",
   }),
@@ -131,11 +131,11 @@ export const CompanionForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      if (initialData) {
-        await axios.patch(`/api/companion/${initialData.id}`, values);
-      } else {
-        await axios.post("/api/companion", values);
-      }
+      //   if (initialData) {
+      // await axios.patch(`/api/companion/${initialData.id}`, values);
+      //  } else {
+      await axios.post("/api/admin/new/companion/", values);
+      //  }
 
       toast({
         description: "Success.",
@@ -143,7 +143,7 @@ export const CompanionForm = ({
       });
 
       router.refresh();
-      router.push("/admin");
+      router.push("/");
     } catch (error) {
       toast({
         variant: "destructive",

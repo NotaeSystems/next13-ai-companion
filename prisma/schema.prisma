@@ -30,7 +30,7 @@ model Companion {
   seed          String
   relationship  String         @default("User is a stranger and a fan to companion")
   voiceId       String         @default("2Egq65mAdch3uRX23oDd")
-  pineconeIndex String         
+  pineconeIndex String?         
   category      Category       @relation(fields: [categoryId], references: [id])
   categoryId    String         @db.ObjectId
   localChatApi  String         @default("/api/streaming")
@@ -148,7 +148,7 @@ model User {
 model Profile {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   status              String @default("Active")
-  userId             String  @unique
+  userId             String  @default("user")
   role               String  @default("user")
   firstName          String  @default("unknown")
   lastName           String  @default("unknown")
@@ -156,9 +156,9 @@ model Profile {
   email              String?
   phone              String?
   content            String?
-  gender             String? @default("unknown")
-  educationLevel     String? @default("unknown")
-  ageLevel           String? @default("unknown")
+  gender             String @default("unknown")
+  educationLevel     String @default("unknown")
+  ageLevel           String @default("unknown")
   conversations      Int     @default(0)
   conversationsLimit Int     @default(10)
 

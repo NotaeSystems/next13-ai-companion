@@ -92,7 +92,7 @@ export const ProfileForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       console.log("inside of submit");
-      await axios.patch(`/api/profile/${Profile.id}`, values);
+      await axios.patch(`/api/admin/profile/${Profile.id}`, values);
 
       toast({
         description: "Success.",

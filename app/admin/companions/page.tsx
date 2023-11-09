@@ -37,6 +37,9 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
   const data: any = companions;
   return (
     <div className="h-full p-4 space-y-2">
+      <Button>
+        <Link href={`/admin/new/companion`}>Create New Companion</Link>
+      </Button>
       {/* <Button>
         <Link href="/dashboard/profile/{userId}">Your Profile</Link>
       </Button>
