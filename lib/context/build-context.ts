@@ -3,7 +3,7 @@
 //import { PineconeClient } from "@pinecone-database/pinecone";
 //import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { Companion, User, Relationship } from "@prisma/client";
-import { getPineConeRelevant } from "@/lib/context/pinecone";
+import { getPineConeRelevant } from "@/lib/context/pineconeRelevant";
 import { findRelationship } from "@/lib/context/findRelationship";
 import prismadb from "@/lib/prismadb";
 //import { cp } from "fs";
@@ -38,15 +38,15 @@ export async function buildContext(
 
   // TODO if there is a user then find the relationship data for that user and companion
 
-  let relationship : Relationship
-  relationship = await findRelationship(userId, companion )
+  let relationship: Relationship;
+  relationship = await findRelationship(userId, companion);
   //console.log("Relationship content: " + relationship.content)
-  
-  if (relationship.conversations > relationship.conversationsLimit){
-    console.log("conversational Limit of " +   relationship.conversationsLimit +  " reached")
+
+  if (relationship.conversations > relationship.conversationsLimit) {
+    console.log(
+      "conversational Limit of " + relationship.conversationsLimit + " reached"
+    );
   }
- ;
-   
   // check to see if there is a pineconeIndex document for Persona
   if (companion.pineconeIndex) {
     console.log(
@@ -67,21 +67,17 @@ export async function buildContext(
   let context =
     `ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix.` +
     "companion instructions" +
-
     companion.instructions +
     "/n" +
-
     "user relationship: /n" +
     relationship.content +
     "/n" +
-
     "Below are facts, if any,  about you. Treat these as facts" +
     companion.seed +
     "/n" +
-
     JSON.stringify(relevantDocs);
   +"Below are relevant details about the conversation you are in.";
 
   //console.log("the full context is: " + context)
-  return {context: context, temperature: relationship.temperature};
+  return { context: context, temperature: relationship.temperature };
 }
