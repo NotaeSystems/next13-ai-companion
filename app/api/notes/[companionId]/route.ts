@@ -12,7 +12,7 @@ import { auth } from "@clerk/nextjs";
 
 const environment: string = process.env.PINECONE_ENVIRONMENT!;
 const apiKey: string = process.env.PINECONE_API_KEY!;
-
+const pineconeIndexEnv: string = process.env.PINECONE_INDEX!;
 const pinecone = new Pinecone({
   apiKey: apiKey,
   environment: environment,
@@ -36,7 +36,8 @@ export async function POST(
       return Response.json({ error: "Error" }, { status: 401 });
     }
 
-    const companionPineConeIndex = companion.pineconeIndex;
+    //const companionPineConeIndex = companion.pineconeIndex;
+    const companionPineConeIndex = pineconeIndexEnv;
     console.log("pineconeIndex: " + companionPineConeIndex);
 
     if (!companionPineConeIndex) {
@@ -108,7 +109,7 @@ export async function PUT(
       return Response.json({ error: "Error" }, { status: 401 });
     }
 
-    const companionPineConeIndex = companion.pineconeIndex;
+    const companionPineConeIndex = pineconeIndexEnv;
     if (!companionPineConeIndex) {
       return Response.json({ error: "Error" }, { status: 401 });
     }
