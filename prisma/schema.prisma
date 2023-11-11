@@ -17,6 +17,7 @@ model Category {
 
 model Companion {
   id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  namespace     String         @default("Pending") 
   status        String         @default("Pending")   // Pending, Active, Deleted, Suspended
   public        Boolean         @default(true)   // companion can be available to public or private
 
@@ -38,7 +39,8 @@ model Companion {
   messages      Message[]
   relationships Relationship[]
   groups        Group[]
-  // notes Note[]
+  notes         Note[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -185,8 +187,8 @@ model Note {
   title         String @default("title")
   content       String
 
-  // companionId   String  @db.ObjectId
-  // companion     Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
+  companionId   String  @db.ObjectId
+  companion     Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
  
   userId        String?
 

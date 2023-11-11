@@ -32,6 +32,7 @@ export async function PATCH(
     const {
       src,
       name,
+      namespace,
       status,
       description,
       instructions,
@@ -48,6 +49,7 @@ export async function PATCH(
     if (
       !src ||
       !name ||
+      !namespace ||
       !status ||
       !description ||
       !instructions ||
@@ -74,6 +76,7 @@ export async function PATCH(
         // userName: user.firstName,
         src,
         name,
+        namespace,
         status,
         description,
         instructions,

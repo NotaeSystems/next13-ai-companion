@@ -5,6 +5,7 @@ import { Note } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Companion } from "@prisma/client";
 import {
   Dialog,
   DialogContent,
@@ -27,12 +28,14 @@ import { Textarea } from "./ui/textarea";
 interface AddEditNoteDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  companion: Companion;
   noteToEdit?: Note;
 }
 
 export default function AddEditNoteDialog({
   open,
   setOpen,
+  companion,
   noteToEdit,
 }: AddEditNoteDialogProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
@@ -49,8 +52,10 @@ export default function AddEditNoteDialog({
 
   async function onSubmit(input: CreateNoteSchema) {
     try {
+      console.log("made it to Submit Note");
       if (noteToEdit) {
-        const response = await fetch("/api/notes", {
+        console.log("there is a noteToEdit: " + noteToEdit.companionId);
+        const response = await fetch(`/api/notes/${noteToEdit.companionId}`, {
           method: "PUT",
           body: JSON.stringify({
             id: noteToEdit.id,
@@ -59,7 +64,7 @@ export default function AddEditNoteDialog({
         });
         if (!response.ok) throw Error("Status code: " + response.status);
       } else {
-        const response = await fetch("/api/notes", {
+        const response = await fetch(`/api/notes/${companion.id}`, {
           method: "POST",
           body: JSON.stringify(input),
         });
@@ -70,15 +75,17 @@ export default function AddEditNoteDialog({
       setOpen(false);
     } catch (error) {
       console.error(error);
-      alert("Something went wrong. Please try again.");
+      alert("Something went wrong. Please try again.xx");
     }
   }
 
   async function deleteNote() {
+    console.log("made it to deleteNote");
     if (!noteToEdit) return;
     setDeleteInProgress(true);
     try {
-      const response = await fetch("/api/notes", {
+      console.log("Deleting note of companion: " + noteToEdit.companionId);
+      const response = await fetch(`/api/notes/${noteToEdit.companionId}`, {
         method: "DELETE",
         body: JSON.stringify({
           id: noteToEdit.id,

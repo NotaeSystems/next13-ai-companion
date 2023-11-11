@@ -21,5 +21,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      {/* <CompanionNavbar companion={companion} /> */}
+      <h1>Companion Navbar</h1>
+      {children}
+    </>
+  );
 }

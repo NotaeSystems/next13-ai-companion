@@ -13,6 +13,7 @@ export default async function NotesPage() {
 
   if (!userId) throw Error("userId undefined");
 
+  // find all notes belonging
   const allNotes = await prismadb.note.findMany({ where: { userId } });
 
   return (

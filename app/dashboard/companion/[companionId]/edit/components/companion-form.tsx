@@ -60,6 +60,9 @@ const formSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required.",
   }),
+  namespace: z.string().min(1, {
+    message: "Name is required.",
+  }),
   status: z.string().min(1, {
     message: "Statusis required.",
   }),
@@ -200,6 +203,29 @@ export const CompanionForm = ({
                   </FormControl>
                   <FormDescription>
                     This is how your AI Companion will be named.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              name="namespace"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="col-span-2 md:col-span-1">
+                  <FormLabel>Name Space</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="elonmusk"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    The companion namespace on subdomain and Pinecone vectorized
+                    database
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

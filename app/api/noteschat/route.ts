@@ -17,21 +17,28 @@ const pinecone = new Pinecone({
 
 const companionPineConeIndex = "jimmy-clone-index";
 const pineconeIndex = pinecone.Index(companionPineConeIndex);
+
 export async function POST(req: Request) {
   try {
     console.log("inside of /api/noteschat");
+
     const body = await req.json();
+
     const messages: ChatCompletionMessage[] = body.messages;
 
-    const messagesTruncated = messages.slice(-6);
+    // get the last 10 messages to determine what we are talking about
+    const messagesTruncated = messages.slice(-10);
 
+    // these messages need to be embedded and sent to the vector database
     const embedding = await getEmbedding(
       messagesTruncated.map((message) => message.content).join("\n")
     );
 
     const { userId } = auth();
 
-    const vectorQueryResponse = await pineconeIndex.query({
+    // can we query by namespace?
+    const namespace = pineconeIndex.namespace("jimmyeaton");
+    const vectorQueryResponse = await namespace.query({
       vector: embedding,
       topK: 4,
       filter: { userId },
@@ -50,7 +57,7 @@ export async function POST(req: Request) {
     const systemMessage: ChatCompletionMessage = {
       role: "system",
       content:
-        "You are the father of the user.. You answer the user's question based upon the following facts about you. " +
+        "You are the father of the user. You answer the user's question based upon the following facts about you. " +
         "The relevant facts about you are:\n" +
         relevantNotes
           .map((note) => `Title: ${note.title}\n\nContent:\n${note.content}`)
@@ -64,6 +71,7 @@ export async function POST(req: Request) {
     });
 
     const stream = OpenAIStream(response);
+
     return new StreamingTextResponse(stream);
   } catch (error) {
     console.error(error);

@@ -49,6 +49,11 @@ export const CompanionNavbar = ({ companion }: CompanionNavBarProps) => {
                 Edit
               </Link>
             </Button>
+            <Button>
+              <Link href={`/dashboard/companion/${companion.id}/notes`}>
+                Notes
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

@@ -26,6 +26,7 @@ export async function POST(
   { params }: { params: { companionId: string } }
 ) {
   try {
+    console.log("inside of /api/notes/[companionId]");
     const companion = await prisma.companion.findUnique({
       where: {
         id: params.companionId,
@@ -35,7 +36,13 @@ export async function POST(
       return Response.json({ error: "Error" }, { status: 401 });
     }
 
-    const companionPineConeIndex = companion.namespace;
+    const companionPineConeIndex = companion.pineconeIndex;
+    console.log("pineconeIndex: " + companionPineConeIndex);
+
+    if (!companionPineConeIndex) {
+      return Response.json({ error: "Error" }, { status: 401 });
+    }
+
     const pineconeIndex = pinecone.Index(companionPineConeIndex);
 
     const body = await req.json();
@@ -63,9 +70,10 @@ export async function POST(
           title,
           content,
           userId,
+          companionId: companion.id,
         },
       });
-      const ns1 = pineconeIndex.namespace("jimmyeaton");
+      const ns1 = pineconeIndex.namespace(companion.namespace);
       await ns1.upsert([
         {
           id: note.id,
@@ -89,6 +97,7 @@ export async function PUT(
   { params }: { params: { companionId: string } }
 ) {
   try {
+    console.log("made it to PUT /api/notes/[companionId]");
     const body = await req.json();
     const companion = await prisma.companion.findUnique({
       where: {
@@ -99,7 +108,11 @@ export async function PUT(
       return Response.json({ error: "Error" }, { status: 401 });
     }
 
-    const companionPineConeIndex = companion.namespace;
+    const companionPineConeIndex = companion.pineconeIndex;
+    if (!companionPineConeIndex) {
+      return Response.json({ error: "Error" }, { status: 401 });
+    }
+
     const pineconeIndex = pinecone.Index(companionPineConeIndex);
     const parseResult = updateNoteSchema.safeParse(body);
 

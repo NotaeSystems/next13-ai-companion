@@ -36,7 +36,7 @@ const RootPage = async () => {
     return new NextResponse("Not Authorized", { status: 404 });
   }
 
-  const companions = await prismadb.companion.findMany({});
+  const companions = await prismadb.companion.findMany();
 
   const data: any = companions;
   console.log("getting ready to return");
