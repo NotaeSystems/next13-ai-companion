@@ -22,6 +22,9 @@ export const CompanionNavbar = ({ companion }: CompanionNavBarProps) => {
   return (
     <>
       <div className="w-full h-20 bg-yellow-800 sticky top-0">
+        <div>
+          <h1>Companion Navbar</h1>
+        </div>
         <div className="flex justify-center">
           <Link href={`/dashboard/companion/${companion.id}`}>
             <Image
@@ -39,11 +42,29 @@ export const CompanionNavbar = ({ companion }: CompanionNavBarProps) => {
                 Relationship
               </Link>
             </Button>
+
             <Button>
-              <Link href={`/dashboard/${companion.chatLink}/${companion.id}`}>
-                Chat
+              {/* <Link href={`/dashboard/companion/${companion.chatLink}/${companion.id}`}> */}
+              <Link href={`/dashboard/companion/${companion.id}/chats/chat`}>
+                Basic Chat
               </Link>
             </Button>
+            <Button>
+              {/* <Link href={`/dashboard/companion/${companion.chatLink}/${companion.id}`}> */}
+              <Link
+                href={`/dashboard/companion/${companion.id}/chats/streaming`}
+              >
+                Voice Chat
+              </Link>
+            </Button>
+
+            <Button>
+              {/* <Link href={`/dashboard/companion/${companion.chatLink}/${companion.id}`}> */}
+              <Link href={`/dashboard/companion/${companion.id}/chats/notes`}>
+                Notes Chat
+              </Link>
+            </Button>
+
             <Button>
               <Link href={`/dashboard/companion/${companion.id}/edit`}>
                 Edit

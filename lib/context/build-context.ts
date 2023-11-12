@@ -78,6 +78,6 @@ export async function buildContext(
     JSON.stringify(relevantDocs);
   +"Below are relevant details about the conversation you are in.";
 
-  //console.log("the full context is: " + context)
+  console.log("the full context is: " + context);
   return { context: context, temperature: relationship.temperature };
 }

@@ -14,13 +14,13 @@ const pinecone = new Pinecone({
   apiKey: apiKey,
   environment: environment,
 });
-
-const companionPineConeIndex = "jimmy-clone-index";
-const pineconeIndex = pinecone.Index(companionPineConeIndex);
+const pineconeIndexEnv: string = process.env.PINECONE_INDEX!;
+//const companionPineConeIndex = "jimmy-clone-index";
+const pineconeIndex = pinecone.Index(pineconeIndexEnv);
 
 export async function POST(req: Request) {
   try {
-    console.log("inside of /api/noteschat");
+    console.log("inside of POST /api/noteschat");
 
     const body = await req.json();
 
@@ -57,8 +57,9 @@ export async function POST(req: Request) {
     const systemMessage: ChatCompletionMessage = {
       role: "system",
       content:
-        "You are the father of the user. You answer the user's question based upon the following facts about you. " +
-        "The relevant facts about you are:\n" +
+        "You are the ex-husband of the user. The user is your ex-wife You will answer the user's question based upon the following facts about you. " +
+        "The relevant facts you know about the user are:\n" +
+        "## Relevant Facts about User in first person" +
         relevantNotes
           .map((note) => `Title: ${note.title}\n\nContent:\n${note.content}`)
           .join("\n\n"),
