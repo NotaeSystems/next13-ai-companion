@@ -69,7 +69,7 @@ export async function POST(
       const note = await tx.note.create({
         data: {
           title,
-          content,
+          content: content,
           userId,
           companionId: companion.id,
         },
@@ -147,11 +147,13 @@ export async function PUT(
         },
       });
 
+      // TODO remove metadata: { userId: userId } if companion is inserting his own notes
       await pineconeIndex.upsert([
         {
           id,
+
           values: embedding,
-          metadata: { userId },
+          metadata: { userId: userId },
         },
       ]);
 

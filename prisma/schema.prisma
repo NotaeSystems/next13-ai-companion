@@ -185,7 +185,7 @@ model UserSubscription {
 model Note {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   title         String @default("title")
-  content       String
+  content       String?
 
   companionId   String  @db.ObjectId
   companion     Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
