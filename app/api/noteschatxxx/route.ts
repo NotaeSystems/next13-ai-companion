@@ -34,6 +34,7 @@ export async function POST(req: Request) {
       messagesTruncated.map((message) => message.content).join("\n")
     );
 
+    console.log("Embeddings: " + embedding);
     const { userId } = auth();
 
     // can we query by namespace?

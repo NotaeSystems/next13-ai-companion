@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 
 const apiKey = process.env.OPENAI_API_KEY;
+//const embeddingModelOpenAI =process.env.OPENAI_EMBEDDING_MODEL
 
 if (!apiKey) {
   throw Error("OPENAI_API_KEY is not set");
@@ -20,7 +21,7 @@ export async function getEmbedding(text: string) {
 
   if (!embedding) throw Error("Error generating embedding.");
 
-  console.log(embedding);
+  //console.log(embedding);
 
   return embedding;
 }

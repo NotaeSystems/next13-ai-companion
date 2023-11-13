@@ -75,11 +75,14 @@ export async function POST(
         },
       });
       const ns1 = pineconeIndex.namespace(companion.namespace);
+      if (!content) {
+        return Response.json({ error: "Unauthorized" }, { status: 401 });
+      }
       await ns1.upsert([
         {
           id: note.id,
           values: embedding,
-          metadata: { userId },
+          metadata: { userId, content: title + ": " + content },
         },
       ]);
 
@@ -138,6 +141,8 @@ export async function PUT(
 
     const embedding = await getEmbeddingForNote(title, content);
 
+    console.log("embeddings: " + embedding);
+
     const updatedNote = await prisma.$transaction(async (tx) => {
       const updatedNote = await tx.note.update({
         where: { id },
@@ -146,14 +151,14 @@ export async function PUT(
           content,
         },
       });
-
+      const pineconeIndex = pinecone.Index(pineconeIndexEnv);
+      const namespace = pineconeIndex.namespace(companion.namespace);
       // TODO remove metadata: { userId: userId } if companion is inserting his own notes
-      await pineconeIndex.upsert([
+      await namespace.upsert([
         {
           id,
-
           values: embedding,
-          metadata: { userId: userId },
+          metadata: { userId: userId, content: title + ": " + content },
         },
       ]);
 
@@ -167,9 +172,21 @@ export async function PUT(
   }
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: { companionId: string } }
+) {
   try {
+    console.log("inside of /api/notes/[companionId]");
     const body = await req.json();
+    const companion = await prisma.companion.findUnique({
+      where: {
+        id: params.companionId,
+      },
+    });
+    if (!companion) {
+      return Response.json({ error: "Error" }, { status: 401 });
+    }
 
     const parseResult = deleteNoteSchema.safeParse(body);
 
@@ -179,7 +196,7 @@ export async function DELETE(req: Request) {
     }
 
     const { id } = parseResult.data;
-
+    console.log("delete id: " + id);
     const note = await prisma.note.findUnique({ where: { id } });
 
     if (!note) {
@@ -191,10 +208,11 @@ export async function DELETE(req: Request) {
     if (!userId || userId !== note.userId) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    const pineconeIndex = pinecone.Index(pineconeIndexEnv);
+    const namespace = pineconeIndex.namespace(companion.namespace);
     await prisma.$transaction(async (tx) => {
       await tx.note.delete({ where: { id } });
-      // await pineconeIndex.deleteOne(id);
+      await namespace.deleteOne(id);
     });
 
     return Response.json({ message: "Note deleted" }, { status: 200 });

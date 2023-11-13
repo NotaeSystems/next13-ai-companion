@@ -19,7 +19,6 @@ const pinecone = new Pinecone({
   environment: environment,
 });
 const pineconeIndexEnv: string = process.env.PINECONE_INDEX!;
-//const companionPineConeIndex = "jimmy-clone-index";
 const pineconeIndex = pinecone.Index(pineconeIndexEnv);
 
 export async function POST(
@@ -42,7 +41,9 @@ export async function POST(
     ///////////////////////////////////////////////////////////
 
     // find the companion user is chatting with //////////////////////
-    const companion = await prisma.companion.findUnique({
+    let companion: Companion | null;
+
+    companion = await prisma.companion.findUnique({
       where: {
         id: params.companionId,
       },
@@ -53,11 +54,17 @@ export async function POST(
     }
 
     ///// Relationship: lets find out how the User is related to the Companion
-    let relationship: Relationship;
+    let relationship: Relationship | null;
     relationship = await findRelationship(user.id, companion);
     //console.log("Relationship content: " + relationship.content)
 
+    // the user must have a relationship to chat with a companion
+    if (!relationship) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     // lets check to see if the conversations limit has been reached for billing purposes
+    // TODO do some billing here
     if (relationship.conversations > relationship.conversationsLimit) {
       console.log(
         "conversational Limit of " +
@@ -66,46 +73,49 @@ export async function POST(
       );
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////
-
     ////////////////////////////////////////////////////////////////////
 
-    ///// Memory: the present chat messages are sent by the chat page ///////////////////////////////
+    /////Short-term Chat Memory: the present chat messages are sent by the chat page ///////////////////////////////
     const messages: ChatCompletionMessage[] = body.messages;
 
-    // Memory: get the last 10 messages from present chat to determine what we have been talking about
+    // Short-term Chat Memory: get the last 10 messages from present chat to determine what we have been chatting about
     const messagesTruncated = messages.slice(-10);
 
-    // these messages need to be embedded by openai and sent to the Pinecone vector database
+    // these messages need to be embedded and vectorized by openai and sent to the Pinecone vector database
+    // we are using our getEmbedding function from "@/lib/openai
     const embedding = await getEmbedding(
       messagesTruncated.map((message) => message.content).join("\n")
     );
     ///////////////////////////////////////////////////////////////////
 
-    //// namespace is the location of our companion's part of the Pincone Vectorized Database
-    //  where facts about this companion is stored
-    const namespace = pineconeIndex.namespace(companion.namespace);
+    //// companionNamespace is the location of our companion's part of the Pincone Vectorized Database
+    //  where public facts about this companion is stored
+    const companionNamespace = pineconeIndex.namespace(companion.namespace);
 
-    ///// lets query Pinecone namespace with our last few messages that were embedded by openai
+    ///// lets query Pinecone companion namespace with our last few messages that were embedded by openai
     // and find  relevant facts that were inserted by the present User
-    const vectorAssistantQueryResponse = await namespace.query({
+    const vectorAssistantQueryResponse = await companionNamespace.query({
       vector: embedding,
       topK: 6,
       filter: { userId: undefined },
       includeMetadata: true,
-      includeValues: false,
+      includeValues: true,
     });
 
     console.log(
       "vectorAssistantrQueryResponse: " +
-        JSON.stringify(vectorAssistantQueryResponse)
+        JSON.stringify(
+          "\n\n vectorAssistantQueryResponse" +
+            vectorAssistantQueryResponse +
+            "\n\n"
+        )
     );
 
     console.log(
       vectorAssistantQueryResponse.matches?.map((match) => ({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        text: match.metadata?.text,
+        content: match.metadata?.content,
         score: match.score,
       }))
     );
@@ -117,7 +127,6 @@ export async function POST(
         id: {
           in: vectorAssistantQueryResponse.matches.map((match) => match.id),
         },
-        userId: userId,
       },
     });
 
@@ -129,7 +138,7 @@ export async function POST(
 
     ///// lets query Pinecone namespace with our last few messages that were embedded by openai
     // and find  relevant facts that were inserted by the present User
-    const vectorUserQueryResponse = await namespace.query({
+    const vectorUserQueryResponse = await companionNamespace.query({
       vector: embedding,
       topK: 6,
       filter: { userId: userId },
@@ -145,7 +154,7 @@ export async function POST(
       vectorUserQueryResponse.matches?.map((match) => ({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        text: match.metadata?.text,
+        userId: match.metadata?.userId,
         score: match.score,
       }))
     );
@@ -214,13 +223,14 @@ export async function POST(
     console.log("\n\n" + JSON.stringify(systemMessage) + "\n\n");
 
     // lets call the LLMand send the systemMessage along with messages now in the chat stream
+
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       stream: true,
       messages: [systemMessage, ...messagesTruncated],
       temperature: relationship.temperature,
     });
-
+    console.log("LLM response: " + JSON.stringify(response));
     const stream = OpenAIStream(response);
 
     return new StreamingTextResponse(stream);
