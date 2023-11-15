@@ -139,7 +139,7 @@ export const RelationshipForm = ({
                       <SelectTrigger className="bg-background">
                         <SelectValue
                           defaultValue={field.value}
-                          placeholder="Select a temperature"
+                          placeholder="Select a status"
                         />
                       </SelectTrigger>
                     </FormControl>
