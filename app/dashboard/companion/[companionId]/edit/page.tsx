@@ -47,7 +47,7 @@ const EditCompanionPage = async ({ params }: CompanionIdPageProps) => {
     <>
       <CompanionNavbar companion={companion} />
       <h1> Edit Companion</h1>
-      <CompanionForm initialData={companion} categories={categories} />
+      <CompanionForm companion={companion} categories={categories} />
     </>
   );
 };

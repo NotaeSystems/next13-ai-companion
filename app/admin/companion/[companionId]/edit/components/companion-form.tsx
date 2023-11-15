@@ -106,19 +106,19 @@ const formSchema = z.object({
 
 interface CompanionFormProps {
   categories: Category[];
-  initialData: Companion | null;
+  companion: Companion | null;
 }
 
 export const CompanionForm = ({
   categories,
-  initialData,
+  companion,
 }: CompanionFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
+    defaultValues: companion || {
       name: "",
       status: "Pending",
       role: "",
@@ -138,10 +138,10 @@ export const CompanionForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      if (initialData) {
-        await axios.patch(`/api/companion/${initialData.id}`, values);
+      if (companion) {
+        await axios.patch(`/api/admin/companion/${companion.id}`, values);
       } else {
-        await axios.post("/api/companion", values);
+        await axios.post("/api/admin", values);
       }
 
       toast({
@@ -150,7 +150,7 @@ export const CompanionForm = ({
       });
 
       router.refresh();
-      router.push("/");
+      router.push("/admin");
     } catch (error) {
       toast({
         variant: "destructive",
@@ -476,7 +476,7 @@ export const CompanionForm = ({
           />
           <div className="w-full flex justify-center">
             <Button size="lg" disabled={isLoading}>
-              {initialData ? "Edit your companion" : "Create your companion"}
+              {companion ? "Edit your companion" : "Create your companion"}
               <Wand2 className="w-4 h-4 ml-2" />
             </Button>
           </div>

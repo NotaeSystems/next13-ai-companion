@@ -1,6 +1,6 @@
 import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-
+import { isAdmin } from "@/lib/admin/isAdmin";
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 
@@ -9,12 +9,33 @@ export async function PATCH(
   { params }: { params: { companionId: string } }
 ) {
   try {
+    console.log("inside of PATCH /api/admin/companion/[companionId]/route");
+    //const user = await currentUser();
+
+    // check to see if logged-in user is admin and active /////////
+    // check if signed in with Clerk
+    const { userId } = auth();
+
+    if (!userId) {
+      console.log("not logged in with Clerk");
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    console.log("logged in");
+
+    // check to see if logged-in user is Admin and is Active
+    let userIsAdmin = await isAdmin(userId);
+    if (!userIsAdmin) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    ////////////////////////////////////////////////////////////////
+
     const body = await req.json();
-    const user = await currentUser();
     const {
       src,
       name,
+      namespace,
       status,
+      role,
       description,
       instructions,
       temperature,
@@ -25,21 +46,15 @@ export async function PATCH(
       categoryId,
     } = body;
 
-    console.log("relationship: " + relationship);
-
-    if (!params.companionId) {
-      return new NextResponse("Companion ID required", { status: 400 });
-    }
-
-    if (!user || !user.id || !user.firstName) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
+    console.log("role: " + role);
 
     if (
       !src ||
       !name ||
+      !namespace ||
       !status ||
       !description ||
+      !role ||
       !instructions ||
       !seed ||
       !categoryId
@@ -56,15 +71,17 @@ export async function PATCH(
     const companion = await prismadb.companion.update({
       where: {
         id: params.companionId,
-        userId: user.id,
+        //userId: user.id,
       },
       data: {
         categoryId,
-        userId: user.id,
-        userName: user.firstName,
+        //userId: user.id,
+        // userName: user.firstName,
         src,
         name,
+        namespace,
         status,
+        role,
         description,
         instructions,
         pineconeIndex,
@@ -77,7 +94,7 @@ export async function PATCH(
 
     return NextResponse.json(companion);
   } catch (error) {
-    // console.log("[COMPANION_PATCH]", error);
+    console.log("[COMPANION_PATCH]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
