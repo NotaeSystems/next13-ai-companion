@@ -312,7 +312,7 @@ export async function POST(
         userId: match.metadata?.userId,
         score: match.score,
         content: match.metadata?.content,
-        namespace: match.metadata?.namespace,
+        relationship: match.metadata?.relationship,
       }))
     );
 
