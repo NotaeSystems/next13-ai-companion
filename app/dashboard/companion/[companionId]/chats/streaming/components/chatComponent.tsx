@@ -34,7 +34,7 @@ export default function ChatComponent({ companion }: StreamingProps) {
   return (
     <div>
       {/*  Need to params voiceId to StreamingAudioPlayer */}
-      <AudioPlayerComponent playMessage={playMessage} voiceId={voiceId} />
+      {/* <AudioPlayerComponent playMessage={playMessage} voiceId={voiceId} /> */}
       {messages.map((message: Message) => {
         return (
           <>
