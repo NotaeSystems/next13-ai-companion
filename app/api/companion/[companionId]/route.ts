@@ -9,6 +9,7 @@ export async function PATCH(
   { params }: { params: { companionId: string } }
 ) {
   try {
+    console.log("inside of PATCH /api/companion/[companionId]/routes");
     //const user = await currentUser();
 
     // check to see if logged-in user is admin and active /////////
@@ -34,6 +35,7 @@ export async function PATCH(
       name,
       namespace,
       status,
+      role,
       description,
       instructions,
       temperature,
@@ -44,7 +46,7 @@ export async function PATCH(
       categoryId,
     } = body;
 
-    console.log("relationship: " + relationship);
+    console.log("role: " + role);
 
     if (
       !src ||
@@ -52,6 +54,7 @@ export async function PATCH(
       !namespace ||
       !status ||
       !description ||
+      !role ||
       !instructions ||
       !seed ||
       !categoryId
@@ -78,6 +81,7 @@ export async function PATCH(
         name,
         namespace,
         status,
+        role,
         description,
         instructions,
         pineconeIndex,

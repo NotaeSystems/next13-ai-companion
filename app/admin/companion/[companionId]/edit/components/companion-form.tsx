@@ -61,10 +61,13 @@ const formSchema = z.object({
     message: "Name is required.",
   }),
   namespace: z.string().min(1, {
-    message: "Namespace is required.",
+    message: "Name is required.",
   }),
   status: z.string().min(1, {
     message: "Statusis required.",
+  }),
+  role: z.string().min(10, {
+    message: "Role is required.",
   }),
   description: z.string().min(1, {
     message: "Description is required.",
@@ -118,6 +121,7 @@ export const CompanionForm = ({
     defaultValues: initialData || {
       name: "",
       status: "Pending",
+      role: "",
       description: "",
       temperature: 0.5,
       instructions: "",
@@ -146,7 +150,7 @@ export const CompanionForm = ({
       });
 
       router.refresh();
-      router.push("/admin");
+      router.push("/");
     } catch (error) {
       toast({
         variant: "destructive",
@@ -224,8 +228,8 @@ export const CompanionForm = ({
                     />
                   </FormControl>
                   <FormDescription>
-                    The companion namespace on subdomain and Pinecone vectorized
-                    database
+                    The Companion namespace on subdomain and Pinecone vectorized
+                    database. Must be unique.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -234,23 +238,37 @@ export const CompanionForm = ({
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
-              name="status"
               control={form.control}
+              name="status"
               render={({ field }) => (
-                <FormItem className="col-span-2 md:col-span-1">
+                <FormItem>
                   <FormLabel>Status</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="Pending"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Status of Compannion.</FormDescription>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a status"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Pending">Pending</SelectItem>
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="Suspended">Suspended</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select a temperature for your AI
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               name="description"
               control={form.control}
@@ -347,6 +365,29 @@ export const CompanionForm = ({
               </p>
             </div>
             <Separator className="bg-primary/10" />
+          </div>
+          <div className="space-y-2 w-full">
+            <FormField
+              name="role"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="col-span-2 md:col-span-1">
+                  <FormLabel>Role</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      disabled={isLoading}
+                      rows={4}
+                      className="bg-background resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    This is the base role of the companion.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <FormField
             name="instructions"

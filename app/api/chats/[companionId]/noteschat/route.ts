@@ -254,6 +254,17 @@ export async function POST(
       includeMetadata: true,
       includeValues: true,
     });
+    console.log(
+      vectorAssistantQueryResponse.matches?.map((match) => ({
+        content: match.metadata?.content,
+        score: match.score,
+      }))
+    );
+    const relevantAssistantMatches = JSON.stringify(
+      vectorAssistantQueryResponse.matches?.map((match) => ({
+        content: match.metadata?.content,
+      }))
+    );
 
     // // Debugging
     // console.log(
@@ -265,31 +276,29 @@ export async function POST(
     //     )
     // );
 
-    console.log(
-      vectorAssistantQueryResponse.matches?.map((match) => ({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        content: match.metadata?.content,
-        score: match.score,
-      }))
-    );
+    // console.log(
+    //   vectorAssistantQueryResponse.matches?.map((match) => ({
+    //     content: match.metadata?.content,
+    //     score: match.score,
+    //   }))
+    // );
 
     //// now that we have received some relevant vectorized data back from Pinecone
     // lets find the user notes in mongodb that were used to make the vectorized data
     // !!!! not needed if we get content from the vectorAssistantQuery
-    const assistantNotes = await prisma.note.findMany({
-      where: {
-        id: {
-          in: vectorAssistantQueryResponse.matches.map((match) => match.id),
-        },
-      },
-    });
+    // const assistantNotes = await prisma.note.findMany({
+    //   where: {
+    //     id: {
+    //       in: vectorAssistantQueryResponse.matches.map((match) => match.id),
+    //     },
+    //   },
+    // });
 
-    const relevantAssistantNotes = assistantNotes
-      .map((note) => `Title: ${note.title}\n\nContent:\n${note.content}`)
-      .join("\n\n");
+    // const relevantAssistantNotes = assistantNotes
+    //   .map((note) => `Title: ${note.title}\n\nContent:\n${note.content}`)
+    //   .join("\n\n");
 
-    console.log("Relevant Assistant notes found: ", relevantAssistantNotes);
+    // console.log("Relevant Assistant notes found: ", relevantAssistantNotes);
 
     ///// lets query Pinecone namespace with our last few messages that were embedded by openai
     // and find  relevant facts that were inserted by the present User
@@ -302,34 +311,46 @@ export async function POST(
     });
 
     console.log(
-      "vectorUserQueryResponse: " + JSON.stringify(vectorUserQueryResponse)
-    );
-
-    console.log(
       vectorUserQueryResponse.matches?.map((match) => ({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        userId: match.metadata?.userId,
-        score: match.score,
         content: match.metadata?.content,
-        relationship: match.metadata?.relationship,
+        score: match.score,
       }))
     );
+    // console.log(
+    //   "vectorUserQueryResponse: " + JSON.stringify(vectorUserQueryResponse)
+    // );
+
+    // console.log(
+    //   vectorUserQueryResponse.matches?.map((match) => ({
+    //     userId: match.metadata?.userId,
+    //     score: match.score,
+    //     content: match.metadata?.content,
+    //     relationship: match.metadata?.relationship,
+    //   }))
+    // );
 
     //// now that we have received some relevant vectorized data back from Pinecone
     // lets find the user notes in mongodb that were used to make the vectorized data
-    const userNotes = await prisma.note.findMany({
-      where: {
-        id: {
-          in: vectorUserQueryResponse.matches.map((match) => match.id),
-        },
-        userId: userId,
-      },
-    });
+    const relevantUserMatches = JSON.stringify(
+      vectorAssistantQueryResponse.matches?.map((match) => ({
+        content: match.metadata?.content,
+      }))
+    );
 
-    const relevantUserNotes = userNotes
-      .map((note) => `Title: ${note.title}\n\nContent:\n${note.content}`)
-      .join("\n\n");
+    // console.log("Pinecone Relevant User Matches: " + relevantUserMatches);
+
+    // const userNotes = await prisma.note.findMany({
+    //   where: {
+    //     id: {
+    //       in: vectorUserQueryResponse.matches.map((match) => match.id),
+    //     },
+    //     userId: userId,
+    //   },
+    // });
+
+    // const relevantUserNotes = userNotes
+    //   .map((note) => `Title: ${note.title}\n\nContent:\n${note.content}`)
+    //   .join("\n\n");
 
     //console.log("Relevant Assistant notes found: ", relevantUserNotes);
 
@@ -353,24 +374,24 @@ export async function POST(
     //console.log("User Relationship: " + userRelationshipContent );
     ////
 
-    const assistantRole = companion.description;
+    const assistantRole = companion.role;
 
     /////////////////////////  *Context //////////////////////////////////////
     // lets build the context to send to the LLLM
 
     const context =
-      `ONLY generate sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix. \n` +
-      "## Relevant Facts about yourself in third person" +
+      `ONLY generate sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix. Do not say your are an AI Assistant. Say you are a Persona\n` +
+      "## Your role: ##" +
       assistantRole +
-      "End of Relevant Facts about yourself in third person" +
+      "## End of Relevant Facts about yourself in third person ##" +
       "\n" +
-      "## Relevant Facts about yourself in first person \n" +
-      relevantAssistantNotes +
-      "## End of Relevant Facts about yourself first person \n" +
+      "## Relevant Facts about you ##" +
+      relevantAssistantMatches +
+      "## End of Relevant Facts about yourself first person ##" +
       userRelationshipContent +
       "\n" +
-      "## Relevant Facts about User in first person \n" +
-      relevantUserNotes +
+      "## Relevant Facts about User in first person " +
+      relevantUserMatches +
       "\n";
 
     const systemMessage: ChatCompletionMessage = {
@@ -378,10 +399,18 @@ export async function POST(
       content: context,
     };
 
-    console.log("\n\n System Message" + JSON.stringify(systemMessage) + "\n\n");
+    console.log(
+      "\n\n System Message:\n " + JSON.stringify(systemMessage) + "\n\n"
+    );
 
     // lets call the LLM model and send the systemMessage along with messages now in the chat stream
     // which includes the last message from User
+    console.log(
+      "\n Calling the LLM Model: " +
+        llmModel +
+        " with the System Message\n  Temperature is: " +
+        relationship.temperature
+    );
 
     const response = await openai.chat.completions.create({
       model: llmModel,
