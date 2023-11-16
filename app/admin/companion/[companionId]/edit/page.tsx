@@ -31,13 +31,12 @@ const EditCompanionPage = async ({ params }: CompanionIdPageProps) => {
     companion = await prismadb.companion.findUnique({
       where: {
         id: params.companionId,
-        userId,
       },
     });
   }
   if (!companion) {
     console.log("companion Not Found");
-    return redirect("/dashboard");
+    return redirect("/admin");
   }
   const categories = await prismadb.category.findMany();
 

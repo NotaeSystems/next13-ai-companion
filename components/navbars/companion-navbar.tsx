@@ -43,38 +43,38 @@ export const CompanionNavbar = ({ companion }: CompanionNavBarProps) => {
               </Link>
             </Button>
 
-            <Button>
-              {/* <Link href={`/dashboard/companion/${companion.chatLink}/${companion.id}`}> */}
+            {/* <Button>
+              
               <Link href={`/dashboard/companion/${companion.id}/chats/chat`}>
                 Basic Chat
               </Link>
-            </Button>
+            </Button> */}
             <Button>
               {/* <Link href={`/dashboard/companion/${companion.chatLink}/${companion.id}`}> */}
               <Link
                 href={`/dashboard/companion/${companion.id}/chats/streaming`}
               >
-                Voice Chat
+                Streaming Chat
               </Link>
             </Button>
 
-            <Button>
-              {/* <Link href={`/dashboard/companion/${companion.chatLink}/${companion.id}`}> */}
+            {/* <Button>
+             
               <Link href={`/dashboard/companion/${companion.id}/chats/notes`}>
                 Notes Chat
               </Link>
-            </Button>
+            </Button> */}
 
             <Button>
               <Link href={`/dashboard/companion/${companion.id}/edit`}>
                 Edit
               </Link>
             </Button>
-            <Button>
+            {/* <Button>
               <Link href={`/dashboard/companion/${companion.id}/notes`}>
                 Notes
               </Link>
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

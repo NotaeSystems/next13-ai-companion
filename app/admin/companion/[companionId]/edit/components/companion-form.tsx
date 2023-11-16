@@ -91,7 +91,7 @@ const formSchema = z.object({
 
   voiceId: z.string().optional(),
 
-  pineconeIndex: z.string().optional(),
+  // pineconeIndex: z.string().optional(),
 
   seed: z.string().min(50, {
     message: "Seed requires at least 200 characters.",
@@ -127,7 +127,7 @@ export const CompanionForm = ({
       instructions: "",
       seed: "",
       relationship: "",
-      pineconeIndex: "",
+      // pineconeIndex: "",
       voiceId: "",
       src: "",
       categoryId: undefined,
@@ -289,7 +289,7 @@ export const CompanionForm = ({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="pineconeIndex"
               control={form.control}
               render={({ field }) => (
@@ -306,7 +306,7 @@ export const CompanionForm = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               name="temperature"
               control={form.control}

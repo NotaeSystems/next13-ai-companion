@@ -38,7 +38,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
   const categories = await prismadb.category.findMany();
 
   return (
-    <div className="h-full p-4 space-y-2">
+    <div className="p-4 space-y-2">
       <h1>Home Page</h1>
       {/* <SearchInput /> */}
       {/* <Categories data={categories} /> */}

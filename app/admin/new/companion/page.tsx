@@ -3,7 +3,7 @@ import { auth, redirectToSignIn } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
-
+import { Category, Companion } from "@prisma/client";
 import { CompanionForm } from "./components/companion-form";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
 interface CompanionIdPageProps {

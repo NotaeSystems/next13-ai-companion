@@ -40,7 +40,7 @@ export default async function RootLayout({
   console.log("getting ready to check if admin");
   if (!profile) {
     console.log("Sending to NextResponse. Not Admin");
-    return <>"Not Authorized"</>;
+    return <>Not Authorize</>;
   }
   return (
     <>

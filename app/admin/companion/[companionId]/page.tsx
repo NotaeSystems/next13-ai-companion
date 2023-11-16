@@ -28,11 +28,11 @@ const CompanionPage = async ({ params }: CompanionIdPageProps) => {
   companion = await prismadb.companion.findUnique({
     where: {
       id: params.companionId,
-      userId,
     },
   });
 
   if (!companion) {
+    console.log("Returning there is no companion found");
     return redirect("/admin");
   }
 

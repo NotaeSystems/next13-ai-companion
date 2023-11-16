@@ -32,11 +32,11 @@ model Companion {
   seed          String
   relationship  String         @default("User is a stranger and a fan to companion")
   voiceId       String         @default("2Egq65mAdch3uRX23oDd")
-  pineconeIndex String?         
+  pineconeIndex String?        @default("")
   category      Category       @relation(fields: [categoryId], references: [id])
   categoryId    String         @db.ObjectId
   localChatApi  String         @default("/api/streaming")
-  chatLink      String         @default("chat")
+  chatLink      String         @default("noteschat")
   messages      Message[]
   relationships Relationship[]
   groups        Group[]
@@ -89,7 +89,7 @@ model Relationship {
   role          String  @default("You are a friendly stranger to user")   //role of the user: User, Admin, Manager
   content       String @default("I am a great fan of yours.")  // starting context of the persona from profile of the user
   temperature   Float   @default(0.5) // the temperature of the relationship between user and persona
-  pineconeIndex String   @default("None")  // if there is a pineconeIndex then additonal context about user from pinecone will be used 
+  pineconeIndex String?   @default("")  // if there is a pineconeIndex then additonal context about user from pinecone will be used 
 
   // for billing purposes
   conversations      Int @default(0)

@@ -9,16 +9,16 @@ export async function PATCH(
   { params }: { params: { relationshipId: string } }
 ) {
   try {
-    console.log("inside of /api/relationship");
+    console.log("inside of /api/relationship/[relationshipId]");
     const body = await req.json();
     const user = await currentUser();
     const {
       status,
 
       content,
-      temperature,
+      // temperature,
 
-      pineconeIndex,
+      // pineconeIndex,
     } = body;
 
     //console.log("relationship: " + relationship);
@@ -31,10 +31,10 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!status) {
-      console.log("missing fields");
-      return new NextResponse("Missing required fields", { status: 400 });
-    }
+    // if (!status) {
+    //   console.log("missing fields");
+    //   return new NextResponse("Missing required fields", { status: 400 });
+    // }
 
     const isPro = await checkSubscription();
 
@@ -51,8 +51,8 @@ export async function PATCH(
         status,
         content,
         // instructions,
-        pineconeIndex,
-        temperature: Number(temperature),
+        // pineconeIndex,
+        // temperature: Number(temperature),
       },
     });
     console.log(relationship);

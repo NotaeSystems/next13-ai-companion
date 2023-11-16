@@ -60,9 +60,9 @@ const formSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required.",
   }),
-  // status: z.string().min(1, {
-  //   message: "Status is required.",
-  // }),
+  status: z.string().min(1, {
+    message: "Status is required.",
+  }),
   description: z.string().min(1, {
     message: "Description is required.",
   }),
@@ -85,7 +85,7 @@ const formSchema = z.object({
 
   voiceId: z.string().optional(),
 
-  pineconeIndex: z.string().optional(),
+  // pineconeIndex: z.string().optional(),
 
   seed: z.string().min(50, {
     message: "Seed requires at least 200 characters.",
@@ -120,9 +120,9 @@ export const CompanionForm = ({
       instructions: "",
       seed: "",
       relationship: "",
-      pineconeIndex: "",
+      // pineconeIndex: "",
       voiceId: "",
-      src: "",
+      src: "/placeholder.svg",
       categoryId: undefined,
     },
   });
@@ -211,16 +211,29 @@ export const CompanionForm = ({
               name="status"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="col-span-2 md:col-span-1">
+                <FormItem>
                   <FormLabel>Status</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="Pending"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Status of Compannion.</FormDescription>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a status"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Pending">Pending</SelectItem>
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="Suspended">Suspended</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select a temperature for your AI
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -245,7 +258,7 @@ export const CompanionForm = ({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="pineconeIndex"
               control={form.control}
               render={({ field }) => (
@@ -262,7 +275,7 @@ export const CompanionForm = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               name="temperature"
               control={form.control}

@@ -38,11 +38,11 @@ const topK = 6;
 const pineconeEnvironment: string = process.env.PINECONE_ENVIRONMENT!;
 const pineconeApiKey: string = process.env.PINECONE_API_KEY!;
 
-// the pinecone function is now ready to send  requests to Pinecone
 const pinecone = new Pinecone({
   apiKey: pineconeApiKey,
   environment: pineconeEnvironment,
 });
+// the pinecone function is now ready to send  requests to Pinecone
 
 // Pinecone index is the name of pinecone's database where all our vectorized data is stored at Pinecone
 // all our site's  vectorized data is stored in this index
@@ -80,20 +80,24 @@ export async function POST(
     const user = await currentUser();
 
     if (!user || !user.firstName || !user.id) {
-      console.log(" Not a logged in user. Returning\n");
+      console.log(" !!!!!!! Not a logged in user. Returning\n !!!!!!!!!!");
       return new NextResponse("Unauthorized", { status: 401 });
     }
     ///////////////////////////////////////////////////////////
 
     console.log(
-      "*** User verified: " + user.firstName + " " + user.lastName + "\n"
+      "****** User verified: " +
+        user.firstName +
+        " " +
+        user.lastName +
+        "\n *********"
     );
 
     //////////////////////// *Verify  Companion* /////////////////////////////////
     // find the Companion that User is chatting with this is in the url as [companionId] //////////////////////
     // the information comes to as params in the url and is inthe params variable
 
-    console.log("****** Getting ready to find Companion\n");
+    console.log("****** Getting ready to find Companion\n  *********");
     let companion: Companion | null;
 
     companion = await prisma.companion.findUnique({
@@ -104,10 +108,13 @@ export async function POST(
 
     // if we cannot find companion Or companion is 'Suspended' then we will return an error
     if (!companion) {
-      console.log("\nCould not find an active Companion. Returning. \n");
+      console.log(
+        "\n !!!!!!!!!!!!!Could not find an active Companion. Returning. !!!!!!!!! \n"
+      );
       return new NextResponse("Companion not found", { status: 404 });
     }
     // we found the Companion now check to see if Companion is active
+
     if (companion.status != "Active") {
       console.log(
         " *********  Companion found but is not active. Companion Status: " +
@@ -115,7 +122,7 @@ export async function POST(
           "****************\n"
       );
       return new NextResponse(
-        " Companion found but is not active. Returning \n",
+        " !!!!!!!!!! Companion found but is not active. Returning  !!!!!!!!!!!!!!!!!!!\n",
         {
           status: 404,
         }
@@ -145,13 +152,13 @@ export async function POST(
     // User must have an active relationship to chat with a companion
     if (!relationship) {
       console.log(
-        "\n\n ************** Did not find a Relationship. Returning Unauthorized"
+        "\n\n !!!!!!!!!!!!!!! Did not find a Relationship. Returning Unauthorized !!!!!!!!!!!!!!"
       );
       return new NextResponse("Unauthorized", { status: 401 });
     }
     if (relationship.status != "Active") {
       console.log(
-        "\n\n *********** Found Relationship but Relationship is not Active. Returning Unauthorized"
+        "\n\n !!!!!!!!!!!!!!!!!!! Found Relationship but Relationship is not Active. Returning Unauthorized !!!!!!!!!"
       );
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -172,15 +179,14 @@ export async function POST(
 
     if (relationship.conversations > relationship.conversationsLimit) {
       console.log(
-        "conversational Limit of " +
+        " !!!!!!!!!!!!!!!!!conversational Limit of " +
           relationship.conversationsLimit +
-          " reached. Need to do Billing"
+          " reached. Need to do Billing !!!!!!!!!!!"
       );
     }
 
-    //// lets get the relationship information between User and Assistant
     console.log(
-      "\n************* Found Relationship. Getting Relationship Content \n"
+      "\n************* Found Relationship. Getting Relationship Content ********************* \n"
     );
 
     const userRelationshipContent = relationship.content;
@@ -203,15 +209,22 @@ export async function POST(
     // the present chat messages are sent by the chat page.
     // the messages are give a special type of ChatCompletionMessage[]
     const messages: ChatCompletionMessage[] = body.messages;
+
+    // Lets find the present chat message
+    const lastChatMessage = messages.slice(-1);
+
     console.log(
-      "\n Request Messages from present Active Chat: request.messages \n" +
+      "\n *************** Request Messages from present Active Chat: request.messages **************\n" +
         JSON.stringify(body.messages)
     );
+
+    console.log("Last Chat Message: " + JSON.stringify(lastChatMessage));
 
     // It could be a long chat session that would be too much to send to the LLM
     // so we limit the the message history
     // Lets get the last number messages from present active chat to determine what we have been chatting about
     // messagesTruncatedNumber is set in Constants above
+
     const messagesTruncated = messages.slice(messagesTruncatedNumber);
 
     console.log(
@@ -228,7 +241,7 @@ export async function POST(
     // we are using our getEmbedding function from our function "@/lib/openai
 
     console.log(
-      "Embedding the truncated messages for querying Pinecone vectorized database"
+      "############### Embedding the truncated messages for querying Pinecone vectorized database ########"
     );
     const embedding = await getEmbedding(
       messagesTruncated.map((message) => message.content).join("\n")
@@ -238,15 +251,20 @@ export async function POST(
     //// companionNamespace is the location of our companion's segmented partiton of the Pinecone Vectorized Database
     //  where public facts about this particular companion is stored
 
-    const companionNamespace = pineconeIndex.namespace(companion.namespace);
-
     console.log(
-      "Will be searching Pinecone in the Companion's namespace: " +
-        companionNamespace
+      "*************** Will be searching Pinecone in the Companion's namespace: " +
+        JSON.stringify(companion.namespace) +
+        "****************"
     );
+    const companionNamespace = pineconeIndex.namespace(companion.namespace);
 
     ///// lets query Pinecone companion namespace with our last few messages that were embedded by openai
     // and find  relevant facts that were inserted by the present User. topK is the number of related records to return
+
+    console.log(
+      "********** Lets find Pine Cone data for Assistant **************"
+    );
+
     const vectorAssistantQueryResponse = await companionNamespace.query({
       vector: embedding,
       topK: topK,
@@ -260,6 +278,8 @@ export async function POST(
         score: match.score,
       }))
     );
+
+    /// TODO figure out how to just get content
     const relevantAssistantMatches = JSON.stringify(
       vectorAssistantQueryResponse.matches?.map((match) => ({
         content: match.metadata?.content,
@@ -302,6 +322,7 @@ export async function POST(
 
     ///// lets query Pinecone namespace with our last few messages that were embedded by openai
     // and find  relevant facts that were inserted by the present User
+    console.log("********** Lets find Pine Cone data for User **************");
     const vectorUserQueryResponse = await companionNamespace.query({
       vector: embedding,
       topK: 6,
