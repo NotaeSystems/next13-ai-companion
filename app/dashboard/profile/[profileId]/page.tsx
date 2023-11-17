@@ -31,7 +31,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
   });
 
   if (!profile) {
-    await prismadb.profile.create({
+    profile = await prismadb.profile.create({
       data: {
         userId: userId,
       },

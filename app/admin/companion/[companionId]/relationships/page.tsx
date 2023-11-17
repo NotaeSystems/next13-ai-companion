@@ -12,7 +12,7 @@ import { AdminCompanionNavbar } from "@/components/navbars/admin-companion-navba
 import { AdminCompanions } from "@/components/admin/admin-companions";
 import { redirect } from "next/navigation";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
-import { Companion } from "@prisma/client";
+import { Companion, Relationship } from "@prisma/client";
 interface RelationshipsAdminPageProps {
   params: {
     companionId: string;
@@ -97,9 +97,7 @@ const RelationshipsAdminPage = async ({
                   alt="Character"
                 />
               </div> */}
-                <p className="font-bold">
-                  {user.firstName} {user.lastName}
-                </p>
+                <p className="font-bold">{relationship.title}</p>
                 {/* <p className="font-bold">{relationship.content} xxxx</p> */}
                 {/* <p className="text-xs">{item.description}</p> */}
               </CardHeader>

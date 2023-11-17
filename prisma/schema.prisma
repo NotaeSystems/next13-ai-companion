@@ -15,6 +15,15 @@ model Category {
   companions Companion[]
 }
 
+model Invitation {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  inviteCode  String
+  companionId String
+  userId      String
+  email       String
+  status      String
+}
+
 model Companion {
   id            String         @id @default(auto()) @map("_id") @db.ObjectId
   namespace     String         @default("Pending") 

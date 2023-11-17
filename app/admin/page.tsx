@@ -43,6 +43,9 @@ const RootPage = async () => {
   return (
     <div className="h-full p-4 space-y-2">
       <h1>Admin Dashboard</h1>
+
+      <AdminCompanions data={companions} />
+
       <Button>
         <Link href={`/admin/new/companion`}>Create New Companion</Link>
       </Button>

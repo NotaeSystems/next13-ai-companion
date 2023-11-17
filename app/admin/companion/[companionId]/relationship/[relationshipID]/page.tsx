@@ -77,7 +77,7 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
   return (
     <>
       <AdminCompanionNavbar companion={companion} />
-      <h1>You are now in a Relationship with Companion-{companion.name}</h1>
+      <h1 className="text-lg font-medium">{relationship.title}</h1>
       <div className="flex justify-center col-auto">
         <h1>{companion.name}</h1>
       </div>

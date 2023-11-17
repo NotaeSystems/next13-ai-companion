@@ -4,7 +4,7 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { CompanionNavbar } from "@/components/navbars/companion-navbar";
+import { AdminCompanionNavbar } from "@/components/navbars/admin-companion-navbar";
 import NavBar from "./NavBar";
 export const metadata: Metadata = {
   title: "FlowBrain - Notes",
@@ -39,7 +39,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
 
   return (
     <>
-      <CompanionNavbar companion={companion} />
+      <AdminCompanionNavbar companion={companion} />
       <NavBar companion={companion} />
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {allNotes.map((note) => (

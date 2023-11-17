@@ -5,7 +5,7 @@ import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 
 import { CompanionForm } from "./components/companion-form";
-import { CompanionNavbar } from "@/components/navbars/companion-navbar";
+import { AdminCompanionNavbar } from "@/components/navbars/admin-companion-navbar";
 interface CompanionIdPageProps {
   params: {
     companionId: string;
@@ -43,7 +43,7 @@ const EditCompanionPage = async ({ params }: CompanionIdPageProps) => {
   console.log("getting ready to return");
   return (
     <>
-      <CompanionNavbar companion={companion} />
+      <AdminCompanionNavbar companion={companion} />
       <h1> Edit Companion</h1>
       <CompanionForm companion={companion} categories={categories} />
     </>

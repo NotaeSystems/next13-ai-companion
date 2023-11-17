@@ -34,7 +34,7 @@ export const Companions = ({ data }: CompanionsProps) => {
           key={item.name}
           className="bg-primary/10 rounded-xl cursor-pointer hover:opacity-75 transition border-0"
         >
-          <Link href={`/dashboard/companion/${item.id}/chats/streaming`}>
+          <Link href={`/dashboard/companion/${item.id}`}>
             <CardHeader className="flex items-center justify-center text-center text-muted-foreground">
               <div className="relative w-32 h-32">
                 <Image

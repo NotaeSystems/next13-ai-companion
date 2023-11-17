@@ -27,22 +27,25 @@ export default function NavBar({ companion }: NavBarProps) {
     <>
       <div className="p-4 shadow">
         <div className="m-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
-          <Link href="/notes" className="flex items-center gap-1">
+          {/* <Link href="/notes" className="flex items-center gap-1">
             <Image src={logo} alt="FlowBrain logo" width={40} height={40} />
             <span className="font-bold">FlowBrain</span>
-          </Link>
+          </Link> */}
+          <div>
+            <h1 className="">Notes</h1>
+          </div>
           <div className="flex items-center gap-2">
-            <UserButton
+            {/* <UserButton
               afterSignOutUrl="/"
               appearance={{
                 baseTheme: theme === "dark" ? dark : undefined,
                 elements: { avatarBox: { width: "2.5rem", height: "2.5rem" } },
               }}
             />
-            <ThemeToggleButton />
+            <ThemeToggleButton /> */}
             <Button onClick={() => setShowAddEditNoteDialog(true)}>
               <Plus size={20} className="mr-2" />
-              Add Note
+              Add Companion Note
             </Button>
             <AIChatButton />
           </div>

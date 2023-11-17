@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { auth, redirectToSignIn } from "@clerk/nextjs";
+import { auth, currentUser, redirectToSignIn } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
@@ -23,6 +23,10 @@ const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
     return redirectToSignIn();
   }
 
+  const user = await currentUser();
+  if (!user) {
+    return redirectToSignIn();
+  }
   const validSubscription = await checkSubscription();
 
   if (!validSubscription) {
@@ -43,6 +47,47 @@ const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
     return redirect("/dashboard");
   }
   const categories = await prismadb.category.findMany();
+
+  //check if this if first time to chat with compannion. If so need to establish relationship
+  console.log("getting ready to check for relationship");
+  // check to see if relationship exists
+  let relationship = null;
+  relationship = await prismadb.relationship.findFirst({
+    where: {
+      companionId: companion.id,
+      userId: user.id,
+    },
+  });
+
+  let profileName = null;
+
+  if (!relationship) {
+    console.log("Did not find relationship");
+    let profile = await prismadb.profile.findFirst({
+      where: {
+        userId: user.id,
+      },
+    });
+    if (!profile) {
+      return redirectToSignIn();
+    }
+
+    profileName = profile.firstName + " " + profile.lastName;
+
+    console.log(
+      "getting ready to create new relationship for:  " + profileName
+    );
+    relationship = await prismadb.relationship.create({
+      data: {
+        userId: user.id,
+        companionId: companion.id,
+        role: "user",
+        title: profileName,
+        // content: "You are a friendly stranger to Assistant",
+      },
+    });
+  }
+  console.log(relationship.title);
 
   return (
     <>

@@ -53,6 +53,9 @@ export const AdminCompanionNavbar = ({
                 Conversations
               </Link>
             </Button>
+            <Button>
+              <Link href={`/admin/companion/${companion.id}/notes`}>Notes</Link>
+            </Button>
           </div>
         </div>
       </div>

@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { Poppins } from "next/font/google";
-import { auth, redirectToSignIn, SignedOut, SignedIn } from "@clerk/nextjs";
+import {
+  auth,
+  currentUser,
+  redirectToSignIn,
+  SignedOut,
+  SignedIn,
+} from "@clerk/nextjs";
 import { Sparkles } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -9,8 +15,9 @@ import { MobileSidebar } from "@/components/mobile-sidebar";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { useProModal } from "@/hooks/use-pro-modal";
-import { Companion } from "@prisma/client";
+import { Companion, Relationship } from "@prisma/client";
 import Image from "next/image";
+import prismadb from "@/lib/prismadb";
 
 const font = Poppins({ weight: "600", subsets: ["latin"] });
 
@@ -18,7 +25,14 @@ interface CompanionNavBarProps {
   companion: Companion;
 }
 
-export const CompanionNavbar = ({ companion }: CompanionNavBarProps) => {
+export const CompanionNavbar = async ({ companion }: CompanionNavBarProps) => {
+  console.log("inside of companion-navbar");
+
+  const user = await currentUser();
+  if (!user) {
+    return redirectToSignIn();
+  }
+
   return (
     <>
       <div className="w-full h-20 bg-yellow-800 sticky top-0">
@@ -65,11 +79,11 @@ export const CompanionNavbar = ({ companion }: CompanionNavBarProps) => {
               </Link>
             </Button> */}
 
-            <Button>
+            {/* <Button>
               <Link href={`/dashboard/companion/${companion.id}/edit`}>
                 Edit
               </Link>
-            </Button>
+            </Button> */}
             {/* <Button>
               <Link href={`/dashboard/companion/${companion.id}/notes`}>
                 Notes
