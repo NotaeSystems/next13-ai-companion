@@ -40,7 +40,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
 
   return (
     <div className="p-4 space-y-2">
-      <h1>Home Page</h1>
+      <h1 className="text-3xl lg:text-5xl text-center">Home Page</h1>
       <Button>
         <Link href={`/invitation`}>Have an Invitation?</Link>
       </Button>

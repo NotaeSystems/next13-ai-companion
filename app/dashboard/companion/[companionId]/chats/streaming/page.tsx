@@ -68,13 +68,14 @@ const StreamingPage = async ({ params }: StreamingPageProps) => {
   const companionId = companion.id;
   return (
     <>
-      <CompanionNavbar companion={companion} />
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div className="bg-slate-800 p-3 w-[800px] rounded-md text-white">
+      {/* <main className="flex min-h-screen flex-col items-center justify-between p-24"> */}
+      <main className="flex flex-col h-full p-24 space-y-2 items-center ">
+        <div className="bg-slate-800 p-3  rounded-md  text-white">
+          <CompanionNavbar companion={companion} />
           <div className="flex justify-center col-auto">
             <h2 className="text-2xl">{companion.name}</h2>
           </div>
-          {/* <div className="flex justify-center col-auto">
+          <div className="flex justify-center col-auto">
             <Image
               src={companion.src}
               width={125}
@@ -82,7 +83,7 @@ const StreamingPage = async ({ params }: StreamingPageProps) => {
               alt="Picture of the author"
             />
           </div>
-          <Button>
+          {/* <Button>
             <Link href={`/dashboard/companion/${companionId}/relationship`}>
               Relationship
             </Link>

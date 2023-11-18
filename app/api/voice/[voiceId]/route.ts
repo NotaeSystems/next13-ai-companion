@@ -1,94 +1,95 @@
-import fs from 'fs';
-import { Readable } from 'stream';
+import fs from "fs";
+import { Readable } from "stream";
 
 const voice = require("elevenlabs-node");
 const axios = require("axios");
-
 
 // export const runtime = 'edge'
 const elevenLabsAPI = "https://api.elevenlabs.io/v1";
 
 // Need to adapt from elevenlabs-node because of https://github.com/FelixWaweru/elevenlabs-node/issues/16
 const textToSpeech = async (
-    apiKey: string | undefined,
-    voiceID: string,
-    fileName: string,
-    textInput: string,
-    stability?: number,
-    similarityBoost?: number,
-    modelId?: string,
+  apiKey: string | undefined,
+  voiceID: string,
+  fileName: string,
+  textInput: string,
+  stability?: number,
+  similarityBoost?: number,
+  modelId?: string
 ) => {
-    try {
-        if (!apiKey || !voiceID || !fileName || !textInput) {
-            console.log("ERR: Missing parameter");
-        }
-
-        const voiceURL = `${elevenLabsAPI}/text-to-speech/${voiceID}`;
-        const stabilityValue = stability ? stability : 0;
-        const similarityBoostValue = similarityBoost ? similarityBoost : 0;
-
-        const response = await axios({
-            method: "POST",
-            url: voiceURL,
-            data: {
-                text: textInput,
-                voice_settings: {
-                    stability: stabilityValue,
-                    similarity_boost: similarityBoostValue,
-                },
-                model_id: modelId ? modelId : undefined,
-            },
-            headers: {
-                Accept: "audio/mpeg",
-                "xi-api-key": apiKey,
-                "Content-Type": "application/json",
-            },
-            responseType: "stream",
-        });
-
-        return new Promise((resolve, reject) => {
-            const writeStream = fs.createWriteStream(fileName);
-            response.data.pipe(writeStream);
-
-            writeStream.on('finish', () => resolve(fileName));
-            writeStream.on('error', reject);
-        });
-
-    } catch (error) {
-        console.log(error);
+  try {
+    if (!apiKey || !voiceID || !fileName || !textInput) {
+      console.log("ERR: Missing parameter");
     }
+
+    const voiceURL = `${elevenLabsAPI}/text-to-speech/${voiceID}`;
+    const stabilityValue = stability ? stability : 0;
+    const similarityBoostValue = similarityBoost ? similarityBoost : 0;
+
+    const response = await axios({
+      method: "POST",
+      url: voiceURL,
+      data: {
+        text: textInput,
+        voice_settings: {
+          stability: stabilityValue,
+          similarity_boost: similarityBoostValue,
+        },
+        model_id: modelId ? modelId : undefined,
+      },
+      headers: {
+        Accept: "audio/mpeg",
+        "xi-api-key": apiKey,
+        "Content-Type": "application/json",
+      },
+      responseType: "stream",
+    });
+
+    return new Promise((resolve, reject) => {
+      const writeStream = fs.createWriteStream(fileName);
+      response.data.pipe(writeStream);
+
+      writeStream.on("finish", () => resolve(fileName));
+      writeStream.on("error", reject);
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export async function POST(req: Request,{ params }: { params: { voiceId: string} }){
-    console.log("inside of /api/voice/[voiceId]")
-    
-    const json = await req.json()
-    const { text } = json
-    console.log("message: " + text )
-    const apiKey = process.env.ELEVEN_LABS_API_KEY
-   // const voiceID = "IKne3meq5aSn9XLyUdCD"
-    const voiceID = params.voiceId
-    const filePath = "./tmp/audio.mp3";
+export async function POST(
+  req: Request,
+  { params }: { params: { voiceId: string } }
+) {
+  console.log("inside of /api/voice/[voiceId]");
 
-    try {
-        await textToSpeech(apiKey, voiceID, filePath, text).then((res) => {
-            console.log(res)
-        });
-        // Stream the audio file
-        // Create the stream from the audio file
-        const audioStream = fs.createReadStream(filePath);
+  const json = await req.json();
+  const { text } = json;
+  console.log("message: " + text);
+  const apiKey = process.env.ELEVEN_LABS_API_KEY;
+  // const voiceID = "IKne3meq5aSn9XLyUdCD"
+  const voiceID = params.voiceId;
+  const filePath = "./tmp/audio.mp3";
 
-        audioStream.on('end', () => {
-            fs.unlinkSync(filePath); // Delete the file after streaming
-        });
+  try {
+    await textToSpeech(apiKey, voiceID, filePath, text).then((res) => {
+      console.log(res);
+    });
+    // Stream the audio file
+    // Create the stream from the audio file
+    const audioStream = fs.createReadStream(filePath);
 
-        // @ts-ignore
-        const response = new Response(Readable.from(audioStream), {
-            headers: { 'Content-Type': 'audio/mpeg' }
-        });
-        return response;
-    } catch (error) {
-        console.error(error);
-        // res.status(500).json({error: 'Error generating audio'});
-    }
+    audioStream.on("end", () => {
+      fs.unlinkSync(filePath); // Delete the file after streaming
+    });
+
+    // @ts-ignore
+    const response = new Response(Readable.from(audioStream), {
+      headers: { "Content-Type": "audio/mpeg" },
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    // res.status(500).json({error: 'Error generating audio'});
+  }
 }

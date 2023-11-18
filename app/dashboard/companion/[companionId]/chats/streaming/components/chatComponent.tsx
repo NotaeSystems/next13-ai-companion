@@ -20,7 +20,7 @@ export default function ChatComponent({ companion }: StreamingProps) {
   // useChat -> handles messages for us, user input, handling user submits, etc.
   const { input, handleInputChange, handleSubmit, isLoading, messages } =
     useChat({
-      api: `/api/chats/${companion.id}/noteschat/`,
+      api: `/api/chats/${companion.id}/streaming/`,
       onFinish(message: Message) {
         setPlayMessage(message);
       },
@@ -32,19 +32,20 @@ export default function ChatComponent({ companion }: StreamingProps) {
   //console.log(input);
   const voiceId: string = companion.voiceId;
   return (
-    <div>
+    <div className="flex flex-col h-full p-4 space-y-2">
       {/*  Need to params voiceId to StreamingAudioPlayer */}
+
       {/* <AudioPlayerComponent playMessage={playMessage} voiceId={voiceId} /> */}
       {messages.map((message: Message) => {
         return (
           <>
             <div key={message.id}>
               {/*  Name of person talking */}
-              {message.role === "assistant" ? (
+              {/* {message.role === "assistant" ? (
                 <h3 className="text-lg font-semibold mt-2">{companion.name}</h3>
               ) : (
                 <h3 className="text-lg font-semibold mt-2 justify-end">You</h3>
-              )}
+              )} */}
 
               {/* Formatting the message */}
               {message.content
@@ -66,7 +67,7 @@ export default function ChatComponent({ companion }: StreamingProps) {
                       return (
                         <p
                           key={message.id + index}
-                          className="text-white bg-black justify-end"
+                          className="group flex items-start gap-x-3 py-4 w-full justify-end"
                         >
                           {currentTextBlock}
                         </p>
@@ -81,7 +82,7 @@ export default function ChatComponent({ companion }: StreamingProps) {
 
       <form className="mt-12" onSubmit={handleSubmit}>
         <p>Your Message</p>
-        <textarea
+        <input
           className="mt-2 w-full bg-slate-600 p-2"
           placeholder={`Converse with ${companion.name}`}
           value={input}

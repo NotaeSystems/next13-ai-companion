@@ -57,12 +57,11 @@ export const CompanionNavbar = async ({ companion }: CompanionNavBarProps) => {
               </Link>
             </Button>
 
-            {/* <Button>
-              
+            <Button>
               <Link href={`/dashboard/companion/${companion.id}/chats/chat`}>
                 Basic Chat
               </Link>
-            </Button> */}
+            </Button>
             <Button>
               {/* <Link href={`/dashboard/companion/${companion.chatLink}/${companion.id}`}> */}
               <Link
@@ -72,12 +71,11 @@ export const CompanionNavbar = async ({ companion }: CompanionNavBarProps) => {
               </Link>
             </Button>
 
-            {/* <Button>
-             
+            <Button>
               <Link href={`/dashboard/companion/${companion.id}/chats/notes`}>
                 Notes Chat
               </Link>
-            </Button> */}
+            </Button>
 
             {/* <Button>
               <Link href={`/dashboard/companion/${companion.id}/edit`}>
