@@ -4,7 +4,7 @@ import { Companion } from "@prisma/client";
 import { ChatHeader } from "@/components/chat-header";
 import { AudioPlayerComponent } from "./AudioPlayerComponent";
 import { useEffect, useState } from "react";
-
+import { UserAvatar } from "@/components/chat/user-avatar";
 interface StreamingProps {
   companion: Companion & {
     messages: Message[];
@@ -67,9 +67,10 @@ export default function ChatComponent({ companion }: StreamingProps) {
                       return (
                         <p
                           key={message.id + index}
-                          className="group flex items-start gap-x-3 py-4 w-full justify-end"
+                          className="group text-red-300 flex items-start gap-x-3 py-4 w-full justify-end"
                         >
                           {currentTextBlock}
+                          {<UserAvatar />}
                         </p>
                       );
                     }
