@@ -1,3 +1,33 @@
+#### Chatbot
+
+Stage 1
+
+    -tailwind css totally responsive mobile, tablets, desktops
+    -chat config file to change appearance - text size, bg text colors allow on-off voice chat, avatar etc
+
+    -clerk user icon for user
+    -cloudinary  assistant icon
+
+    vercel ai useChat
+
+    use whisper voice icon  on-off button
+
+    use voice icon-microphone on-off button
+
+    clear chat messages -icon button
+
+    copy any message to clipboard -  icon
+
+    eleven labs for assistant speech
+
+    whisper
+
+Stage 2 avatar
+lip syncing voice
+
+Stage 3
+Unity VR avatar
+
 ### Built from inspiration of following:
 
 # Youtubes:

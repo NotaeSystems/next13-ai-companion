@@ -185,7 +185,7 @@ export async function DELETE(
   { params }: { params: { companionId: string } }
 ) {
   try {
-    console.log("inside of /api/notes/[companionId]");
+    console.log("inside of DELETE /api/admin/notes/[companionId]");
     const body = await req.json();
     const companion = await prisma.companion.findUnique({
       where: {

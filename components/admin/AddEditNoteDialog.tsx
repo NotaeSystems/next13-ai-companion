@@ -12,7 +12,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -20,10 +20,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
-import LoadingButton from "./ui/loading-button";
-import { Textarea } from "./ui/textarea";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import LoadingButton from "@/components/ui/loading-button";
+import { Textarea } from "@/components/ui/textarea";
 
 interface AddEditNoteDialogProps {
   open: boolean;
@@ -67,7 +67,7 @@ export default function AddEditNoteDialog({
         if (!response.ok) throw Error("Status code: " + response.status);
       } else {
         const response = await fetch(
-          `/api/notes/${companion.id}?role=assistant`,
+          `/api/notes/${companion.id}?role=${role}`,
           {
             method: "POST",
             body: JSON.stringify(input),
