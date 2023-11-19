@@ -6,6 +6,8 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { AdminCompanionNavbar } from "@/components/navbars/admin-companion-navbar";
 import NavBar from "./NavBar";
+import { RelationshipAdminNavbar } from "@/components/navbars/admin-relationship-navbar";
+
 export const metadata: Metadata = {
   title: "FlowBrain - Notes",
 };
@@ -13,6 +15,7 @@ export const metadata: Metadata = {
 interface NotesPageProps {
   params: {
     companionId: string;
+    relationshipID: string;
   };
 }
 
@@ -25,6 +28,11 @@ export default async function NotesPage({ params }: NotesPageProps) {
       id: params.companionId,
     },
   });
+  const relationship = await prismadb.relationship.findUnique({
+    where: {
+      id: params.relationshipID,
+    },
+  });
 
   if (!companion) {
     console.log("companion Not Found. Is user the owner of the companion?");
@@ -35,7 +43,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
   const undefinedField = "";
   const allNotes = await prismadb.note.findMany({
     where: {
-      userId: null,
+      userId: userId,
       companionId: companion.id,
     },
   });
@@ -44,7 +52,12 @@ export default async function NotesPage({ params }: NotesPageProps) {
   return (
     <>
       <AdminCompanionNavbar companion={companion} />
+      <RelationshipAdminNavbar
+        companion={companion}
+        relationship={relationship}
+      />
       <NavBar companion={companion} />
+
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {allNotes.map((note) => (
           <Note note={note} key={note.id} />

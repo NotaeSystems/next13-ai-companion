@@ -68,7 +68,7 @@ export async function POST(
 
     if (Debugging) {
       console.log(
-        "***** inside of POST /api/chats/[companionId]/noteschat *****\n"
+        "***** inside of POST /api/chats/[companionId]/streaming *****\n"
       );
     }
 
@@ -411,7 +411,7 @@ export async function POST(
       "## End of Relevant Facts about yourself first person ##" +
       userRelationshipContent +
       "\n" +
-      "## Relevant Facts about User in first person " +
+      "## Relevant Facts about User. User's name is " +
       relevantUserMatches +
       "\n";
 

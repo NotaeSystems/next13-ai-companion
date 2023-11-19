@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
 import { AdminCompanionNavbar } from "@/components/navbars/admin-companion-navbar";
+import { RelationshipAdminNavbar } from "@/components/navbars/admin-relationship-navbar";
 
 interface CompanionIdPageProps {
   params: {
@@ -77,6 +78,10 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
   return (
     <>
       <AdminCompanionNavbar companion={companion} />
+      <RelationshipAdminNavbar
+        companion={companion}
+        relationship={relationship}
+      />
       <h1 className="text-lg font-medium">{relationship.title}</h1>
       <div className="flex justify-center col-auto">
         <h1>{companion.name}</h1>

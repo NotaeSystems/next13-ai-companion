@@ -67,7 +67,7 @@ export default function AddEditNoteDialog({
         if (!response.ok) throw Error("Status code: " + response.status);
       } else {
         const response = await fetch(
-          `/api/notes/${companion.id}?role=${role}`,
+          `/api/notes/${companion.id}?role=assistant`,
           {
             method: "POST",
             body: JSON.stringify(input),

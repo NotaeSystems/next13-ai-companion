@@ -23,9 +23,15 @@ const pinecone = new Pinecone({
 
 export async function POST(
   req: Request,
-  { params }: { params: { companionId: string } }
+  { params }: { params: { companionId: string; role: string } }
 ) {
   try {
+    const { searchParams } = new URL(req.url);
+
+    const role = searchParams.get("role");
+    console.log("role= " + role);
+
+    console.log("inside of POST  /api/notes/?role=" + role);
     const companion = await prisma.companion.findUnique({
       where: {
         id: params.companionId,
