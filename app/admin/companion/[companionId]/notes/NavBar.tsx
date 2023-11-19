@@ -2,7 +2,7 @@
 
 import logo from "@/assets/logo.png";
 import AIChatButton from "@/components/AIChatButton";
-import AddEditNoteDialog from "@/components/AddEditNoteDialog";
+import AddEditNoteDialog from "./AddEditNoteDialog";
 import ThemeToggleButton from "@/components/ThemeToggleButton";
 import { Button } from "@/components/ui/button";
 import { UserButton } from "@clerk/nextjs";

@@ -8,11 +8,12 @@ import {
   deleteNoteSchema,
   updateNoteSchema,
 } from "@/lib/validation/note";
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 import { isAdmin } from "@/lib/admin/isAdmin";
+
 const environment: string = process.env.PINECONE_ENVIRONMENT!;
 const apiKey: string = process.env.PINECONE_API_KEY!;
-
+const pineconeIndexEnv: string = process.env.PINECONE_INDEX!;
 const pinecone = new Pinecone({
   apiKey: apiKey,
   environment: environment,
@@ -23,9 +24,14 @@ const pinecone = new Pinecone({
 
 export async function POST(
   req: Request,
-  { params }: { params: { companionId: string } }
+  { params }: { params: { companionId: string; role: string } }
 ) {
   try {
+    // const { searchParams } = new URL(req.url);
+    // console.log("req url: " + req.url);
+    // const role = searchParams.get("role");
+    // console.log("role= " + role);
+    console.log("inside of POST /api/admin/companion/[companionId]/notes");
     const companion = await prisma.companion.findUnique({
       where: {
         id: params.companionId,
@@ -35,7 +41,14 @@ export async function POST(
       return Response.json({ error: "Error" }, { status: 401 });
     }
 
-    const companionPineConeIndex = companion.namespace;
+    //const companionPineConeIndex = companion.pineconeIndex;
+    const companionPineConeIndex = pineconeIndexEnv;
+    console.log("pineconeIndex: " + companionPineConeIndex);
+
+    if (!companionPineConeIndex) {
+      return Response.json({ error: "Error" }, { status: 401 });
+    }
+
     const pineconeIndex = pinecone.Index(companionPineConeIndex);
 
     const body = await req.json();
@@ -54,23 +67,36 @@ export async function POST(
     if (!userId) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    let setUserId: string | null;
     const embedding = await getEmbeddingForNote(title, content);
-
+    // if (role === "assistant") {
+    //   setUserId = null;
+    // } else {
+    //   setUserId = userId;
+    // }
+    // check to see if logged-in user is Admin and is Active
+    let userIsAdmin = await isAdmin(userId);
+    if (!userIsAdmin) {
+      return Response.json("Unauthorized", { status: 401 });
+    }
     const note = await prisma.$transaction(async (tx) => {
       const note = await tx.note.create({
         data: {
           title,
-          content,
-          userId,
+          content: content,
+          userId: null,
+          companionId: companion.id,
         },
       });
-      const ns1 = pineconeIndex.namespace("jimmyeaton");
+      const ns1 = pineconeIndex.namespace(companion.namespace);
+      if (!content) {
+        return Response.json({ error: "Unauthorized" }, { status: 401 });
+      }
       await ns1.upsert([
         {
           id: note.id,
           values: embedding,
-          metadata: { userId },
+          metadata: { userId, content: title + ": " + content },
         },
       ]);
 
@@ -89,6 +115,7 @@ export async function PUT(
   { params }: { params: { companionId: string } }
 ) {
   try {
+    console.log("made it to PUT /api/admin/companion/[companionId]/notes");
     const body = await req.json();
     const companion = await prisma.companion.findUnique({
       where: {
@@ -99,7 +126,11 @@ export async function PUT(
       return Response.json({ error: "Error" }, { status: 401 });
     }
 
-    const companionPineConeIndex = companion.namespace;
+    const companionPineConeIndex = pineconeIndexEnv;
+    if (!companionPineConeIndex) {
+      return Response.json({ error: "Error" }, { status: 401 });
+    }
+
     const pineconeIndex = pinecone.Index(companionPineConeIndex);
     const parseResult = updateNoteSchema.safeParse(body);
 
@@ -118,19 +149,17 @@ export async function PUT(
 
     const { userId } = auth();
 
-    if (!userId) {
+    if (!userId || userId !== note.userId) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-    // TODO also move code to admin for admin use. This is for user use
+    // check to see if logged-in user is Admin and is Active
     let userIsAdmin = await isAdmin(userId);
-
-    // if (!userId || userId !== note.userId  ) {
-    //   return Response.json({ error: "Unauthorized" }, { status: 401 });
-    // }
-    // if (!userId) {
-    //   return Response.json({ error: "Unauthorized" }, { status: 401 });
-    // }
+    if (!userIsAdmin) {
+      return Response.json("Unauthorized", { status: 401 });
+    }
     const embedding = await getEmbeddingForNote(title, content);
+
+    console.log("embeddings: " + embedding);
 
     const updatedNote = await prisma.$transaction(async (tx) => {
       const updatedNote = await tx.note.update({
@@ -140,12 +169,14 @@ export async function PUT(
           content,
         },
       });
-
-      await pineconeIndex.upsert([
+      const pineconeIndex = pinecone.Index(pineconeIndexEnv);
+      const namespace = pineconeIndex.namespace(companion.namespace);
+      // TODO remove metadata: { userId: userId } if companion is inserting his own notes
+      await namespace.upsert([
         {
           id,
           values: embedding,
-          metadata: { userId },
+          metadata: { userId: userId, content: title + ": " + content },
         },
       ]);
 
@@ -159,9 +190,21 @@ export async function PUT(
   }
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: { companionId: string } }
+) {
   try {
+    console.log("inside of DELETE /api/admin/companion/[companionId]/notes");
     const body = await req.json();
+    const companion = await prisma.companion.findUnique({
+      where: {
+        id: params.companionId,
+      },
+    });
+    if (!companion) {
+      return Response.json({ error: "Error" }, { status: 401 });
+    }
 
     const parseResult = deleteNoteSchema.safeParse(body);
 
@@ -171,7 +214,7 @@ export async function DELETE(req: Request) {
     }
 
     const { id } = parseResult.data;
-
+    console.log("delete id: " + id);
     const note = await prisma.note.findUnique({ where: { id } });
 
     if (!note) {
@@ -183,14 +226,21 @@ export async function DELETE(req: Request) {
     // if (!userId || userId !== note.userId) {
     //   return Response.json({ error: "Unauthorized" }, { status: 401 });
     // }
-
     if (!userId) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // check to see if logged-in user is Admin and is Active
+    let userIsAdmin = await isAdmin(userId);
+    if (!userIsAdmin) {
+      return Response.json("Unauthorized", { status: 401 });
+    }
+
+    const pineconeIndex = pinecone.Index(pineconeIndexEnv);
+    const namespace = pineconeIndex.namespace(companion.namespace);
     await prisma.$transaction(async (tx) => {
       await tx.note.delete({ where: { id } });
-      // await pineconeIndex.deleteOne(id);
+      await namespace.deleteOne(id);
     });
 
     return Response.json({ message: "Note deleted" }, { status: 200 });

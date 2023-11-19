@@ -213,7 +213,10 @@ export async function DELETE(
 
     const { userId } = auth();
 
-    if (!userId || userId !== note.userId) {
+    // if (!userId || userId !== note.userId) {
+    //   return Response.json({ error: "Unauthorized" }, { status: 401 });
+    // }
+    if (!userId) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
     const pineconeIndex = pinecone.Index(pineconeIndexEnv);

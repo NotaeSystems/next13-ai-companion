@@ -40,7 +40,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
     },
   });
 
-  console.log(allNotes);
+  //console.log(allNotes);
   return (
     <>
       <AdminCompanionNavbar companion={companion} />
