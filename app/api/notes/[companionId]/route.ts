@@ -66,19 +66,20 @@ export async function POST(
     if (!userId) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-    let setUserId: string | null;
+    // let setUserId: string | null;
     const embedding = await getEmbeddingForNote(title, content);
-    if (role === "assistant") {
-      setUserId = null;
-    } else {
-      setUserId = userId;
-    }
+
+    // if (role === "assistant") {
+    //   setUserId = null;
+    // } else {
+    //   setUserId = userId;
+    // }
     const note = await prisma.$transaction(async (tx) => {
       const note = await tx.note.create({
         data: {
           title,
           content: content,
-          userId: setUserId,
+          userId: userId,
           companionId: companion.id,
         },
       });

@@ -30,7 +30,6 @@ interface AddEditNoteDialogProps {
   setOpen: (open: boolean) => void;
   companion: Companion;
   noteToEdit?: Note;
-  role?: string;
 }
 
 export default function AddEditNoteDialog({
@@ -38,7 +37,6 @@ export default function AddEditNoteDialog({
   setOpen,
   companion,
   noteToEdit,
-  role,
 }: AddEditNoteDialogProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
 
@@ -66,13 +64,10 @@ export default function AddEditNoteDialog({
         });
         if (!response.ok) throw Error("Status code: " + response.status);
       } else {
-        const response = await fetch(
-          `/api/notes/${companion.id}?role=${role}`,
-          {
-            method: "POST",
-            body: JSON.stringify(input),
-          }
-        );
+        const response = await fetch(`/api/notes/${companion.id}`, {
+          method: "POST",
+          body: JSON.stringify(input),
+        });
         if (!response.ok) throw Error("Status code: " + response.status);
         form.reset();
       }
