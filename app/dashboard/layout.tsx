@@ -23,11 +23,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+    <>
       <DashboardNavbar />
       <ProModal />
       {children}
       <Toaster />
-    </ThemeProvider>
+    </>
   );
 }

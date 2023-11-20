@@ -35,46 +35,47 @@ interface StreamingPageProps {
 }
 
 const StreamingPage = async ({ params }: StreamingPageProps) => {
-  const { userId } = auth();
+  try {
+    const { userId } = auth();
 
-  if (!userId) {
-    return redirectToSignIn();
-  }
+    if (!userId) {
+      return redirectToSignIn();
+    }
 
-  const companion = await prismadb.companion.findUnique({
-    where: {
-      id: params.companionId,
-    },
-    include: {
-      messages: {
-        orderBy: {
-          createdAt: "asc",
+    const companion = await prismadb.companion.findUnique({
+      where: {
+        id: params.companionId,
+      },
+      include: {
+        messages: {
+          orderBy: {
+            createdAt: "asc",
+          },
+          where: {
+            userId,
+          },
         },
-        where: {
-          userId,
+        _count: {
+          select: {
+            messages: true,
+          },
         },
       },
-      _count: {
-        select: {
-          messages: true,
-        },
-      },
-    },
-  });
+    });
 
-  if (!companion) {
-    return redirect("/dashboard");
-  }
-  const companionId = companion.id;
-  return (
-    <>
-      <CompanionNavbar companion={companion} />
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div className="bg-slate-800 p-3 w-[800px] rounded-md text-white">
-          <div className="flex justify-center col-auto">
-            <h2 className="text-2xl">{companion.name}</h2>
-          </div>
-          {/* <div className="flex justify-center col-auto">
+    if (!companion) {
+      return redirect("/dashboard");
+    }
+    const companionId = companion.id;
+    return (
+      <>
+        <CompanionNavbar companion={companion} />
+        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+          <div className="bg-slate-800 p-3 w-[800px] rounded-md text-white">
+            <div className="flex justify-center col-auto">
+              <h2 className="text-2xl">{companion.name}</h2>
+            </div>
+            {/* <div className="flex justify-center col-auto">
             <Image
               src={companion.src}
               width={125}
@@ -88,11 +89,14 @@ const StreamingPage = async ({ params }: StreamingPageProps) => {
             </Link>
           </Button> */}
 
-          <ChatComponent companion={companion} />
-        </div>
-      </main>
-    </>
-  );
+            <ChatComponent companion={companion} />
+          </div>
+        </main>
+      </>
+    );
+  } catch (err) {
+    return redirect("/server-error");
+  }
 };
 
 export default StreamingPage;

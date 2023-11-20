@@ -30,7 +30,9 @@ export const RelationshipAdminNavbar = async ({
   relationship,
   companion,
 }: RelationshipAdminNavBarProps) => {
-  console.log("inside of relationship-admin-navbar");
+  console.log(
+    "inside of relationship-admin-navbar. RelationshipId: " + relationship.id
+  );
 
   const user = await currentUser();
   if (!user) {

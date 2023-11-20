@@ -15,7 +15,9 @@ interface CompanionIdPageProps {
   };
 }
 
-const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
+export default async function CompanionIdPage({
+  params,
+}: CompanionIdPageProps) {
   console.log("made it to /dashboard/companion/[companionId]");
   const { userId } = auth();
 
@@ -81,21 +83,46 @@ const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
       data: {
         userId: user.id,
         companionId: companion.id,
-        role: "user",
+        role: "User",
         title: profileName,
         // content: "You are a friendly stranger to Assistant",
       },
     });
   }
   console.log(relationship.title);
+  if (relationship.status != "Active" && relationship.adminStatus != "Status") {
+    console.log("redirecting to /dashboard. Relationship is not active");
+    return redirect("/dashboard");
+  }
 
-  return (
-    <>
-      <CompanionNavbar companion={companion} />
-      <h1>{companion.name}</h1>
-      <p>{companion.description}</p>
-    </>
-  );
-};
-
-export default CompanionIdPage;
+  if (
+    relationship.status === "Active" &&
+    relationship.adminStatus === "Active"
+  ) {
+    return (
+      <>
+        <CompanionNavbar companion={companion} />
+        <h1>{companion.name}</h1>
+        <p>{companion.description}</p>
+      </>
+    );
+  } else if (relationship.adminStatus === "Suspended") {
+    return (
+      <>
+        <div className="text-xl text-red-500 col-span-full text-center">
+          <div>{companion.name}</div>
+          {"Relationship has been Suspended at this time"}
+        </div>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div className="text-xl text-red-500 col-span-full text-center">
+          <div>{companion.name}</div>
+          {"Relationship is not Active at this time"}
+        </div>
+      </>
+    );
+  }
+}

@@ -66,8 +66,10 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
     relationship = await prismadb.relationship.create({
       data: {
         userId: userId,
+        adminStatus: "Active",
+        status: "Active",
         companionId: companion.id,
-        role: "user",
+        role: "User",
         content: "You are a friendly stranger to Assistant",
       },
     });

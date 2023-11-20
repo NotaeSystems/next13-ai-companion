@@ -35,65 +35,104 @@ interface StreamingPageProps {
 }
 
 const StreamingPage = async ({ params }: StreamingPageProps) => {
-  const { userId } = auth();
+  try {
+    const { userId } = auth();
 
-  if (!userId) {
-    return redirectToSignIn();
-  }
+    if (!userId) {
+      return redirectToSignIn();
+    }
 
-  const companion = await prismadb.companion.findUnique({
-    where: {
-      id: params.companionId,
-    },
-    include: {
-      messages: {
-        orderBy: {
-          createdAt: "asc",
+    const companion = await prismadb.companion.findUnique({
+      where: {
+        id: params.companionId,
+      },
+      include: {
+        messages: {
+          orderBy: {
+            createdAt: "asc",
+          },
+          where: {
+            userId,
+          },
         },
-        where: {
-          userId,
+        _count: {
+          select: {
+            messages: true,
+          },
         },
       },
-      _count: {
-        select: {
-          messages: true,
-        },
-      },
-    },
-  });
+    });
 
-  if (!companion) {
-    return redirect("/dashboard");
-  }
-  const companionId = companion.id;
-  return (
-    <>
-      {/* <main className="flex min-h-screen flex-col items-center justify-between p-24"> */}
-      <main className="flex flex-col h-full p-24 space-y-2 items-center ">
-        <div className="bg-slate-800 p-3  rounded-md  text-white">
-          <CompanionNavbar companion={companion} />
-          <div className="flex justify-center col-auto">
-            <h2 className="text-2xl">{companion.name}</h2>
+    if (!companion) {
+      return (
+        <>
+          <div className="text-xl text-red-500 col-span-full text-center">
+            {"There is not a Companion with that ID available."}
           </div>
-          <div className="flex justify-center col-auto">
-            <Image
-              src={companion.src}
-              width={125}
-              height={125}
-              alt="Picture of the author"
-            />
+        </>
+      );
+    }
+    // check to see if relationship exists
+    let relationship = null;
+    relationship = await prismadb.relationship.findFirst({
+      where: {
+        companionId: companion.id,
+        userId: userId,
+      },
+    });
+
+    const companionId = companion.id;
+    if (!relationship) {
+      return (
+        <>
+          <div className="text-xl text-red-500 col-span-full text-center">
+            <div>{companion.name}</div>
+            {"There is not a Relationship with you available."}
           </div>
-          {/* <Button>
+        </>
+      );
+    }
+    if (relationship.adminStatus === "Suspended") {
+      return (
+        <>
+          <div className="text-xl text-red-500 col-span-full text-center">
+            <div>{companion.name}</div>
+            {"Relationship has been suspended"}
+          </div>
+        </>
+      );
+    }
+    return (
+      <>
+        {/* <main className="flex min-h-screen flex-col items-center justify-between p-24"> */}
+        <main className="flex flex-col h-full p-24 space-y-2 items-center ">
+          <div className="bg-slate-800 p-3  rounded-md  text-white">
+            <CompanionNavbar companion={companion} />
+            <div className="flex justify-center col-auto">
+              <h2 className="text-2xl">{companion.name}</h2>
+            </div>
+            <div className="flex justify-center col-auto">
+              <Image
+                src={companion.src}
+                width={125}
+                height={125}
+                alt="Picture of the author"
+              />
+            </div>
+            {/* <Button>
             <Link href={`/dashboard/companion/${companionId}/relationship`}>
               Relationship
             </Link>
           </Button> */}
 
-          <ChatComponent companion={companion} />
-        </div>
-      </main>
-    </>
-  );
+            <ChatComponent companion={companion} />
+          </div>
+        </main>
+      </>
+    );
+  } catch (err) {
+    return redirect("/server-error");
+  }
 };
 
 export default StreamingPage;

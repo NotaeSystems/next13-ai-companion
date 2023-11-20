@@ -16,6 +16,7 @@ import { RelationshipAdminNavbar } from "@/components/navbars/admin-relationship
 interface CompanionIdPageProps {
   params: {
     companionId: string;
+    relationshipID: string;
   };
 }
 
@@ -50,9 +51,9 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
 
   let relationship = null;
   // check to see if relationship exists
-  relationship = await prismadb.relationship.findFirst({
+  relationship = await prismadb.relationship.findUnique({
     where: {
-      companionId: params.companionId,
+      id: params.relationshipID,
     },
   });
   // if (relationship) {

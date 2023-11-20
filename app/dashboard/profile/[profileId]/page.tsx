@@ -16,6 +16,7 @@ interface ProfilePageProps {
 }
 
 const ProfilePage = async ({ params }: ProfilePageProps) => {
+  console.log("inside of ProfilePage");
   const { userId } = auth();
 
   if (!userId) {

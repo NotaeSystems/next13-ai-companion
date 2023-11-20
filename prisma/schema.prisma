@@ -83,8 +83,9 @@ model Relationship {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId
 
   userId        String  // clerk's authenication userId of logged-in user
-  
+  adminStatus   String  @default("Active")
   status        String  @default("Active")
+
   
   companionId   String    @db.ObjectId
   companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
@@ -159,6 +160,7 @@ model User {
 // profile contains the default notes about a user and any persona subscribed 
 model Profile {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  adminStatus         String @default("Active")
   status              String @default("Active")
   userId             String  @default("user")
   role               String  @default("user")

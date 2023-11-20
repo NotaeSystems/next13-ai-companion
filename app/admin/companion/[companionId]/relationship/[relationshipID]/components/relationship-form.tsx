@@ -37,6 +37,9 @@ const formSchema = z.object({
   // name: z.string().min(1, {
   //   message: "Name is required.",
   // }),
+  adminStatus: z.string().min(1, {
+    message: "Admin Status is required.",
+  }),
   status: z.string().min(1, {
     message: "Status is required.",
   }),
@@ -51,7 +54,7 @@ const formSchema = z.object({
   //   }),
 
   content: z.string().min(25, {
-    message: "Instructions require at least 100 characters.",
+    message: "Instructions require at least 25 characters.",
   }),
 
   // pineconeIndex: z.string().optional(),
@@ -74,6 +77,7 @@ export const RelationshipForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: Relationship || {
       name: "",
+      adminStatus: "Pending",
       status: "Pending",
       content: "",
       temperature: "0.5",
@@ -86,7 +90,7 @@ export const RelationshipForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       console.log("inside of submit");
-      await axios.patch(`/api/relationship/${Relationship.id}`, values);
+      await axios.patch(`/api/admin/relationship/${Relationship.id}`, values);
 
       toast({
         description: "Success.",
@@ -94,7 +98,7 @@ export const RelationshipForm = ({
       });
 
       router.refresh();
-      router.push(`/dashboard/companion/${Relationship.companionId}`);
+      router.push(`/admin/companion/${Relationship.companionId}`);
     } catch (error) {
       toast({
         variant: "destructive",
@@ -127,6 +131,37 @@ export const RelationshipForm = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
+              name="adminStatus"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Admin Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select an Admin Status"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Pending">Pending</SelectItem>
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="Suspended">Suspended</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select an Admin Status for your AI
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="status"
               render={({ field }) => (
                 <FormItem>
@@ -149,9 +184,7 @@ export const RelationshipForm = ({
                       <SelectItem value="Suspended">Suspended</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription>
-                    Select a temperature for your AI
-                  </FormDescription>
+                  <FormDescription>Select a status for your AI</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

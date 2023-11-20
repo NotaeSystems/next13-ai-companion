@@ -146,7 +146,6 @@ export const RelationshipForm = ({
                     <SelectContent>
                       <SelectItem value="Pending">Pending</SelectItem>
                       <SelectItem value="Active">Active</SelectItem>
-                      <SelectItem value="Suspended">Suspended</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>
