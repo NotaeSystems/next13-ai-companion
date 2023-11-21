@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 ////import { ProModal } from "@/components/pro-modal";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
 
-import "@/app/globals.css";
+// import "@/app/globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description: "Your customized companion.",
 };
 
-export default function RootLayout({
+export default function CompanionLayout({
   children,
 }: {
   children: React.ReactNode;

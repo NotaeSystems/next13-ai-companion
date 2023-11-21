@@ -1,11 +1,11 @@
 import prismadb from "@/lib/prismadb";
-import { Categories } from "@/components/categories";
-import { CompanionsDashboard } from "@/components/companions-dashboard";
-import { SearchInput } from "@/components/search-input";
-import { MainNavbar } from "@/components/navbars/main-navbar";
+// import { Categories } from "@/components/categories";
+// import { CompanionsDashboard } from "@/components/companions-dashboard";
+// import { SearchInput } from "@/components/search-input";
+// import { MainNavbar } from "@/components/navbars/main-navbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { AdminCompanions } from "@/components/admin/admin-companions";
 interface RootPageProps {
@@ -19,6 +19,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
   const categories = await prismadb.category.findMany();
   const { userId } = auth();
   console.log(userId);
+
   if (!userId) {
     return redirectToSignIn();
   }

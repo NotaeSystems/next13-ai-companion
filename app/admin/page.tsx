@@ -5,7 +5,7 @@ import { SearchInput } from "@/components/search-input";
 import { MainNavbar } from "@/components/navbars/main-navbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { AdminNavbar } from "@/components/navbars/admin-navbar";
@@ -43,8 +43,6 @@ const RootPage = async () => {
   return (
     <div className="h-full p-4 space-y-2">
       <h1>Admin Dashboard</h1>
-
-      <AdminCompanions data={companions} />
 
       <Button>
         <Link href={`/admin/new/companion`}>Create New Companion</Link>

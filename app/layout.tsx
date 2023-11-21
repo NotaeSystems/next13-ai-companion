@@ -8,7 +8,10 @@ import { Toaster } from "@/components/ui/toaster";
 //import { ProModal } from '@/components/pro-modal';
 import { MainNavbar } from "@/components/navbars/main-navbar";
 
-import "./globals.css";
+//***********BUG**************
+// when globals.css is loaded here a hard refresh will lose css
+// at this time moved globals.css to MainNavbar
+import "@/app/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +32,7 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <MainNavbar />
             {children}
-            {/* <Toaster /> */}
+            <Toaster />
           </ThemeProvider>
         </body>
       </ClerkProvider>

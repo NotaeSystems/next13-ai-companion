@@ -7,6 +7,9 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+const under_construction = process.env.UNDER_CONSTRUCTION;
+
 interface RootPageProps {
   searchParams: {
     categoryId: string;
@@ -25,7 +28,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
       // },
     },
     orderBy: {
-      createdAt: "desc",
+      updatedAt: "desc",
     },
     include: {
       _count: {
@@ -38,9 +41,24 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
 
   const categories = await prismadb.category.findMany();
 
+  if (under_construction === "True") {
+    return (
+      <>
+        <div className="h-screen flex items-center justify-center">
+          <Image
+            src="/under-construction.jpg"
+            alt="Under Construction"
+            height={300}
+            width={300}
+          />
+        </div>
+      </>
+    );
+  }
+
   return (
     <div className="p-4 space-y-2">
-      <h1 className="text-3xl lg:text-5xl text-center">Home Page</h1>
+      <h1>Home Page</h1>
       <Button>
         <Link href={`/invitation`}>Have an Invitation?</Link>
       </Button>

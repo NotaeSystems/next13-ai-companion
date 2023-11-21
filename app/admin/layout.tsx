@@ -1,25 +1,25 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
+// import { Inter } from "next/font/google";
+// import { ClerkProvider } from "@clerk/nextjs";
 import { AdminNavbar } from "@/components/navbars/admin-navbar";
-import { cn } from "@/lib/utils";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
+// import { cn } from "@/lib/utils";
+// import { ThemeProvider } from "@/components/theme-provider";
+// import { Toaster } from "@/components/ui/toaster";
 //import { ProModal } from '@/components/pro-modal';
-import { MainNavbar } from "@/components/navbars/main-navbar";
+// import { MainNavbar } from "@/components/navbars/main-navbar";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
+// import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
-import "../globals.css";
+// import "../globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Companion.AI",
   description: "Your customized companion.",
 };
 
-export default async function RootLayout({
+export default async function AdminRootLayout({
   children,
 }: {
   children: React.ReactNode;

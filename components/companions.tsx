@@ -36,9 +36,10 @@ export const Companions = ({ data }: CompanionsProps) => {
         >
           <Link href={`/dashboard/companion/${item.id}`}>
             <CardHeader className="flex items-center justify-center text-center text-muted-foreground">
-              <div className="relative w-32 h-32">
+              <div className="relative w-32 h-32 overflow-hidden">
                 <Image
                   src={item.src}
+                  object-fit="cover"
                   fill
                   className="rounded-xl object-cover"
                   alt="Character"
