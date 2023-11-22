@@ -189,6 +189,36 @@ export const RelationshipForm = ({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="addNotes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Add Ai Notes</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a Notes status"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select a Add Notes Status for your AI
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* <FormField
               name="pineconeIndex"
               control={form.control}

@@ -41,7 +41,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
 
   const categories = await prismadb.category.findMany();
 
-  if (under_construction === "True") {
+  if (under_construction === "true") {
     return (
       <>
         <div className="h-screen flex items-center justify-center">

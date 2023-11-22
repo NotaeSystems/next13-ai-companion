@@ -24,17 +24,26 @@ const pinecone = new Pinecone({
 
 export async function POST(
   req: Request,
-  { params }: { params: { companionId: string; role: string } }
+  { params }: { params: { relationshipId: string } }
 ) {
   try {
-    const { searchParams } = new URL(req.url);
-    console.log("req url: " + req.url);
-    const role = searchParams.get("role");
-    console.log("role= " + role);
-    console.log("inside of POST /api/notes/[companionId]?role=" + role);
+    console.log(
+      "inside of POST /api/admin/relationship/[relationshipId]/notes)"
+    );
+
+    const relationship = await prisma.relationship.findUnique({
+      where: {
+        id: params.relationshipId,
+      },
+    });
+
+    if (!relationship) {
+      return Response.json({ error: "Error" }, { status: 401 });
+    }
+
     const companion = await prisma.companion.findUnique({
       where: {
-        id: params.companionId,
+        id: relationship.companionId,
       },
     });
     if (!companion) {
@@ -82,6 +91,7 @@ export async function POST(
           content: content,
           userId: userId,
           companionId: companion.id,
+          relationshipId: relationship.id,
         },
       });
       const ns1 = pineconeIndex.namespace(companion.namespace);

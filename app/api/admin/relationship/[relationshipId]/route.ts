@@ -33,6 +33,7 @@ export async function PATCH(
     const {
       adminStatus,
       status,
+      addNotes,
 
       content,
       // temperature,
@@ -69,6 +70,7 @@ export async function PATCH(
       data: {
         adminStatus,
         status,
+        addNotes,
         content,
         // instructions,
         // pineconeIndex,

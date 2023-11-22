@@ -2,7 +2,7 @@
 
 import logo from "@/assets/logo.png";
 import AIChatButton from "@/components/AIChatButton";
-import AddEditNoteDialog from "@/components/AddEditNoteDialog";
+import AddEditNoteDialog from "./AddEditNoteDialog";
 import ThemeToggleButton from "@/components/ThemeToggleButton";
 import { Button } from "@/components/ui/button";
 import { UserButton } from "@clerk/nextjs";
@@ -12,13 +12,14 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Companion } from "@prisma/client";
+import { Companion, Relationship } from "@prisma/client";
 
 interface NavBarProps {
   companion: Companion;
+  relationship: Relationship;
 }
 
-export default function NavBar({ companion }: NavBarProps) {
+export default function NavBar({ companion, relationship }: NavBarProps) {
   const { theme } = useTheme();
 
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
@@ -55,7 +56,7 @@ export default function NavBar({ companion }: NavBarProps) {
         open={showAddEditNoteDialog}
         setOpen={setShowAddEditNoteDialog}
         companion={companion}
-        role="user"
+        relationship={relationship}
       />
     </>
   );

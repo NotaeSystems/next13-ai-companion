@@ -1,11 +1,9 @@
 import { CreateNoteSchema, createNoteSchema } from "@/lib/validation/note";
 import { zodResolver } from "@hookform/resolvers/zod";
-//import { Note } from "@prisma/client";
-import { Note } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Companion } from "@prisma/client";
+import { Companion, Relationship, Note } from "@prisma/client";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +28,7 @@ interface AddEditNoteDialogProps {
   setOpen: (open: boolean) => void;
   companion: Companion;
   noteToEdit?: Note;
+  relationship: Relationship;
 }
 
 export default function AddEditNoteDialog({
@@ -37,6 +36,7 @@ export default function AddEditNoteDialog({
   setOpen,
   companion,
   noteToEdit,
+  relationship,
 }: AddEditNoteDialogProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
 
@@ -55,20 +55,18 @@ export default function AddEditNoteDialog({
       console.log("made it to Submit Note");
       if (noteToEdit) {
         console.log("there is a noteToEdit: " + noteToEdit.companionId);
-        const response = await fetch(
-          `/api/admin/companion/${noteToEdit.companionId}/notes`,
-          {
-            method: "PUT",
-            body: JSON.stringify({
-              id: noteToEdit.id,
-              ...input,
-            }),
-          }
-        );
+        // const response = await fetch(`/api/notes/${noteToEdit.companionId}`, {
+        const response = await fetch(`/api/notes/${noteToEdit.companionId}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            id: noteToEdit.id,
+            ...input,
+          }),
+        });
         if (!response.ok) throw Error("Status code: " + response.status);
       } else {
         const response = await fetch(
-          `/api/admin/companion/${companion.id}/notes`,
+          `/api/admin/relationship/${relationship.id}/notes`,
           {
             method: "POST",
             body: JSON.stringify(input),
@@ -91,15 +89,12 @@ export default function AddEditNoteDialog({
     setDeleteInProgress(true);
     try {
       console.log("Deleting note of companion: " + noteToEdit.companionId);
-      const response = await fetch(
-        `/api/admin/companion/${companion.id}/notes`,
-        {
-          method: "DELETE",
-          body: JSON.stringify({
-            id: noteToEdit.id,
-          }),
-        }
-      );
+      const response = await fetch(`/api/notes/${noteToEdit.companionId}`, {
+        method: "DELETE",
+        body: JSON.stringify({
+          id: noteToEdit.id,
+        }),
+      });
       if (!response.ok) throw Error("Status code: " + response.status);
       router.refresh();
       setOpen(false);
@@ -139,9 +134,9 @@ export default function AddEditNoteDialog({
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Note Content</FormLabel>
+                  <FormLabel>Note content</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Note Content" rows={15} {...field} />
+                    <Textarea placeholder="Note content" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

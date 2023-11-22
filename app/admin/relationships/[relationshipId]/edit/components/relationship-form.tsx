@@ -75,6 +75,7 @@ export const RelationshipForm = ({
     defaultValues: Relationship || {
       name: "",
       status: "Pending",
+      addNotes: "",
       content: "",
       temperature: "0.5",
       // pineconeIndex: "none",
@@ -152,6 +153,34 @@ export const RelationshipForm = ({
                   <FormDescription>
                     Select a temperature for your AI
                   </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="addNotes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Add Notes</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a status"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Can User Add AI Notes</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

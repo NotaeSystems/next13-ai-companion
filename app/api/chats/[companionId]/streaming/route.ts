@@ -192,11 +192,12 @@ export async function POST(
     const userRelationshipContent = relationship.content;
 
     /// now that the User , Companion and Relationship has been verified lets pull the request body for the chat
-    // the request body has the present active chat
+    // the request body has the present active chat messages
 
     /////////////////// * Active Chat*  /////////////////////////////
     /// the active chat is being passed to this function in the body of the request
     const body = await request.json();
+
     // console.log(
     //   "Request Body sent by chat page: " + "\n" + JSON.stringify(body) + "/n"
     // );
@@ -210,7 +211,7 @@ export async function POST(
     // the messages are give a special type of ChatCompletionMessage[]
     const messages: ChatCompletionMessage[] = body.messages;
 
-    // Lets find the present chat message
+    // Lets find the present chat message which is the last message in the array of messages
     const lastChatMessage = messages.slice(-1);
 
     console.log(

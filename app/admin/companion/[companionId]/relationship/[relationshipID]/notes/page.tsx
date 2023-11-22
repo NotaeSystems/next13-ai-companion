@@ -41,9 +41,12 @@ export default async function NotesPage({ params }: NotesPageProps) {
 
   // find all personal relationship notes belonging to user and companion
   const undefinedField = "";
+  if (!relationship) {
+    if (!relationship) throw Error("userId undefined");
+  }
   const allNotes = await prismadb.note.findMany({
     where: {
-      userId: userId,
+      relationshipId: relationship.id,
       companionId: companion.id,
     },
   });
@@ -56,7 +59,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
         companion={companion}
         relationship={relationship}
       />
-      <NavBar companion={companion} />
+      <NavBar companion={companion} relationship={relationship} />
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {allNotes.map((note) => (
