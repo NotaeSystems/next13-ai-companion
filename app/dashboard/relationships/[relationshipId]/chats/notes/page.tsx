@@ -1,7 +1,7 @@
 import Note from "@/components/Note";
 //import prisma from "@/lib/db/prisma";
 import prismadb from "@/lib/prismadb";
-import { auth, redirectToSignIn } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
@@ -23,6 +23,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
   const companion = await prismadb.companion.findUnique({
     where: {
       id: params.companionId,
+      userId,
     },
   });
 
@@ -31,32 +32,14 @@ export default async function NotesPage({ params }: NotesPageProps) {
     return redirect("/dashboard");
   }
 
-  // check to see if relationship exists
-  let relationship = null;
-  relationship = await prismadb.relationship.findFirst({
-    where: {
-      companionId: companion.id,
-      userId: userId,
-    },
-  });
-
-  let profileName = null;
-
-  if (!relationship) {
-    console.log("Did not find relationship");
-    return (
-      <>
-        <h1>Did not find Relationship</h1>
-      </>
-    );
-  }
   // find all personal relationship notes belonging to user and companion
   const allNotes = await prismadb.note.findMany({
-    where: { userId: relationship.userId, companionId: companion.id },
+    where: { userId, companionId: params.companionId },
   });
+
   return (
     <>
-      <CompanionNavbar companion={companion} relationship={relationship} />
+      <CompanionNavbar companion={companion} />
       <NavBar companion={companion} />
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {allNotes.map((note) => (

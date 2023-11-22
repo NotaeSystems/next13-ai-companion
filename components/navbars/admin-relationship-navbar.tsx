@@ -41,7 +41,7 @@ export const RelationshipAdminNavbar = async ({
 
   return (
     <>
-      <div className="w-full h-20 bg-red-800 sticky top-0">
+      <div className="w-full h-20 bg-red-400 sticky top-0">
         <div>
           <h1>Admin Relationship Navbar</h1>
         </div>
@@ -57,6 +57,9 @@ export const RelationshipAdminNavbar = async ({
             <h1>{companion.name}</h1>
           </Link> */}
           <div>
+            <div className="bg-black left-2">
+              <h1>Admin Relationship Navbar</h1>
+            </div>
             <Button>
               <Link
                 href={`/admin/companion/${companion.id}/relationship/${relationship.id}`}
@@ -79,8 +82,10 @@ export const RelationshipAdminNavbar = async ({
             </Button> */}
 
             <Button>
-              <Link href={`/dashboard/companion/${companion.id}/chats/notes`}>
-                Notes Chat
+              <Link
+                href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
+              >
+                Chat
               </Link>
             </Button>
 

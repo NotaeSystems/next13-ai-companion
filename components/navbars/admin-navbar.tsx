@@ -19,8 +19,8 @@ interface AdminNavbarProps {}
 export const AdminNavbar = () => {
   return (
     <>
-      <div className="w-full h-20 bg-pink-200 sticky top-0">
-        <div className="flex justify-center">
+      <div className="w-full h-20 bg-red-800 sticky top-0">
+        <div className="flex justify-center gap-3">
           <div className="bg-black left-2">
             <h1>Admin Navbar</h1>
           </div>
@@ -32,7 +32,7 @@ export const AdminNavbar = () => {
               <Link href={`/admin/companions`}>Companions</Link>
             </Button>
             <Button>
-              <Link href={`/admin/profiles`}>Profiles</Link>
+              <Link href={`/admin/profiles`}>User Profiles</Link>
             </Button>
             <Button>
               <Link href={`/admin/billing`}>Billing</Link>

@@ -23,10 +23,15 @@ const font = Poppins({ weight: "600", subsets: ["latin"] });
 
 interface CompanionNavBarProps {
   companion: Companion;
+  relationship: Relationship;
 }
 
-export const CompanionNavbar = async ({ companion }: CompanionNavBarProps) => {
+export const CompanionNavbar = async ({
+  companion,
+  relationship,
+}: CompanionNavBarProps) => {
   console.log("inside of companion-navbar");
+  console.log("relationship: " + relationship.title);
 
   const user = await currentUser();
   if (!user) {
@@ -57,23 +62,28 @@ export const CompanionNavbar = async ({ companion }: CompanionNavBarProps) => {
               </Link>
             </Button>
 
-            <Button>
+            {/* <Button>
               <Link href={`/dashboard/companion/${companion.id}/chats/chat`}>
                 Basic Chat
               </Link>
-            </Button>
+            </Button> */}
             <Button>
               {/* <Link href={`/dashboard/companion/${companion.chatLink}/${companion.id}`}> */}
-              <Link
+              {/* <Link
                 href={`/dashboard/companion/${companion.id}/chats/streaming`}
               >
                 Streaming Chat
+              </Link> */}
+              <Link
+                href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
+              >
+                Streaming Relationship Chat
               </Link>
             </Button>
 
             <Button>
-              <Link href={`/dashboard/companion/${companion.id}/chats/notes`}>
-                Notes Chat
+              <Link href={`/dashboard/companion/${companion.id}/notes`}>
+                Notes
               </Link>
             </Button>
 

@@ -101,7 +101,7 @@ export default async function CompanionIdPage({
   ) {
     return (
       <>
-        <CompanionNavbar companion={companion} />
+        <CompanionNavbar companion={companion} relationship={relationship} />
         <h1>{companion.name}</h1>
         <p>{companion.description}</p>
       </>

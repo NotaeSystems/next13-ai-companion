@@ -24,8 +24,11 @@ export const AdminCompanionNavbar = ({
 }: AdminCompanionNavBarProps) => {
   return (
     <>
-      <div className="w-full h-20 bg-yellow-800 sticky top-0">
+      <div className="w-full h-20 bg-red-500 sticky top-0">
         <div className="flex justify-center">
+          <div className="bg-black left-2">
+            <h1>Admin Companion Navbar</h1>
+          </div>
           <Link href={`/admin/companion/${companion.id}`}>
             <Image
               src={companion.src}
@@ -42,9 +45,9 @@ export const AdminCompanionNavbar = ({
                 Relationships
               </Link>
             </Button>
-            <Button>
-              <Link href={`/admin/companion/${companion.id}/chat`}>Chat</Link>
-            </Button>
+            {/* <Button>
+              <Link href={`/dashboard/companion/${companion.id}/chat`}>Chat</Link>
+            </Button> */}
             <Button>
               <Link href={`/admin/companion/${companion.id}/edit`}>Edit</Link>
             </Button>
