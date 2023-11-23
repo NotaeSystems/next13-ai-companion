@@ -79,10 +79,10 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
   return (
     <>
       <CompanionNavbar companion={companion} relationship={relationship} />
-      <h1>You are now in a Relationship with Companion-{companion.name}</h1>
-      <div className="flex justify-center col-auto">
-        <h1>{companion.name}</h1>
-      </div>
+      {/* <h1 className="text-xl text-center my-5">
+        You are now in a Relationship with Companion-{companion.name}
+      </h1> */}
+      <div className="flex justify-center col-auto"></div>
       {/* <div className="flex justify-center col-auto">
         <Image
           src={companion.src}
@@ -91,7 +91,7 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
           alt="Picture of the author"
         />
       </div> */}
-      <RelationshipForm Companion={companion} Relationship={relationship} />;
+      <RelationshipForm Companion={companion} relationship={relationship} />;
     </>
   );
 };

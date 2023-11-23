@@ -1,30 +1,23 @@
-import prismadb from "@/lib/prismadb";
+import { Metadata } from "next";
 
-import { MainNavbar } from "@/components/navbars/main-navbar";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { NextResponse } from "next/server";
-import { auth, redirectToSignIn } from "@clerk/nextjs";
-import { AdminNavbar } from "@/components/navbars/admin-navbar";
-import { AdminCompanions } from "@/components/admin/admin-companions";
+import UnderConstruction from "@/components/under-construction";
+const under_construction = process.env.UNDER_CONSTRUCTION;
 
-interface InvitationProps {
-  searchParams: {
-    // categoryId: string;
-    // name: string;
-  };
-}
+export const metadata: Metadata = {
+  title: "Smarty Clone-Invitation",
+};
 
-const InvitationPage = async () => {
-  // const categories = await prismadb.category.findMany();
-  console.log("inside of invitation");
-
+export default function InvitationPage() {
+  if (under_construction === "true") {
+    return (
+      <>
+        <UnderConstruction />
+      </>
+    );
+  }
   return (
-    <div className="h-full p-4 space-y-2">
+    <div>
       <h1>Invitation</h1>
     </div>
   );
-};
-
-export default InvitationPage;
+}

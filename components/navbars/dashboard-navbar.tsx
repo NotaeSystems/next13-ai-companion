@@ -20,6 +20,16 @@ export const DashboardNavbar = () => {
       <div className="container mx-auto px-4 h-full">
         <nav className="flex justify-between items-center h-full">
           <div>
+            <h1>Dashboard</h1>
+          </div>
+          <div>
+            <Button>
+              <Link href="/dashboard">
+                <h1 className={cn("font-bold")}>Your Personas</h1>
+              </Link>
+            </Button>
+          </div>
+          <div>
             <Button>
               <Link href="/dashboard/profile/{userId}">
                 <h1 className={cn("font-bold")}>Your Profile</h1>
@@ -29,12 +39,12 @@ export const DashboardNavbar = () => {
 
           <div>
             <Button>
-              <Link href="/dashboard/settings">
+              <Link href="/dashboard/billing">
                 <h1 className={cn("font-bold ")}>Billing</h1>
               </Link>
             </Button>
           </div>
-
+          {/* 
           <SignedOut>
             <div>
               <Button>
@@ -63,7 +73,7 @@ export const DashboardNavbar = () => {
             </div>
 
             <UserButton afterSignOutUrl="/" />
-          </SignedIn>
+          </SignedIn> */}
         </nav>
       </div>
     </div>

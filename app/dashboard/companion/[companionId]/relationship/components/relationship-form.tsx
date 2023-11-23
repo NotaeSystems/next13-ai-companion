@@ -40,7 +40,18 @@ const formSchema = z.object({
   status: z.string().min(1, {
     message: "Status is required.",
   }),
+  role: z.string().optional(),
+  name: z.string().min(1, {
+    message: "Name is required.",
+  }),
 
+  nickNames: z.string().optional(),
+
+  gender: z.string().optional(),
+
+  educationalLevel: z.string().optional(),
+
+  ageLevel: z.string().optional(),
   // temperature: z.coerce
   //   .number()
   //   .min(0, {
@@ -60,20 +71,25 @@ const formSchema = z.object({
 interface RelationshipFormProps {
   //categories: Category[];
   Companion: Companion;
-  Relationship: Relationship;
+  relationship: Relationship;
 }
 
 export const RelationshipForm = ({
   //categories,
-  Relationship,
+  relationship,
 }: RelationshipFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: Relationship || {
+    defaultValues: relationship || {
       name: "",
+      nickNames: "",
+      role: "",
+      gender: "",
+      educationalLevel: "",
+      ageLevel: "",
       status: "Pending",
       content: "",
       temperature: "0.5",
@@ -86,7 +102,7 @@ export const RelationshipForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       console.log("inside of submit");
-      await axios.patch(`/api/relationship/${Relationship.id}`, values);
+      await axios.patch(`/api/relationship/${relationship.id}`, values);
 
       toast({
         description: "Success.",
@@ -94,7 +110,7 @@ export const RelationshipForm = ({
       });
 
       router.refresh();
-      router.push(`/dashboard/companion/${Relationship.companionId}`);
+      router.push(`/dashboard/companion/${relationship.companionId}`);
     } catch (error) {
       toast({
         variant: "destructive",
@@ -116,8 +132,7 @@ export const RelationshipForm = ({
         >
           <div className="space-y-2 w-full col-span-2">
             <div>
-              <h3 className="text-lg font-medium">General Information</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xl text-center my-5 ">
                 General information about your Relationship with Companion
               </p>
             </div>
@@ -155,24 +170,178 @@ export const RelationshipForm = ({
                 </FormItem>
               )}
             />
-            {/* <FormField
-              name="pineconeIndex"
+            <FormField
               control={form.control}
+              name="role"
               render={({ field }) => (
-                <FormItem className="col-span-2 md:col-span-1">
-                  <FormLabel>Pine Cone Index</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="Pinecone Index name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>The Pine Cone Index Name</FormDescription>
+                <FormItem>
+                  <FormLabel>
+                    Your Role or Relationship to Persona.You are a:{" "}
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a Gender"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Undisclosed">Undisclosed</SelectItem>
+                      <SelectItem value="Stranger">
+                        You are a Stranger
+                      </SelectItem>
+                      <SelectItem value="Fan">You are a Fan</SelectItem>
+                      <SelectItem value="Friend">You are a Friend</SelectItem>
+                      <SelectItem value="Son">You are a Son</SelectItem>
+                      <SelectItem value="Daughter">
+                        You are a Daughter
+                      </SelectItem>
+                      <SelectItem value="Father">You are the Father</SelectItem>
+                      <SelectItem value="Mother">You are the Mother</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Select your Gender</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
-            /> */}
+            />
+            <FormField
+              name="name"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="col-span-2 md:col-span-1">
+                  <FormLabel>Your Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="Mary Smith"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription></FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="nickNames"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="col-span-2 md:col-span-1">
+                  <FormLabel>Enter Nicknames You May Have</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="Buddy, Sammie"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription></FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Your Gender</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a Gender"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Male">Male</SelectItem>
+                      <SelectItem value="Female">Female</SelectItem>
+                      <SelectItem value="Undisclosed">Undisclosed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Select your Gender</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="educationalLevel"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Your Education Level</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select your Highest Education Level"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="High School">High School</SelectItem>
+                      <SelectItem value="Trade School">Trade School</SelectItem>
+                      <SelectItem value="College">College</SelectItem>
+                      <SelectItem value="Professional Degree">
+                        Professional
+                      </SelectItem>
+                      <SelectItem value="Undisclosed">Undisclosed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Select your Education Level</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="ageLevel"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Your Age Level</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select your Age Level"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Young Teenager">
+                        Young Teenager
+                      </SelectItem>
+                      <SelectItem value="Teenager">Teenager</SelectItem>
+                      <SelectItem value="Adult">Adult</SelectItem>
+                      <SelectItem value="Older Adult">Older Adult</SelectItem>
+                      <SelectItem value="Undisclosed">Undisclosed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Select your Age Level</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             {/* <FormField
               name="temperature"
@@ -239,7 +408,11 @@ export const RelationshipForm = ({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Facts About Relationship</FormLabel>
+                  <FormLabel>
+                    {" "}
+                    Describe in detail your relationship with Companion and
+                    relevant details.
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       disabled={isLoading}

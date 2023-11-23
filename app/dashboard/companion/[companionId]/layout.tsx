@@ -24,7 +24,7 @@ export default function CompanionLayout({
   return (
     <>
       {/* <CompanionNavbar companion={companion} /> */}
-      <h1>Companion Navbar</h1>
+
       {children}
     </>
   );

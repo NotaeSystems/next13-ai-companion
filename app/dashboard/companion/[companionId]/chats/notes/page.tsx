@@ -20,6 +20,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
   const { userId } = auth();
   if (!userId) throw Error("userId undefined");
 
+  // find all notes belonging to Companion and User.These are relationship notes.
   const companion = await prismadb.companion.findUnique({
     where: {
       id: params.companionId,
@@ -32,6 +33,17 @@ export default async function NotesPage({ params }: NotesPageProps) {
     return redirect("/dashboard");
   }
 
+  const relationship = await prismadb.relationship.findUnique({
+    where: {
+      id: params.companionId,
+      userId,
+    },
+  });
+
+  if (!relationship) {
+    console.log("companion Not Found. Is user the owner of the companion?");
+    return redirect("/dashboard");
+  }
   // find all personal relationship notes belonging to user and companion
   const allNotes = await prismadb.note.findMany({
     where: { userId, companionId: params.companionId },
@@ -39,8 +51,8 @@ export default async function NotesPage({ params }: NotesPageProps) {
 
   return (
     <>
-      <CompanionNavbar companion={companion} />
-      <NavBar companion={companion} />
+      <CompanionNavbar companion={companion} relationship={relationship} />
+      <NavBar companion={companion} relationship={relationship} />
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {allNotes.map((note) => (
           <Note note={note} key={note.id} />

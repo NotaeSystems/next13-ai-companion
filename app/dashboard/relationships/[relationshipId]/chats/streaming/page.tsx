@@ -119,22 +119,20 @@ const DashboardRelationshipsChatsStreamingPage = async ({
 
     return (
       <>
+        <CompanionNavbar companion={companion} relationship={relationship} />
         {/* <main className="flex min-h-screen flex-col items-center justify-between p-24"> */}
         <main className="flex flex-col h-full p-24 space-y-2 items-center ">
           <div className="bg-slate-800 p-3  rounded-md  text-white">
-            <CompanionNavbar
-              companion={companion}
-              relationship={relationship}
-            />
             <div className="flex justify-center col-auto">
               <h2 className="text-2xl">{companion.name}</h2>
             </div>
             <div className="flex justify-center col-auto">
               <Image
                 src={companion.src}
-                width={125}
-                height={125}
-                alt="Picture of the author"
+                className="rounded-xl object-cover"
+                alt="Character"
+                width={50}
+                height={50}
               />
             </div>
             {/* <Button>

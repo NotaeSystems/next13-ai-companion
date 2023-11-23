@@ -12,10 +12,11 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Companion } from "@prisma/client";
+import { Companion, Relationship } from "@prisma/client";
 
 interface NavBarProps {
   companion: Companion;
+  relationship: Relationship;
 }
 
 export default function NavBar({ companion }: NavBarProps) {

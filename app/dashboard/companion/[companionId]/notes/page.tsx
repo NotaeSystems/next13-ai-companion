@@ -57,6 +57,13 @@ export default async function NotesPage({ params }: NotesPageProps) {
   return (
     <>
       <CompanionNavbar companion={companion} relationship={relationship} />
+      <p className="text-xl text-center my-5 ">
+        Add Notes about your relationship with the Persona {companion.name}
+      </p>
+      <p>
+        Refer to yourself and Persona in the third person, ie {companion.name}.
+        The Persona will now know these facts.
+      </p>
       <NavBar companion={companion} />
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {allNotes.map((note) => (

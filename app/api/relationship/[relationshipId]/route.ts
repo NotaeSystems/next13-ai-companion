@@ -14,6 +14,12 @@ export async function PATCH(
     const user = await currentUser();
     const {
       status,
+      role,
+      name,
+      nickNames,
+      gender,
+      educationalLevel,
+      ageLevel,
 
       content,
       // temperature,
@@ -50,6 +56,13 @@ export async function PATCH(
       data: {
         status,
         content,
+        role,
+        name,
+        nickNames,
+        gender,
+        educationalLevel,
+        ageLevel,
+
         // instructions,
         // pineconeIndex,
         // temperature: Number(temperature),

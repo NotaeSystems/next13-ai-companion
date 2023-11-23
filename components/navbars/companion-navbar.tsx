@@ -41,63 +41,55 @@ export const CompanionNavbar = async ({
   return (
     <>
       <div className="w-full h-20 bg-yellow-800 sticky top-0">
-        <div>
-          <h1>Companion Navbar</h1>
-        </div>
-        <div className="flex justify-center">
-          <Link href={`/dashboard/companion/${companion.id}`}>
-            <Image
-              src={companion.src}
-              className="rounded-xl object-cover"
-              alt="Character"
-              width={50}
-              height={50}
-            />
-            <h1>{companion.name}</h1>
-          </Link>
-          <div>
-            <Button>
-              <Link href={`/dashboard/companion/${companion.id}/relationship`}>
-                Relationship
-              </Link>
-            </Button>
+        <div className="container mx-auto px-4 h-full">
+          <nav className="flex justify-between items-center h-full">
+            <div>
+              <h1>Persona</h1>
+            </div>
 
-            {/* <Button>
-              <Link href={`/dashboard/companion/${companion.id}/chats/chat`}>
-                Basic Chat
+            <div>
+              <Link href={`/dashboard/companion/${companion.id}`}>
+                <Image
+                  src={companion.src}
+                  className="rounded-xl object-cover"
+                  alt="Character"
+                  width={35}
+                  height={35}
+                />
               </Link>
-            </Button> */}
-            <Button>
-              {/* <Link href={`/dashboard/companion/${companion.chatLink}/${companion.id}`}> */}
-              {/* <Link
-                href={`/dashboard/companion/${companion.id}/chats/streaming`}
-              >
-                Streaming Chat
-              </Link> */}
-              <Link
-                href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
-              >
-                Streaming Relationship Chat
-              </Link>
-            </Button>
+            </div>
 
-            <Button>
-              <Link href={`/dashboard/companion/${companion.id}/notes`}>
-                Notes
-              </Link>
-            </Button>
+            <div>
+              <h1>{companion.name}</h1>
+            </div>
 
-            {/* <Button>
-              <Link href={`/dashboard/companion/${companion.id}/edit`}>
-                Edit
-              </Link>
-            </Button> */}
-            {/* <Button>
-              <Link href={`/dashboard/companion/${companion.id}/notes`}>
-                Notes
-              </Link>
-            </Button> */}
-          </div>
+            <div>
+              <Button>
+                <Link
+                  href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
+                >
+                  Chat
+                </Link>
+              </Button>
+            </div>
+            <div>
+              <Button>
+                <Link
+                  href={`/dashboard/companion/${companion.id}/relationship`}
+                >
+                  Relationship
+                </Link>
+              </Button>
+            </div>
+
+            <div>
+              <Button>
+                <Link href={`/dashboard/companion/${companion.id}/notes`}>
+                  Notes
+                </Link>
+              </Button>
+            </div>
+          </nav>
         </div>
       </div>
 

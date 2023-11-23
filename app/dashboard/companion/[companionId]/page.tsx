@@ -90,7 +90,7 @@ export default async function CompanionIdPage({
     });
   }
   console.log(relationship.title);
-  if (relationship.status != "Active" && relationship.adminStatus != "Status") {
+  if (relationship.status != "Active" && relationship.adminStatus != "Active") {
     console.log("redirecting to /dashboard. Relationship is not active");
     return redirect("/dashboard");
   }

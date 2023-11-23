@@ -24,42 +24,50 @@ export const AdminCompanionNavbar = ({
 }: AdminCompanionNavBarProps) => {
   return (
     <>
-      <div className="w-full h-20 bg-red-500 sticky top-0">
-        <div className="flex justify-center">
-          <div className="bg-black left-2">
-            <h1>Admin Companion Navbar</h1>
-          </div>
-          <Link href={`/admin/companion/${companion.id}`}>
-            <Image
-              src={companion.src}
-              className="rounded-xl object-cover"
-              alt="Character"
-              width={50}
-              height={50}
-            />
-            <h1>{companion.name}</h1>
-          </Link>
-          <div>
-            <Button>
-              <Link href={`/admin/companion/${companion.id}/relationships`}>
-                Relationships
+      <div className="w-full h-20 bg-red-400 sticky top-0">
+        <div className="container mx-auto px-4 h-full">
+          <nav className="flex justify-between items-center h-full">
+            <div>
+              <h1>Admin Persona </h1>
+            </div>
+            <div>
+              <Link href={`/admin/companion/${companion.id}`}>
+                <Image
+                  src={companion.src}
+                  className="rounded-xl object-cover"
+                  alt="Persona"
+                  width={35}
+                  height={35}
+                />
               </Link>
-            </Button>
-            {/* <Button>
+            </div>
+            <div>
+              <h1>{companion.name}</h1>
+            </div>
+            <div>
+              <Button>
+                <Link href={`/admin/companion/${companion.id}/relationships`}>
+                  Relationships
+                </Link>
+              </Button>
+              {/* <Button>
               <Link href={`/dashboard/companion/${companion.id}/chat`}>Chat</Link>
             </Button> */}
-            <Button>
-              <Link href={`/admin/companion/${companion.id}/edit`}>Edit</Link>
-            </Button>
-            <Button>
-              <Link href={`/admin/companion/${companion.id}/conversations`}>
-                Conversations
-              </Link>
-            </Button>
-            <Button>
-              <Link href={`/admin/companion/${companion.id}/notes`}>Notes</Link>
-            </Button>
-          </div>
+              <Button>
+                <Link href={`/admin/companion/${companion.id}/edit`}>Edit</Link>
+              </Button>
+              <Button>
+                <Link href={`/admin/companion/${companion.id}/conversations`}>
+                  Conversations
+                </Link>
+              </Button>
+              <Button>
+                <Link href={`/admin/companion/${companion.id}/notes`}>
+                  Notes
+                </Link>
+              </Button>
+            </div>
+          </nav>
         </div>
       </div>
 

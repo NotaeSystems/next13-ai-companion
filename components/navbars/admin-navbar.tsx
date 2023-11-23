@@ -20,27 +20,42 @@ export const AdminNavbar = () => {
   return (
     <>
       <div className="w-full h-20 bg-red-800 sticky top-0">
-        <div className="flex justify-center gap-3">
-          <div className="bg-black left-2">
-            <h1>Admin Navbar</h1>
-          </div>
-          <div>
-            <Button>
-              <Link href={`/admin`}>Admin</Link>
-            </Button>
-            <Button>
-              <Link href={`/admin/companions`}>Companions</Link>
-            </Button>
-            <Button>
-              <Link href={`/admin/profiles`}>User Profiles</Link>
-            </Button>
-            <Button>
-              <Link href={`/admin/billing`}>Billing</Link>
-            </Button>
-            <Button>
-              <Link href={`/admin/groups`}>Groups</Link>
-            </Button>
-          </div>
+        <div className="container mx-auto px-4 h-full">
+          <nav className="flex justify-between items-center h-full">
+            <div>
+              <h1>Admin</h1>
+            </div>
+
+            <div>
+              <Button>
+                <Link href={`/admin`}>Admin</Link>
+              </Button>
+            </div>
+
+            <div>
+              <Button>
+                <Link href={`/admin/companions`}>Companions</Link>
+              </Button>
+            </div>
+
+            <div>
+              <Button>
+                <Link href={`/admin/profiles`}>User Profiles</Link>
+              </Button>
+            </div>
+
+            <div>
+              <Button>
+                <Link href={`/admin/billing`}>Billing</Link>
+              </Button>
+            </div>
+
+            <div>
+              <Button>
+                <Link href={`/admin/groups`}>Groups</Link>
+              </Button>
+            </div>
+          </nav>
         </div>
       </div>
 

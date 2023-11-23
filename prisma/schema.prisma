@@ -16,7 +16,7 @@ model Category {
 }
 
 model Invitation {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
   inviteCode  String
   companionId String
   userId      String
@@ -25,15 +25,15 @@ model Invitation {
 }
 
 model Companion {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  namespace     String         @default("Pending") 
-  status        String         @default("Pending")   // Pending, Active, Deleted, Suspended
-  role          String          @default("You are an ai assistant to converse on a friendly level with user.")
-  public        Boolean         @default(true)   // companion can be available to public or private
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  namespace String  @default("Pending")
+  status    String  @default("Pending") // Pending, Active, Deleted, Suspended
+  role      String  @default("You are an ai assistant to converse on a friendly level with user.")
+  public    Boolean @default(true) // companion can be available to public or private
 
-  userId        String          // the root owner of this persona, can delete and edit
+  userId        String // the root owner of this persona, can delete and edit
   userName      String
-  src           String          // the Cloudinary source url fot image of companion
+  src           String // the Cloudinary source url fot image of companion
   name          String
   description   String
   instructions  String
@@ -80,28 +80,38 @@ model Message {
 
 // the relationship between the user and the persona-companion
 model Relationship {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  userId        String  // clerk's authenication userId of logged-in user
-  adminStatus   String  @default("Active")
-  status        String  @default("Active")
+  userId String // clerk's authenication userId of logged-in user
 
-  addNotes      String @default("No")
-  companionId   String    @db.ObjectId
+  adminStatus String @default("Active")
+  status      String @default("Active")
+
+  addNotes        String @default("No")
+  addPersonaNotes String @default("No")
+
+  companionId String    @db.ObjectId
   companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
-  
-  notes         Note[]
- 
+
+  notes Note[]
+
   // profileId   String    @db.ObjectId
   // profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  title         String? @default("")
-  
+  title String? @default("")
+
   // determing the context between user and persona
-  role          String  @default("You are a friendly stranger to user")   //role of the user: User, Admin, Manager
-  content       String @default("I am a great fan of yours.")  // starting context of the persona from profile of the user
+  name      String @default("")
+  nickNames String @default("")
+
+  gender           String @default("unknown")
+  educationalLevel String @default("unknown")
+  ageLevel         String @default("unknown")
+
+  role          String  @default("You are a friendly stranger to user") //role of the user: User, Admin, Manager
+  content       String  @default("I am a great fan of yours.") // starting context of the persona from profile of the user
   temperature   Float   @default(0.5) // the temperature of the relationship between user and persona
-  pineconeIndex String?   @default("")  // if there is a pineconeIndex then additonal context about user from pinecone will be used 
+  pineconeIndex String? @default("") // if there is a pineconeIndex then additonal context about user from pinecone will be used 
 
   // for billing purposes
   conversations      Int @default(0)
@@ -110,24 +120,22 @@ model Relationship {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-
-
   @@index([companionId])
   @@index([userId])
 }
 
 // the relationship between the user and the persona-companion
 model Group {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  status        String  @default("Active")
-  name          String @default("Group")
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  status String @default("Active")
+  name   String @default("Group")
 
-  userId        String  // clerk's authenication userId of logged-in user
-  role          String @default("Member") // Admin, Member
- 
-  companionId   String    @db.ObjectId
-  companion     Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
-  
+  userId String // clerk's authenication userId of logged-in user
+  role   String @default("Member") // Admin, Member
+
+  companionId String    @db.ObjectId
+  companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
+
   // for billing purposes
   conversations      Int @default(0)
   conversationsLimit Int @default(0)
@@ -162,8 +170,8 @@ model User {
 // profile contains the default notes about a user and any persona subscribed 
 model Profile {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
-  adminStatus         String @default("Active")
-  status              String @default("Active")
+  adminStatus        String  @default("Active")
+  status             String  @default("Active")
   userId             String  @default("user")
   role               String  @default("user")
   firstName          String  @default("unknown")
@@ -172,15 +180,13 @@ model Profile {
   email              String?
   phone              String?
   content            String?
-  gender             String @default("unknown")
-  educationLevel     String @default("unknown")
-  ageLevel           String @default("unknown")
+  gender             String  @default("unknown")
+  educationLevel     String  @default("unknown")
+  ageLevel           String  @default("unknown")
   conversations      Int     @default(0)
   conversationsLimit Int     @default(10)
 
-  
   // relationships    Relationship[]
-  
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -196,23 +202,24 @@ model UserSubscription {
   stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 }
+
 model Note {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  title         String @default("title")
-  content       String?
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  title   String  @default("title")
+  content String?
 
-  companionId   String  @db.ObjectId
-  companion     Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
- 
- relationshipId  String? @db.ObjectId
- relationship   Relationship? @relation(fields: [relationshipId], references: [id], onDelete: Cascade)
- 
-  userId        String?
+  companionId String    @db.ObjectId
+  companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  relationshipId String?       @db.ObjectId
+  relationship   Relationship? @relation(fields: [relationshipId], references: [id], onDelete: Cascade)
 
-  @@map("note")
+  userId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   // @@index([companionId])
   @@index([userId])
+  @@map("note")
 }

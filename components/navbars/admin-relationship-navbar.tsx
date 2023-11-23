@@ -41,65 +41,50 @@ export const RelationshipAdminNavbar = async ({
 
   return (
     <>
-      <div className="w-full h-20 bg-red-400 sticky top-0">
-        <div>
-          <h1>Admin Relationship Navbar</h1>
-        </div>
-        <div className="flex justify-center">
-          {/* <Link href={`/dashboard/companion/${companion.id}`}>
-            <Image
-              src={companion.src}
-              className="rounded-xl object-cover"
-              alt="Character"
-              width={50}
-              height={50}
-            />
-            <h1>{companion.name}</h1>
-          </Link> */}
-          <div>
-            <div className="bg-black left-2">
-              <h1>Admin Relationship Navbar</h1>
+      <div className="w-full h-20 bg-red-300 sticky top-0">
+        <div className="container mx-auto px-4 h-full">
+          <nav className="flex justify-between items-center h-full">
+            <div>
+              <h1>Admin Relationship</h1>
             </div>
-            <Button>
-              <Link
-                href={`/admin/companion/${companion.id}/relationship/${relationship.id}`}
-              >
-                Relationship
+            <div>
+              <h1>
+                {user.firstName} {user.lastName}
+              </h1>
+            </div>
+            {/* <div className="flex justify-center">
+              <Link href={`/dashboard/companion/${companion.id}`}>
+                <Image
+                  src={companion.src}
+                  className="rounded-xl object-cover"
+                  alt="Character"
+                  width={50}
+                  height={50}
+                />
+                <h1>{companion.name}</h1>
               </Link>
-            </Button>
-            <Button>
-              <Link
-                href={`/admin/companion/${companion.id}/relationship/${relationship.id}/notes`}
-              >
-                Notes
-              </Link>
-            </Button>
-            {/* 
-            <Button>
-              <Link href={`/dashboard/companion/${companion.id}/chats/chat`}>
-                Basic Chat
-              </Link>
-            </Button> */}
+            </div> */}
 
-            <Button>
-              <Link
-                href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
-              >
-                Chat
-              </Link>
-            </Button>
+            <div>
+              <Button>
+                <Link
+                  href={`/admin/companion/${companion.id}/relationship/${relationship.id}`}
+                >
+                  Relationship
+                </Link>
+              </Button>
+            </div>
 
-            {/* <Button>
-              <Link href={`/dashboard/companion/${companion.id}/edit`}>
-                Edit
-              </Link>
-            </Button> */}
-            {/* <Button>
-              <Link href={`/dashboard/companion/${companion.id}/notes`}>
-                Notes
-              </Link>
-            </Button> */}
-          </div>
+            <div>
+              <Button>
+                <Link
+                  href={`/admin/companion/${companion.id}/relationship/${relationship.id}/notes`}
+                >
+                  Relationship Notes
+                </Link>
+              </Button>
+            </div>
+          </nav>
         </div>
       </div>
 

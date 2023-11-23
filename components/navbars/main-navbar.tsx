@@ -3,7 +3,8 @@ import { UserButton } from "@clerk/nextjs";
 import { Poppins } from "next/font/google";
 import { auth, redirectToSignIn, SignedOut, SignedIn } from "@clerk/nextjs";
 // import { Sparkles } from "lucide-react";
-
+import Image from "next/image";
+import logo from "@/assets/logo.png";
 import { cn } from "@/lib/utils";
 // import { MobileSidebar } from "@/components/mobile-sidebar";
 // import { ModeToggle } from "@/components/mode-toggle";
@@ -24,6 +25,10 @@ export const MainNavbar = () => {
       <div className="w-full h-20 bg-emerald-800 sticky top-0">
         <div className="container mx-auto px-4 h-full">
           <nav className="flex justify-between items-center h-full">
+            <Link href="/" className="flex items-center gap-1">
+              <Image src={logo} alt="logo" width={40} height={40} />
+              <span className="font-bold">SmartyPersona</span>
+            </Link>
             <div>
               <Button>
                 <Link href="/">
