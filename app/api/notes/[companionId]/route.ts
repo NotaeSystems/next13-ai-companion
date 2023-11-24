@@ -38,6 +38,7 @@ export async function POST(
       },
     });
     if (!companion) {
+      console.log("cannot find companion: ");
       return Response.json({ error: "Error" }, { status: 401 });
     }
 

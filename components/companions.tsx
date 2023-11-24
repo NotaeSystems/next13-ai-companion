@@ -8,15 +8,15 @@ import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 //const chatLink = process.env.COMPANION_CHAT_LINK;
 
 interface CompanionsProps {
-  data: (Companion & {
+  companions: (Companion & {
     _count: {
       messages: number;
     };
   })[];
 }
 
-export const Companions = ({ data }: CompanionsProps) => {
-  if (data.length === 0) {
+export const Companions = ({ companions }: CompanionsProps) => {
+  if (companions.length === 0) {
     return (
       <div className="pt-10 flex flex-col items-center justify-center space-y-3">
         <div className="relative w-60 h-60">
@@ -29,17 +29,16 @@ export const Companions = ({ data }: CompanionsProps) => {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 pb-10">
-      {data.map((item) => (
+      {companions.map((companion) => (
         <Card
-          key={item.name}
+          key={companion.name}
           className="bg-primary/10 rounded-xl cursor-pointer hover:opacity-75 transition border-0"
         >
-          <Link href={`/dashboard/companion/${item.id}`}>
+          <Link href={`/dashboard/companion/${companion.id}`}>
             <CardHeader className="flex items-center justify-center text-center text-muted-foreground">
-              <div className="relative w-32 h-32 overflow-hidden">
+              <div className="relative w-32 h-32">
                 <Image
-                  src={item.src}
-                  object-fit="cover"
+                  src={companion.src}
                   fill
                   className="rounded-xl object-cover"
                   alt="Character"
@@ -47,14 +46,14 @@ export const Companions = ({ data }: CompanionsProps) => {
                   // height={150}
                 />
               </div>
-              <p className="font-bold">{item.name}</p>
-              <p className="text-xs">{item.description}</p>
+              <p className="font-bold">{companion.name}</p>
+              <p className="text-xs">{companion.description}</p>
             </CardHeader>
             <CardFooter className="flex items-center justify-between text-xs text-muted-foreground">
-              <p className="lowercase">@{item.userName}</p>
+              <p className="lowercase">@{companion.userName}</p>
               <div className="flex items-center">
                 <MessagesSquare className="w-3 h-3 mr-1" />
-                {item._count.messages}
+                {companion._count.messages}
               </div>
             </CardFooter>
           </Link>

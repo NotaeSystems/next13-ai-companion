@@ -6,8 +6,10 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
 import NavBar from "./NavBar";
+import { useSearchParams } from "next/navigation";
+import { TopicsPanel } from "@/components/topics-panel";
 export const metadata: Metadata = {
-  title: "FlowBrain - Notes",
+  title: "SmartyPersona - Notes",
 };
 
 interface NotesPageProps {
@@ -50,9 +52,20 @@ export default async function NotesPage({ params }: NotesPageProps) {
       </>
     );
   }
+
+  //const searchParams = useSearchParams()
+
+  //const topicId = searchParams.get('topicId')
+
+  const topics = await prismadb.topic.findMany();
+
   // find all personal relationship notes belonging to user and companion
   const allNotes = await prismadb.note.findMany({
-    where: { userId: relationship.userId, companionId: companion.id },
+    where: {
+      userId: relationship.userId,
+      companionId: companion.id,
+      //topicId: topicId,
+    },
   });
   return (
     <>
@@ -65,6 +78,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
         The Persona will now know these facts.
       </p>
       <NavBar companion={companion} />
+      {/* <TopicsPanel topics={topics} /> */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {allNotes.map((note) => (
           <Note note={note} key={note.id} />

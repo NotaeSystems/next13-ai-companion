@@ -11,7 +11,7 @@ interface CompanionsDashboardProps {
   relationships: any;
 }
 
-export const CompanionsDashboard = ({
+export const RelationshipsDashboard = ({
   relationships,
 }: CompanionsDashboardProps) => {
   if (relationships.length === 0) {

@@ -1,4 +1,4 @@
-import prisma from "@/lib/prismadb";
+import prismadb from "@/lib/prismadb";
 import { Categories } from "@/components/categories";
 import { Companions } from "@/components/companions";
 import { SearchInput } from "@/components/search-input";
@@ -8,8 +8,6 @@ import { cn } from "@/lib/utils";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-
-import UnderConstruction from "@/components/under-construction";
 const under_construction = process.env.UNDER_CONSTRUCTION;
 
 interface RootPageProps {
@@ -20,14 +18,7 @@ interface RootPageProps {
 }
 
 const RootPage = async ({ searchParams }: RootPageProps) => {
-  if (under_construction === "true") {
-    return (
-      <>
-        <UnderConstruction />
-      </>
-    );
-  }
-  const data = await prisma.companion.findMany({
+  const activeCompanions = await prismadb.companion.findMany({
     where: {
       //categoryId: searchParams.categoryId,
       status: "Active",
@@ -48,7 +39,22 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
     },
   });
 
-  const categories = await prisma.category.findMany();
+  const categories = await prismadb.category.findMany();
+
+  if (under_construction === "true") {
+    return (
+      <>
+        <div className="h-screen flex items-center justify-center">
+          <Image
+            src="/under-construction.jpg"
+            alt="Under Construction"
+            height={300}
+            width={300}
+          />
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className="p-4 space-y-2">
@@ -58,7 +64,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
       </Button>
       {/* <SearchInput /> */}
       {/* <Categories data={categories} /> */}
-      <Companions data={data} />
+      <Companions companions={activeCompanions} />
     </div>
   );
 };

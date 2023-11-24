@@ -103,64 +103,66 @@ export default function AddEditNoteDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {noteToEdit ? "Edit Note" : "Add Companion Note"}
-          </DialogTitle>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Note title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Note title" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="content"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Note content</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Note content" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter className="gap-1 sm:gap-0">
-              {noteToEdit && (
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {noteToEdit ? "Edit Note" : "Add Companion Note"}
+            </DialogTitle>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Note title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Note title" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="content"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Note content</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Note content" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <DialogFooter className="gap-1 sm:gap-0">
+                {noteToEdit && (
+                  <LoadingButton
+                    variant="destructive"
+                    loading={deleteInProgress}
+                    disabled={form.formState.isSubmitting}
+                    onClick={deleteNote}
+                    type="button"
+                  >
+                    Delete note
+                  </LoadingButton>
+                )}
                 <LoadingButton
-                  variant="destructive"
-                  loading={deleteInProgress}
-                  disabled={form.formState.isSubmitting}
-                  onClick={deleteNote}
-                  type="button"
+                  type="submit"
+                  loading={form.formState.isSubmitting}
+                  disabled={deleteInProgress}
                 >
-                  Delete note
+                  Submit
                 </LoadingButton>
-              )}
-              <LoadingButton
-                type="submit"
-                loading={form.formState.isSubmitting}
-                disabled={deleteInProgress}
-              >
-                Submit
-              </LoadingButton>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

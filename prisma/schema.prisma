@@ -15,6 +15,12 @@ model Category {
   companions Companion[]
 }
 
+model Topic {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  notes Note[]
+}
+
 model Invitation {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   inviteCode  String
@@ -210,6 +216,9 @@ model Note {
 
   companionId String    @db.ObjectId
   companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
+
+  topicId String? @db.ObjectId
+  topic   Topic?  @relation(fields: [topicId], references: [id], onDelete: Cascade)
 
   relationshipId String?       @db.ObjectId
   relationship   Relationship? @relation(fields: [relationshipId], references: [id], onDelete: Cascade)

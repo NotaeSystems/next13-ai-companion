@@ -48,6 +48,7 @@ export default function NavBar({ companion }: NavBarProps) {
           </div>
         </div>
       </div>
+
       <AddEditNoteDialog
         open={showAddEditNoteDialog}
         setOpen={setShowAddEditNoteDialog}
