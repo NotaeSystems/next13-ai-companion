@@ -9,6 +9,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
+
 interface CompanionIdPageProps {
   params: {
     companionId: string;
@@ -102,8 +103,18 @@ export default async function CompanionIdPage({
     return (
       <>
         <CompanionNavbar companion={companion} relationship={relationship} />
-        <h1>{companion.name}</h1>
-        <p>{companion.description}</p>
+        <h1 className="text-2xl text-center my-5 ">{companion.name}</h1>
+
+        <div className="flex items-center justify-center">
+          <Image
+            src={companion.src}
+            className="rounded-xl object-cover"
+            alt="Persona ${companion.name}"
+            height={150}
+            width={150}
+          />
+        </div>
+        <p className="text-xl text-center my-5 ">{companion.description}</p>
       </>
     );
   } else if (relationship.adminStatus === "Suspended") {

@@ -32,6 +32,8 @@ import {
   SelectValue,
   SelectTrigger,
 } from "@/components/ui/select";
+import Image from "next/image";
+import { cp } from "fs";
 
 const formSchema = z.object({
   // name: z.string().min(1, {
@@ -70,12 +72,12 @@ const formSchema = z.object({
 
 interface RelationshipFormProps {
   //categories: Category[];
-  Companion: Companion;
+  companion: Companion;
   relationship: Relationship;
 }
 
 export const RelationshipForm = ({
-  //categories,
+  companion,
   relationship,
 }: RelationshipFormProps) => {
   const { toast } = useToast();
@@ -119,7 +121,7 @@ export const RelationshipForm = ({
       });
     }
   };
-
+  const lover: string = relationship.name + " " + "is a lover";
   return (
     <div className="h-full p-4 space-y-2 max-w-3xl mx-auto">
       {/* <Button variant="destructive">
@@ -131,10 +133,19 @@ export const RelationshipForm = ({
           className="space-y-8 pb-10"
         >
           <div className="space-y-2 w-full col-span-2">
-            <div>
-              <p className="text-xl text-center my-5 ">
-                General information about your Relationship with Companion
-              </p>
+            <p className="text-xl text-center my-5 ">
+              General information about your Relationship with {companion.name}
+            </p>
+            <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center">
+                <Image
+                  src={companion.src}
+                  className="rounded-xl object-cover"
+                  alt="Persona ${companion.name}"
+                  height={150}
+                  width={150}
+                />
+              </div>
             </div>
             <Separator className="bg-primary/10" />
           </div>
@@ -159,12 +170,12 @@ export const RelationshipForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Pending">Pending</SelectItem>
+                      <SelectItem value="Pending">Inactive</SelectItem>
                       <SelectItem value="Active">Active</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    Select a temperature for your AI
+                    Select whether your relationship is Active or not.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -191,21 +202,167 @@ export const RelationshipForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Undisclosed">Undisclosed</SelectItem>
-                      <SelectItem value="Stranger">
-                        You are a Stranger
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " has an undisclosed relationship to " +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name} has an undisclosed relationship to{" "}
+                        {companion.name}
                       </SelectItem>
-                      <SelectItem value="Fan">You are a Fan</SelectItem>
-                      <SelectItem value="Friend">You are a Friend</SelectItem>
-                      <SelectItem value="Son">You are a Son</SelectItem>
-                      <SelectItem value="Daughter">
-                        You are a Daughter
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is a stranger to " +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name} is a stranger to {companion.name}
                       </SelectItem>
-                      <SelectItem value="Father">You are the Father</SelectItem>
-                      <SelectItem value="Mother">You are the Mother</SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is a lover to " +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name + " is a lover to " + companion.name}
+                      </SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is a fan of " +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name} is a fan of {companion.name}
+                      </SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is a friend of " +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name} is a friend of {companion.name}
+                      </SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is a boyfriend of " +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name} is a boyfriend of {companion.name}
+                      </SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is a girlfriend of " +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name} is a girlfriend of {companion.name}
+                      </SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is the son of " +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name} is the son of {companion.name}
+                      </SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is the daughter of" +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name} is the daughter of {companion.name}
+                      </SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is the Father of " +
+                          companion.name
+                        }
+                      >
+                        {relationship.name} is the father of {companion.name} +
+                        ". "
+                      </SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is the Mother of " +
+                          companion.name
+                        }
+                      >
+                        {relationship.name} is the mother of {companion.name} +
+                        ". "
+                      </SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is a Grandfather of " +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name} is the Grandfather of
+                        {companion.name}
+                      </SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is the Grandmother of " +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name} is the GrandMother of
+                        {companion.name}
+                      </SelectItem>
+
+                      <SelectItem
+                        value={
+                          relationship.name +
+                          " is a cousin of " +
+                          companion.name +
+                          ". "
+                        }
+                      >
+                        {relationship.name} is a cousin of {companion.name}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription>Select your Gender</FormDescription>
+                  <FormDescription>
+                    Select your Relationship with {companion.name}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -265,9 +422,23 @@ export const RelationshipForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Male">Male</SelectItem>
-                      <SelectItem value="Female">Female</SelectItem>
-                      <SelectItem value="Undisclosed">Undisclosed</SelectItem>
+                      <SelectItem
+                        value={relationship.name + " gender is a male. "}
+                      >
+                        Male
+                      </SelectItem>
+                      <SelectItem
+                        value={relationship.name + " gender is a female. "}
+                      >
+                        Female
+                      </SelectItem>
+                      <SelectItem
+                        value={
+                          relationship.name + " has an undisclosed gender. "
+                        }
+                      >
+                        Undisclosed
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>Select your Gender</FormDescription>
@@ -295,13 +466,39 @@ export const RelationshipForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="High School">High School</SelectItem>
-                      <SelectItem value="Trade School">Trade School</SelectItem>
-                      <SelectItem value="College">College</SelectItem>
-                      <SelectItem value="Professional Degree">
+                      <SelectItem
+                        value={
+                          relationship.name + " has an high school education. "
+                        }
+                      >
+                        High School
+                      </SelectItem>
+                      <SelectItem
+                        value={
+                          relationship.name + " has a trade school education. "
+                        }
+                      >
+                        Trade School
+                      </SelectItem>
+                      <SelectItem
+                        value={relationship.name + " has a college education. "}
+                      >
+                        College
+                      </SelectItem>
+                      <SelectItem
+                        value={
+                          relationship.name + " has a professional education. "
+                        }
+                      >
                         Professional
                       </SelectItem>
-                      <SelectItem value="Undisclosed">Undisclosed</SelectItem>
+                      <SelectItem
+                        value={
+                          relationship.name + " has an undisclosed education. "
+                        }
+                      >
+                        Undisclosed
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>Select your Education Level</FormDescription>
@@ -328,13 +525,25 @@ export const RelationshipForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Young Teenager">
-                        Young Teenager
+                      <SelectItem value="Teenager">Young Teenager</SelectItem>
+                      <SelectItem
+                        value={relationship.name + " is a teenager. "}
+                      >
+                        Teenager
                       </SelectItem>
-                      <SelectItem value="Teenager">Teenager</SelectItem>
-                      <SelectItem value="Adult">Adult</SelectItem>
-                      <SelectItem value="Older Adult">Older Adult</SelectItem>
-                      <SelectItem value="Undisclosed">Undisclosed</SelectItem>
+                      <SelectItem value={relationship.name + " is an adult. "}>
+                        Adult
+                      </SelectItem>
+                      <SelectItem
+                        value={relationship.name + " is an older adult. "}
+                      >
+                        Older Adult
+                      </SelectItem>
+                      <SelectItem
+                        value={relationship.name + " has undisclosed age. "}
+                      >
+                        Undisclosed
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>Select your Age Level</FormDescription>
@@ -408,23 +617,17 @@ export const RelationshipForm = ({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    {" "}
-                    Describe in detail your relationship with Companion and
-                    relevant details.
-                  </FormLabel>
+                  <FormLabel> Describe other relationship details.</FormLabel>
                   <FormControl>
                     <Textarea
                       disabled={isLoading}
                       rows={15}
                       className="bg-background resize-none"
-                      //placeholder={PREAMBLE}
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    Describe in detail your relationship with Companion and
-                    relevant details.
+                    Describe other relevant details.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

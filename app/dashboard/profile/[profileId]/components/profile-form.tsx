@@ -46,6 +46,8 @@ const formSchema = z.object({
     message: "Last Name require at least 1 character.",
   }),
 
+  nickNames: z.string(),
+
   gender: z.string().min(1, {
     message: "Select your gender",
   }),
@@ -76,6 +78,7 @@ export const ProfileForm = ({
     defaultValues: Profile || {
       firstName: "",
       lastName: "",
+      nicknames: "",
       gender: "",
       educationLevel: "",
       ageLevel: "",
@@ -153,6 +156,24 @@ export const ProfileForm = ({
                   />
                 </FormControl>
                 <FormDescription>Your Last Name</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="nickNames"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="col-span-2 md:col-span-1">
+                <FormLabel>Nicknames</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isLoading}
+                    placeholder="Buddy, Harve"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>Nicknames you may have</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

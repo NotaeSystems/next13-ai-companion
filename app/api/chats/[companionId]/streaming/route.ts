@@ -62,7 +62,7 @@ export async function POST(
   try {
     if (Debugging) {
       console.warn(
-        "\n\n********************** New Conversation *****************************\n\n"
+        "\n\n********************** New Conversation xxxxx *****************************\n\n"
       );
     }
 
@@ -189,8 +189,10 @@ export async function POST(
       "\n************* Found Relationship. Getting Relationship Content ********************* \n"
     );
 
-    const userRelationshipContent = relationship.content;
+    const userRelationshipContent =
+      "${relationship.content} ${relationship.gender} ${relationship.ageLevel} ${relationship.role} ${relationship.educationalLevel}  ";
 
+    console.log("userRelationshipContent: " + userRelationshipContent);
     /// now that the User , Companion and Relationship has been verified lets pull the request body for the chat
     // the request body has the present active chat messages
 
@@ -273,6 +275,7 @@ export async function POST(
       includeMetadata: true,
       includeValues: true,
     });
+
     console.log(
       vectorAssistantQueryResponse.matches?.map((match) => ({
         content: match.metadata?.content,

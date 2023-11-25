@@ -212,7 +212,24 @@ export async function POST(
       "\n************* Found Relationship. Getting Relationship Content ********************* \n"
     );
 
-    const userRelationshipContent = relationship.content;
+    const userRelationshipContent =
+      "The User name is " +
+      relationship.name +
+      ". " +
+      " You know the following facts about " +
+      relationship.name +
+      ". " +
+      relationship.content +
+      " " +
+      relationship.gender +
+      " " +
+      relationship.ageLevel +
+      " " +
+      relationship.role +
+      " " +
+      relationship.educationalLevel;
+
+    console.log("userRelationshipContent: " + userRelationshipContent);
 
     /// now that the User , Companion and Relationship has been verified lets pull the request body for the chat
     // the request body has the present active chat messages
@@ -428,18 +445,19 @@ export async function POST(
 
     const context =
       `ONLY generate sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix. Do not say your are an AI Assistant. Say you are a Persona\n` +
-      "## Your role: ##" +
-      assistantRole +
-      "## End of Relevant Facts about yourself in third person ##" +
-      "\n" +
-      "## Relevant Facts about you ##" +
-      relevantAssistantMatches +
-      "## End of Relevant Facts about yourself first person ##" +
+      "Do not say your are an AI Assistant. Say you are a Persona of Jimmy Eaton. You will take on  the role of Jimmy Eaton. " +
+      +"## Relevant Facts about User. " +
       userRelationshipContent +
       "\n" +
-      "## Relevant Facts about User. User's name is " +
       relevantUserMatches +
-      "\n";
+      "\n ";
+    "## Your role: ##" +
+      assistantRole +
+      "## End of Relevant Facts about yourself in third person ##" +
+      " n" +
+      "## Relevant Facts about you ##" +
+      relevantAssistantMatches +
+      "## End of Relevant Facts about yourself first person ##";
 
     const systemMessage: ChatCompletionMessage = {
       role: "system",

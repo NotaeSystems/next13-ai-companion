@@ -41,10 +41,10 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
 
   return (
     <div>
-      <h1>Profile Page</h1>
-      <p className="max-w-prose text-center gap-5">
-        Give some information about you so that your Persona can better converse
-        with you.
+      <h1 className="text-2xl text-center my-5 ">Your Profile</h1>
+      <p className="text-2xl text-center my-5 ">
+        Give some information about you so that your Personas can better
+        converse with you.
       </p>
       <ProfileForm Profile={profile} />
     </div>

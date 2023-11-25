@@ -91,7 +91,7 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
           alt="Picture of the author"
         />
       </div> */}
-      <RelationshipForm Companion={companion} relationship={relationship} />;
+      <RelationshipForm companion={companion} relationship={relationship} />;
     </>
   );
 };

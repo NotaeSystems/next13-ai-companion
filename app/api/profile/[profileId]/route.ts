@@ -2,7 +2,8 @@ import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
-import { checkSubscription } from "@/lib/subscription";
+//import { checkSubscription } from "@/lib/subscription";
+import { isAdmin } from "@/lib/admin/isAdmin";
 
 export async function PATCH(
   req: Request,
@@ -10,30 +11,21 @@ export async function PATCH(
 ) {
   try {
     console.log("inside of /api/profile");
-    const body = await req.json();
+
+    // authenicate user
     const user = await currentUser();
-    const { firstName, lastName, gender, educationLevel, ageLevel } = body;
-
-    //console.log("relationship: " + relationship);
-
-    if (!params.profileId) {
-      return new NextResponse("Relationship ID required", { status: 400 });
-    }
-
     if (!user || !user.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // if (!status) {
-    //   console.log("missing fields");
-    //   return new NextResponse("Missing required fields", { status: 400 });
-    // }
+    // pull fields from body of request
+    const body = await req.json();
+    const { firstName, lastName, nickNames, gender, educationLevel, ageLevel } =
+      body;
 
-    // const isPro = await checkSubscription();
-
-    // if (!isPro) {
-    //   return new NextResponse("Pro subscription required", { status: 403 });
-    // }
+    if (!params.profileId) {
+      return new NextResponse("Profile ID required", { status: 400 });
+    }
 
     let profile = null;
     profile = await prismadb.profile.update({
@@ -43,15 +35,16 @@ export async function PATCH(
       data: {
         lastName,
         firstName,
+        nickNames,
         gender,
         educationLevel,
         ageLevel,
       },
     });
     console.log(profile);
+
     return NextResponse.json(profile);
   } catch (error) {
-    // console.log("[COMPANION_PATCH]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
@@ -62,12 +55,17 @@ export async function DELETE(
 ) {
   try {
     const { userId } = auth();
-
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const cprofile = await prismadb.companion.delete({
+    // only admin can delete a profile
+    const isAdminStatus = isAdmin(userId);
+    if (!isAdminStatus) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const profile = await prismadb.companion.delete({
       where: {
         userId,
         id: params.profileId,
@@ -76,7 +74,6 @@ export async function DELETE(
 
     return NextResponse.json(profile);
   } catch (error) {
-    // console.log("[COMPANION_DELETE]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
