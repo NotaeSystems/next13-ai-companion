@@ -74,9 +74,7 @@ export const CompanionNavbar = async ({
             </div>
             <div>
               <Button>
-                <Link
-                  href={`/dashboard/companion/${companion.id}/relationship`}
-                >
+                <Link href={`/dashboard/relationships/${relationship.id}`}>
                   Relationship
                 </Link>
               </Button>
@@ -84,8 +82,10 @@ export const CompanionNavbar = async ({
 
             <div>
               <Button>
-                <Link href={`/dashboard/companion/${companion.id}/notes`}>
-                  Notes
+                <Link
+                  href={`/dashboard/relationships/${relationship.id}/notes`}
+                >
+                  Relationship Notes
                 </Link>
               </Button>
             </div>

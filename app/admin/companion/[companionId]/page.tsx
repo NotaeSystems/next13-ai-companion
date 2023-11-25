@@ -4,6 +4,7 @@ import { CompanionsDashboard } from "@/components/companions-dashboard";
 import { SearchInput } from "@/components/search-input";
 import { MainNavbar } from "@/components/navbars/main-navbar";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
@@ -40,10 +41,17 @@ const CompanionPage = async ({ params }: CompanionIdPageProps) => {
     <>
       <div className="h-full p-4 space-y-2">
         <AdminCompanionNavbar companion={companion} />
-        <h1>Companion: {companion.name}</h1>
-        <ul>
-          <li></li>
-        </ul>
+        <h1 className="text-xl text-center my-5 ">Persona: {companion.name}</h1>
+        <div className="flex items-center justify-center">
+          <Image
+            src={companion.src}
+            className="rounded-xl object-cover"
+            alt="Persona ${companion.name}"
+            height={150}
+            width={150}
+          />
+        </div>
+        <p className="text-xl text-center my-5 ">{companion.description}</p>
       </div>
     </>
   );

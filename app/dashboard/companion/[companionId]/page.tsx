@@ -49,6 +49,17 @@ export default async function CompanionIdPage({
     console.log("redirecting to /dashboard did not find companion");
     return redirect("/dashboard");
   }
+  console.log("Admin Status: " + companion.adminStatus);
+  if (companion.adminStatus === "Suspended") {
+    return (
+      <>
+        <div className="text-xl text-red-500 col-span-full text-center">
+          <div>{companion.name}</div>
+          {"Relationship has been Suspended."}
+        </div>
+      </>
+    );
+  }
   const categories = await prismadb.category.findMany();
 
   //check if this if first time to chat with compannion. If so need to establish relationship
@@ -72,10 +83,12 @@ export default async function CompanionIdPage({
       },
     });
     if (!profile) {
+      console.log("Did not find profile");
       return redirectToSignIn();
     }
 
-    profileName = profile.firstName + " " + profile.lastName;
+    const profileName =
+      profile.firstName + " " + profile.lastName + " - " + companion.name;
 
     console.log(
       "getting ready to create new relationship for:  " + profileName
@@ -86,10 +99,31 @@ export default async function CompanionIdPage({
         companionId: companion.id,
         role: "User",
         title: profileName,
+        status: "Active",
+        adminStatus: "Active",
+        name: profile.firstName + " " + profile.lastName,
+        nickNames: profile.nickNames,
+
         // content: "You are a friendly stranger to Assistant",
       },
     });
+    return redirect(`/dashboard/relationships/${relationship.id}`);
   }
+
+  // if (
+  //   relationship.adminStatus === "Active" &&
+  //   relationship.status != "Active"
+  // ) {
+  //   console.log("Relation being reactivated");
+  //   relationship = await prismadb.relationship.update({
+  //     where: {
+  //       id: relationship.id,
+  //     },
+  //     data: {
+  //       status: "Active",
+  //     },
+  //   });
+  // }
   console.log(relationship.title);
   if (relationship.status != "Active" && relationship.adminStatus != "Active") {
     console.log("redirecting to /dashboard. Relationship is not active");
@@ -106,15 +140,31 @@ export default async function CompanionIdPage({
         <h1 className="text-2xl text-center my-5 ">{companion.name}</h1>
 
         <div className="flex items-center justify-center">
-          <Image
-            src={companion.src}
-            className="rounded-xl object-cover"
-            alt="Persona ${companion.name}"
-            height={150}
-            width={150}
-          />
+          <Link
+            href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
+          >
+            <Image
+              src={companion.src}
+              className="rounded-xl object-cover"
+              alt="Persona ${companion.name}"
+              height={150}
+              width={150}
+            />
+          </Link>
         </div>
         <p className="text-xl text-center my-5 ">{companion.description}</p>
+      </>
+    );
+  } else if (
+    relationship.adminStatus === "Active" &&
+    relationship.status === "Inactive"
+  ) {
+    return (
+      <>
+        <div className="text-xl text-red-500 col-span-full text-center">
+          <div>{companion.name}</div>
+          {"Relationship has been Reactivated."}
+        </div>
       </>
     );
   } else if (relationship.adminStatus === "Suspended") {
@@ -132,6 +182,15 @@ export default async function CompanionIdPage({
         <div className="text-xl text-red-500 col-span-full text-center">
           <div>{companion.name}</div>
           {"Relationship is not Active at this time"}
+          <div>
+            <Button>
+              <Link
+                href={`/dashboard/relationships/${relationship.id}/reactivate`}
+              >
+                Reactivate Your Relationship with {companion.name}
+              </Link>
+            </Button>
+          </div>
         </div>
       </>
     );

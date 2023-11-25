@@ -32,14 +32,15 @@ export async function PATCH(
     const body = await req.json();
     const {
       src,
+      adminStatus,
       name,
       namespace,
       status,
       role,
       description,
-      instructions,
+      // instructions,
       temperature,
-      seed,
+      // seed,
       relationship,
       pineconeIndex,
       voiceId,
@@ -51,12 +52,13 @@ export async function PATCH(
     if (
       !src ||
       !name ||
+      !adminStatus ||
       !namespace ||
       !status ||
       !description ||
       !role ||
-      !instructions ||
-      !seed ||
+      // !instructions ||
+      // !seed ||
       !categoryId
     ) {
       return new NextResponse("Missing required fields", { status: 400 });
@@ -78,15 +80,16 @@ export async function PATCH(
         //userId: user.id,
         // userName: user.firstName,
         src,
+        adminStatus,
         name,
         namespace,
         status,
         role,
         description,
-        instructions,
+        // instructions,
         pineconeIndex,
         temperature,
-        seed,
+        // seed,
         relationship,
         voiceId,
       },

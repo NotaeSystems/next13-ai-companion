@@ -127,14 +127,17 @@ const DashboardRelationshipsChatsStreamingPage = async ({
               <h2 className="text-2xl">{companion.name}</h2>
             </div>
             <div className="flex justify-center col-auto">
-              <Image
-                src={companion.src}
-                className="rounded-xl object-cover"
-                alt="Character"
-                width={50}
-                height={50}
-              />
+              <Link href={`/dashboard/companion/${companion.id}`}>
+                <Image
+                  src={companion.src}
+                  className="rounded-xl object-cover"
+                  alt="Character"
+                  width={50}
+                  height={50}
+                />
+              </Link>
             </div>
+
             {/* <Button>
             <Link href={`/dashboard/companion/${companionId}/relationship`}>
               Relationship

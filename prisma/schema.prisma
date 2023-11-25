@@ -31,20 +31,21 @@ model Invitation {
 }
 
 model Companion {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  namespace String  @default("Pending")
-  status    String  @default("Pending") // Pending, Active, Deleted, Suspended
-  role      String  @default("You are an ai assistant to converse on a friendly level with user.")
-  public    Boolean @default(true) // companion can be available to public or private
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  namespace   String  @default("Pending")
+  status      String  @default("Active") // Inactive, Active
+  adminStatus String  @default("Active") // Pending, Active, Suspended
+  role        String  @default("You are an ai assistant to converse on a friendly level with user.")
+  public      Boolean @default(true) // companion can be available to public or private
 
   userId        String // the root owner of this persona, can delete and edit
   userName      String
   src           String // the Cloudinary source url fot image of companion
   name          String
   description   String
-  instructions  String
+  //instructions  String?
   temperature   Float          @default(0.6)
-  seed          String
+  // seed          String
   relationship  String         @default("User is a stranger and a fan to companion")
   voiceId       String         @default("2Egq65mAdch3uRX23oDd")
   pineconeIndex String?        @default("")

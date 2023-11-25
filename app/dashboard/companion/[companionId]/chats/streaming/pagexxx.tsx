@@ -112,12 +112,14 @@ const StreamingPage = async ({ params }: StreamingPageProps) => {
               <h2 className="text-2xl">{companion.name}</h2>
             </div>
             <div className="flex justify-center col-auto">
-              <Image
-                src={companion.src}
-                width={125}
-                height={125}
-                alt="Picture of the author"
-              />
+              <Link href={`/dashboard/companion/${companion.id}`}>
+                <Image
+                  src={companion.src}
+                  width={125}
+                  height={125}
+                  alt="Picture of the author"
+                />
+              </Link>
             </div>
             {/* <Button>
             <Link href={`/dashboard/companion/${companionId}/relationship`}>
