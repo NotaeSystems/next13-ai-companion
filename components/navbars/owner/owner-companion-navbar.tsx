@@ -21,30 +21,36 @@ import prismadb from "@/lib/prismadb";
 
 const font = Poppins({ weight: "600", subsets: ["latin"] });
 
-interface CompanionNavBarProps {
+interface OwnerCompanionNavBarProps {
   companion: Companion;
   relationship: Relationship;
 }
 
-export const CompanionNavbar = async ({
+export const OwnerCompanionNavbar = async ({
   companion,
   relationship,
-}: CompanionNavBarProps) => {
-  console.log("inside of companion-navbar");
+}: OwnerCompanionNavBarProps) => {
+  console.log("inside of owner-companion-navbar");
   console.log("relationship: " + relationship.title);
 
   const user = await currentUser();
   if (!user) {
     return redirectToSignIn();
   }
-
+  if (user.id != companion.userId) {
+    return (
+      <>
+        <h1>Not Authorized</h1>
+      </>
+    );
+  }
   return (
     <>
       <div className="w-full h-20 bg-yellow-800 sticky top-0">
         <div className="container mx-auto px-4 h-full">
           <nav className="flex justify-between items-center h-full">
             <div>
-              <h1>Persona</h1>
+              <h1>Owner Persona</h1>
             </div>
 
             <div>
@@ -75,20 +81,48 @@ export const CompanionNavbar = async ({
             <div>
               <Button>
                 <Link href={`/dashboard/relationships/${relationship.id}`}>
-                  Relationship
+                  Your Relationship
                 </Link>
               </Button>
             </div>
 
-            {/* <div>
+            <div>
+              <Button>
+                <Link
+                  href={`/dashboard/companion/${companion.id}/owner/relationships`}
+                >
+                  Personas Relationships
+                </Link>
+              </Button>
+            </div>
+
+            <div>
+              <Button>
+                <Link href={`/dashboard/companion/${companion.id}/owner/edit`}>
+                  Edit
+                </Link>
+              </Button>
+            </div>
+
+            <div>
+              <Button>
+                <Link
+                  href={`/dashboard/companions/${companion.id}/owner/invitations`}
+                >
+                  Invitations
+                </Link>
+              </Button>
+            </div>
+
+            <div>
               <Button>
                 <Link
                   href={`/dashboard/relationships/${relationship.id}/notes`}
                 >
-                  Relationship Notes
+                  Persona Notes
                 </Link>
               </Button>
-            </div> */}
+            </div>
           </nav>
         </div>
       </div>

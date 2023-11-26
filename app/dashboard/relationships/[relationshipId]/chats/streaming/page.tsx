@@ -13,6 +13,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
 import { isAdmin } from "@/lib/admin/isAdmin";
+import { OwnerCompanionNavbar } from "@/components/navbars/owner/owner-companion-navbar";
 // export default function Home() {
 
 //   // ChatComponent ? Why make a new component?
@@ -116,7 +117,46 @@ const DashboardRelationshipsChatsStreamingPage = async ({
         </>
       );
     }
+    if (companion.userId === relationship.userId) {
+      return (
+        <>
+          <OwnerCompanionNavbar
+            companion={companion}
+            relationship={relationship}
+          />
+          {/* <main className="flex min-h-screen flex-col items-center justify-between p-24"> */}
+          <main className="flex flex-col h-full p-24 space-y-2 items-center ">
+            <div className="bg-slate-800 p-3  rounded-md  text-white">
+              <div className="flex justify-center col-auto">
+                <h2 className="text-2xl">{companion.name}</h2>
+              </div>
+              <div className="flex justify-center col-auto">
+                <Link href={`/dashboard/companion/${companion.id}`}>
+                  <Image
+                    src={companion.src}
+                    className="rounded-xl object-cover"
+                    alt="Character"
+                    width={50}
+                    height={50}
+                  />
+                </Link>
+              </div>
 
+              {/* <Button>
+            <Link href={`/dashboard/companion/${companionId}/relationship`}>
+              Relationship
+            </Link>
+          </Button> */}
+
+              <ChatComponent
+                companion={companion}
+                relationship={relationship}
+              />
+            </div>
+          </main>
+        </>
+      );
+    }
     return (
       <>
         <CompanionNavbar companion={companion} relationship={relationship} />

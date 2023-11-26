@@ -5,7 +5,7 @@ import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 import { ProfileForm } from "./components/profile-form";
 // import { CompanionForm } from "@/components/companion-form";
-import { CompanionNavbar } from "@/components/navbars/companion-navbar";
+import { AdminProfileNavbar } from "@/components/navbars/admin-profile-navbar";
 interface EditProfileAdminPageProps {
   params: {
     profileId: string;
@@ -38,12 +38,15 @@ const EditProfileAdminPage = async ({ params }: EditProfileAdminPageProps) => {
     console.log("Profile Not Found");
     return redirect("/dashboard");
   }
+  const profileFullname = profile.firstName + " " + profile.lastName;
   // const categories = await prismadb.category.findMany();
 
   // console.log("getting ready to return");
   return (
     <>
-      <h1> Edit Profile</h1>
+      <AdminProfileNavbar profile={profile}></AdminProfileNavbar>
+      <h1>{profileFullname}</h1>
+      <h1> Edit Profile </h1>
       <ProfileForm Profile={profile} />
       {/* <ProfileForm initialData={profile} } /> */}
     </>

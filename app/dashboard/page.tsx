@@ -26,7 +26,7 @@ const DashboardRootPage = async ({ searchParams }: RootPageProps) => {
   // TODO only find companions that status: Active
 
   const activeRelationships = await prismadb.relationship.findMany({
-    where: { userId: userId, status: "Active" },
+    where: { userId: userId, status: "Active", adminStatus: "Active" },
 
     include: { companion: true },
   });

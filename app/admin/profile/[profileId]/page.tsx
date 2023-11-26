@@ -10,7 +10,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
-import { OwnerCompanionNavbar } from "@/components/navbars/owner/owner-companion-navbar";
 
 interface CompanionIdPageProps {
   params: {
@@ -84,29 +83,7 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
   }
 
   //const categories = await prismadb.category.findMany();
-  if (companion.userId === relationship.userId) {
-    return (
-      <>
-        <OwnerCompanionNavbar
-          companion={companion}
-          relationship={relationship}
-        />
-        {/* <h1 className="text-xl text-center my-5">
-          You are now in a Relationship with Companion-{companion.name}
-        </h1> */}
-        <div className="flex justify-center col-auto"></div>
-        {/* <div className="flex justify-center col-auto">
-          <Image
-            src={companion.src}
-            width={125}
-            height={125}
-            alt="Picture of the author"
-          />
-        </div> */}
-        <RelationshipForm companion={companion} relationship={relationship} />;
-      </>
-    );
-  }
+
   return (
     <>
       <CompanionNavbar companion={companion} relationship={relationship} />

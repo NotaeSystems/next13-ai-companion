@@ -31,12 +31,12 @@ model Invitation {
 }
 
 model Companion {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  namespace   String  @default("Pending")
-  status      String  @default("Active") // Inactive, Active
-  adminStatus String  @default("Active") // Pending, Active, Suspended
-  role        String  @default("You are an ai assistant to converse on a friendly level with user.")
-  public      Boolean @default(true) // companion can be available to public or private
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  namespace   String @default("Pending")
+  status      String @default("Active") // Inactive, Active
+  adminStatus String @default("Active") // Pending, Active, Suspended
+  role        String @default("You are an ai assistant to converse on a friendly level with user.")
+  publicView  String @default("Yes") // companion can be available to public or private
 
   userId        String // the root owner of this persona, can delete and edit
   userName      String
@@ -90,6 +90,9 @@ model Relationship {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
   userId String // clerk's authenication userId of logged-in user
+
+  profileId String  @db.ObjectId
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   adminStatus String @default("Active")
   status      String @default("Active")
@@ -193,7 +196,7 @@ model Profile {
   conversations      Int     @default(0)
   conversationsLimit Int     @default(10)
 
-  // relationships    Relationship[]
+  relationships Relationship[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

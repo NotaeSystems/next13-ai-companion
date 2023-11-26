@@ -9,7 +9,7 @@ export async function PATCH(
   { params }: { params: { companionId: string } }
 ) {
   try {
-    console.log("inside of PATCH /api/admin/companion/[companionId]/route");
+    console.log("inside of PATCH /api/companion/[companionId]/routes");
     //const user = await currentUser();
 
     // check to see if logged-in user is admin and active /////////
@@ -32,11 +32,11 @@ export async function PATCH(
     const body = await req.json();
     const {
       src,
-      adminStatus,
-      publicView,
+
       name,
       namespace,
       status,
+      publicView,
       role,
       description,
       // instructions,
@@ -53,10 +53,9 @@ export async function PATCH(
     if (
       !src ||
       !name ||
-      !adminStatus ||
-      !publicView ||
       !namespace ||
       !status ||
+      !publicView ||
       !description ||
       !role ||
       // !instructions ||
@@ -82,11 +81,11 @@ export async function PATCH(
         //userId: user.id,
         // userName: user.firstName,
         src,
-        adminStatus,
-        publicView,
+
         name,
         namespace,
         status,
+        publicView,
         role,
         description,
         // instructions,

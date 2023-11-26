@@ -131,9 +131,9 @@ export const CompanionForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (companion) {
-        await axios.patch(`/api/admin/companion/${companion.id}`, values);
+        await axios.patch(`/api/owner/companion/${companion.id}`, values);
       } else {
-        await axios.post("/api/admin", values);
+        await axios.post("/api/owner", values);
       }
 
       toast({
@@ -142,7 +142,7 @@ export const CompanionForm = ({
       });
 
       router.refresh();
-      router.push("/admin");
+      router.push(`/dashboard/companion/${companion.id}`);
     } catch (error) {
       toast({
         variant: "destructive",
@@ -183,7 +183,7 @@ export const CompanionForm = ({
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="adminStatus"
             render={({ field }) => (
@@ -211,82 +211,7 @@ export const CompanionForm = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
-          <FormField
-            control={form.control}
-            name="publicView"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Public Viewinging Status</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="bg-background">
-                      <SelectValue
-                        defaultValue={field.value}
-                        placeholder="Select a public viewing status"
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="Yes">Yes</SelectItem>
-                    <SelectItem value="No">No</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  Select a Private-Public Status for your AI
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              name="name"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="col-span-2 md:col-span-1">
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="Elon Musk"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    This is how your AI Companion will be named.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              name="namespace"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="col-span-2 md:col-span-1">
-                  <FormLabel>Name Space</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="elonmusk"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    The Companion namespace on subdomain and Pinecone vectorized
-                    database. Must be unique.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          /> */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -311,13 +236,86 @@ export const CompanionForm = ({
                       <SelectItem value="Active">Active</SelectItem>
                     </SelectContent>
                   </Select>
+                  <FormDescription>Select a status for your AI</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="publicView"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Public Viewinging Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a public viewing status"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormDescription>
-                    Select a temperature for your AI
+                    Select a Private-Public Status for your AI
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                name="name"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="col-span-2 md:col-span-1">
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isLoading}
+                        placeholder="Elon Musk"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      This is how your AI Companion will be named.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                name="namespace"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="col-span-2 md:col-span-1">
+                    <FormLabel>Name Space</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isLoading}
+                        placeholder="elonmusk"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      The Companion namespace on subdomain and Pinecone
+                      vectorized database. Must be unique.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             {/* <FormField
               name="pineconeIndex"

@@ -34,7 +34,7 @@ export const AdminNavbar = () => {
 
             <div>
               <Button>
-                <Link href={`/admin/companions`}>Companions</Link>
+                <Link href={`/admin/companions`}>Personas</Link>
               </Button>
             </div>
 

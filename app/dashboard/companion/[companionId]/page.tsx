@@ -9,6 +9,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
+import { OwnerCompanionNavbar } from "@/components/navbars/owner/owner-companion-navbar";
 
 interface CompanionIdPageProps {
   params: {
@@ -62,7 +63,7 @@ export default async function CompanionIdPage({
   }
   const categories = await prismadb.category.findMany();
 
-  //check if this if first time to chat with compannion. If so need to establish relationship
+  //check if this if first time to chat with companion. If so need to establish relationship
   console.log("getting ready to check for relationship");
   // check to see if relationship exists
   let relationship = null;
@@ -96,6 +97,7 @@ export default async function CompanionIdPage({
     relationship = await prismadb.relationship.create({
       data: {
         userId: user.id,
+        profileId: profile.id,
         companionId: companion.id,
         role: "User",
         title: profileName,
@@ -129,8 +131,36 @@ export default async function CompanionIdPage({
     console.log("redirecting to /dashboard. Relationship is not active");
     return redirect("/dashboard");
   }
-
   if (
+    relationship.status === "Active" &&
+    relationship.adminStatus === "Active" &&
+    user.id === companion.userId
+  ) {
+    return (
+      <>
+        <OwnerCompanionNavbar
+          companion={companion}
+          relationship={relationship}
+        />
+        <h1 className="text-2xl text-center my-5 ">{companion.name}</h1>
+
+        <div className="flex items-center justify-center">
+          <Link
+            href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
+          >
+            <Image
+              src={companion.src}
+              className="rounded-xl object-cover"
+              alt="Persona ${companion.name}"
+              height={150}
+              width={150}
+            />
+          </Link>
+        </div>
+        <p className="text-xl text-center my-5 ">{companion.description}</p>
+      </>
+    );
+  } else if (
     relationship.status === "Active" &&
     relationship.adminStatus === "Active"
   ) {

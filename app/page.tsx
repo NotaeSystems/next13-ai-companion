@@ -22,7 +22,8 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
     where: {
       //categoryId: searchParams.categoryId,
       status: "Active",
-      public: true,
+      adminStatus: "Active",
+      publicView: "Yes",
       // name: {
       //   search: searchParams.name,
       // },
@@ -39,6 +40,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
     },
   });
 
+  console.log("Public Personas" + activeCompanions);
   const categories = await prismadb.category.findMany();
 
   if (under_construction === "true") {
