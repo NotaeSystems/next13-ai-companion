@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useProModal } from "@/hooks/use-pro-modal";
 import { Companion } from "@prisma/client";
 import Image from "next/image";
+import { ImagePersonaSmallComponent } from "../image/image-persona-small";
 
 const font = Poppins({ weight: "600", subsets: ["latin"] });
 
@@ -32,13 +33,14 @@ export const AdminCompanionNavbar = ({
             </div>
             <div>
               <Link href={`/admin/companion/${companion.id}`}>
-                <Image
+                <ImagePersonaSmallComponent companion={companion} />
+                {/* <Image
                   src={companion.src}
                   className="rounded-xl object-cover"
                   alt="Persona"
                   width={35}
                   height={35}
-                />
+                /> */}
               </Link>
             </div>
             <div>

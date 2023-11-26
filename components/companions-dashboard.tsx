@@ -4,6 +4,7 @@ import { Companion, Relationship } from "@prisma/client";
 import { MessagesSquare } from "lucide-react";
 
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
+import { ImagePersonaLargeComponent } from "./image/image-persona-large";
 
 //const chatLink = process.env.COMPANION_CHAT_LINK;
 
@@ -40,12 +41,15 @@ export const CompanionsDashboard = ({
           >
             <CardHeader className="flex items-center justify-center text-center text-muted-foreground">
               <div className="relative w-32 h-32">
-                <Image
+                {/* <ImagePersonaLargeComponent
+                  companion={relationship.companion}
+                /> */}
+                {/* <Image
                   src={relationship.companion.src}
                   fill
                   className="rounded-xl object-cover"
                   alt="Character"
-                />
+                /> */}
               </div>
               <p className="font-bold">{relationship.companion.name}</p>
               <p className="text-xs">{relationship.companion.description}</p>

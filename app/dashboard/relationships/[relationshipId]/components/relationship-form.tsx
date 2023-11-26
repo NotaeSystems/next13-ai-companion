@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/select";
 import Image from "next/image";
 import { cp } from "fs";
+import { ImagePersonaLargeComponent } from "@/components/image/image-persona-large";
 
 const formSchema = z.object({
   // name: z.string().min(1, {
@@ -139,13 +140,14 @@ export const RelationshipForm = ({
             <div className="flex items-center justify-center">
               <div className="flex items-center justify-center">
                 <Link href={`/dashboard/companion/${companion.id}`}>
-                  <Image
+                  <ImagePersonaLargeComponent companion={companion} />
+                  {/* <Image
                     src={companion.src}
                     className="rounded-xl object-cover"
                     alt="Persona ${companion.name}"
                     height={150}
                     width={150}
-                  />
+                  /> */}
                 </Link>
               </div>
             </div>

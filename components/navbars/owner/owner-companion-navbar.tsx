@@ -18,6 +18,7 @@ import { useProModal } from "@/hooks/use-pro-modal";
 import { Companion, Relationship } from "@prisma/client";
 import Image from "next/image";
 import prismadb from "@/lib/prismadb";
+import { ImagePersonaSmallComponent } from "@/components/image/image-persona-small";
 
 const font = Poppins({ weight: "600", subsets: ["latin"] });
 
@@ -55,13 +56,14 @@ export const OwnerCompanionNavbar = async ({
 
             <div>
               <Link href={`/dashboard/companion/${companion.id}`}>
-                <Image
+                <ImagePersonaSmallComponent companion={companion} />
+                {/* <Image
                   src={companion.src}
                   className="rounded-xl object-cover"
                   alt="Character"
                   width={35}
                   height={35}
-                />
+                /> */}
               </Link>
             </div>
 

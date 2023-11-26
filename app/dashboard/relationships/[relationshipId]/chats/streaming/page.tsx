@@ -14,6 +14,7 @@ import Image from "next/image";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
 import { isAdmin } from "@/lib/admin/isAdmin";
 import { OwnerCompanionNavbar } from "@/components/navbars/owner/owner-companion-navbar";
+import { ImagePersonaLargeComponent } from "@/components/image/image-persona-large";
 // export default function Home() {
 
 //   // ChatComponent ? Why make a new component?
@@ -132,13 +133,14 @@ const DashboardRelationshipsChatsStreamingPage = async ({
               </div>
               <div className="flex justify-center col-auto">
                 <Link href={`/dashboard/companion/${companion.id}`}>
-                  <Image
+                  <ImagePersonaLargeComponent companion={companion} />
+                  {/* <Image
                     src={companion.src}
                     className="rounded-xl object-cover"
                     alt="Character"
                     width={50}
                     height={50}
-                  />
+                  /> */}
                 </Link>
               </div>
 

@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CompanionNavbar } from "@/components/navbars/companion-navbar";
 import { OwnerCompanionNavbar } from "@/components/navbars/owner/owner-companion-navbar";
+import { ImagePersonaLargeComponent } from "@/components/image/image-persona-large";
 
 interface CompanionIdPageProps {
   params: {
@@ -148,13 +149,7 @@ export default async function CompanionIdPage({
           <Link
             href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
           >
-            <Image
-              src={companion.src}
-              className="rounded-xl object-cover"
-              alt="Persona ${companion.name}"
-              height={150}
-              width={150}
-            />
+            <ImagePersonaLargeComponent companion={companion} />
           </Link>
         </div>
         <p className="text-xl text-center my-5 ">{companion.description}</p>
@@ -173,13 +168,7 @@ export default async function CompanionIdPage({
           <Link
             href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
           >
-            <Image
-              src={companion.src}
-              className="rounded-xl object-cover"
-              alt="Persona ${companion.name}"
-              height={150}
-              width={150}
-            />
+            <ImagePersonaLargeComponent companion={companion} />
           </Link>
         </div>
         <p className="text-xl text-center my-5 ">{companion.description}</p>
