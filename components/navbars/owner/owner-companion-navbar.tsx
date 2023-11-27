@@ -55,15 +55,8 @@ export const OwnerCompanionNavbar = async ({
             </div>
 
             <div>
-              <Link href={`/dashboard/companion/${companion.id}`}>
+              <Link href={`/owner/${companion.id}`}>
                 <ImagePersonaSmallComponent companion={companion} />
-                {/* <Image
-                  src={companion.src}
-                  className="rounded-xl object-cover"
-                  alt="Character"
-                  width={35}
-                  height={35}
-                /> */}
               </Link>
             </div>
 
@@ -90,9 +83,7 @@ export const OwnerCompanionNavbar = async ({
 
             <div>
               <Button>
-                <Link
-                  href={`/dashboard/companion/${companion.id}/owner/relationships`}
-                >
+                <Link href={`/owner/${companion.id}/relationships`}>
                   Personas Relationships
                 </Link>
               </Button>
@@ -100,17 +91,13 @@ export const OwnerCompanionNavbar = async ({
 
             <div>
               <Button>
-                <Link href={`/dashboard/companion/${companion.id}/owner/edit`}>
-                  Edit
-                </Link>
+                <Link href={`/owner/${companion.id}/edit`}>Edit</Link>
               </Button>
             </div>
 
             <div>
               <Button>
-                <Link
-                  href={`/dashboard/companions/${companion.id}/owner/invitations`}
-                >
+                <Link href={`/owner/${companion.id}/invitations`}>
                   Invitations
                 </Link>
               </Button>
