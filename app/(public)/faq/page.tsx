@@ -1,17 +1,18 @@
 import { Metadata } from "next";
-
-import UnderConstruction from "@/components/under-construction";
+import { ImageUnderConstructionComponent } from "@/components/image/image-under-construction.";
 const under_construction = process.env.UNDER_CONSTRUCTION;
 
 export const metadata: Metadata = {
-  title: "Smarty Clone-Contact Us",
+  title: "SmartyPersona-FAQ",
 };
 
 export default function FaqPage() {
   if (under_construction === "true") {
     return (
       <>
-        <UnderConstruction />
+        <div className="h-screen flex items-center justify-center">
+          <ImageUnderConstructionComponent height={300} />
+        </div>
       </>
     );
   }

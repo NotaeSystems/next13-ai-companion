@@ -10,23 +10,27 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 import { ImageUnderConstructionComponent } from "@/components/image/image-under-construction.";
-
+import { auth, redirectToSignIn } from "@clerk/nextjs";
 const under_construction = process.env.UNDER_CONSTRUCTION;
 
-interface RootPageProps {
-  searchParams: {
-    categoryId: string;
-    name: string;
-  };
+interface DashboardOwnedPageProps {
+  // searchParams: {
+  //   categoryId: string;
+  //   name: string;
 }
 
-const RootPage = async ({ searchParams }: RootPageProps) => {
-  const activeCompanions = await prismadb.companion.findMany({
+const DashboardOwnedPage = async ({}: DashboardOwnedPageProps) => {
+  const { userId } = auth();
+  console.log(userId);
+  if (!userId) {
+    return redirectToSignIn();
+  }
+
+  const ownedCompanions = await prismadb.companion.findMany({
     where: {
       //categoryId: searchParams.categoryId,
-      status: "Active",
-      adminStatus: "Active",
-      publicView: "Yes",
+      userId: userId,
+
       // name: {
       //   search: searchParams.name,
       // },
@@ -43,7 +47,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
     },
   });
 
-  console.log("Public Personas" + activeCompanions);
+  console.log("Owned Personas" + ownedCompanions);
   const categories = await prismadb.category.findMany();
 
   if (under_construction === "true") {
@@ -70,9 +74,9 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
       </Button>
       {/* <SearchInput /> */}
       {/* <Categories data={categories} /> */}
-      <Companions companions={activeCompanions} />
+      <Companions companions={ownedCompanions} />
     </div>
   );
 };
 
-export default RootPage;
+export default DashboardOwnedPage;

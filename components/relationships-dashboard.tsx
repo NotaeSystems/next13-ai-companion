@@ -3,8 +3,13 @@ import Link from "next/link";
 import { Companion, Relationship } from "@prisma/client";
 import { MessagesSquare } from "lucide-react";
 
-import { Card, CardFooter, CardHeader } from "@/components/ui/card";
-
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 //const chatLink = process.env.COMPANION_CHAT_LINK;
 
 interface CompanionsDashboardProps {
@@ -53,9 +58,14 @@ export const RelationshipsDashboard = ({
                   />
                 </div>
                 <p className="font-bold">{relationship.companion.name}</p>
-                <p className="text-xs">{relationship.companion.description}</p>
+
                 <p> Status: {relationship.companion.status} </p>
               </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[200px] rounded-md border p-4">
+                  <p className="text-s">{relationship.companion.description}</p>
+                </ScrollArea>
+              </CardContent>
               <CardFooter className="flex items-center justify-between text-xs text-muted-foreground">
                 <p className="lowercase">@{relationship.companion.userName}</p>
 

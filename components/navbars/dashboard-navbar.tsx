@@ -25,7 +25,14 @@ export const DashboardNavbar = () => {
           <div>
             <Button>
               <Link href="/dashboard">
-                <h1 className={cn("font-bold")}>Your Personas</h1>
+                <h1 className={cn("font-bold")}>Subscribed Personas</h1>
+              </Link>
+            </Button>
+          </div>
+          <div>
+            <Button>
+              <Link href="/dashboard/owned">
+                <h1 className={cn("font-bold")}>Owned Personas</h1>
               </Link>
             </Button>
           </div>

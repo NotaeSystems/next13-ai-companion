@@ -152,7 +152,12 @@ export default async function CompanionIdPage({
             <ImagePersonaLargeComponent companion={companion} />
           </Link>
         </div>
-        <p className="text-xl text-center my-5 ">{companion.description}</p>
+
+        <div className="flex justify-center">
+          <p className="bg-gray-500 w-4/6 lg:w-600 text-xl my-5 ">
+            {companion.description}
+          </p>
+        </div>
       </>
     );
   } else if (
