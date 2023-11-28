@@ -93,6 +93,13 @@ const DashboardCompanionOwnerRelationshipPage = async ({
     <div className="h-full p-4 space-y-2">
       <OwnerCompanionNavbar companion={companion} relationship={relationship} />
       <h1>{relationship.title}</h1>
+      <Button>
+        <Link
+          href={`/owner/${companion.id}/relationship/${relationship.id}/notes`}
+        >
+          Relationship Notes
+        </Link>
+      </Button>
       <RelationshipForm
         companion={companion}
         relationship={relationship}

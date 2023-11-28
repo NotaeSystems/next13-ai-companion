@@ -12,13 +12,14 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Companion } from "@prisma/client";
+import { Companion, Relationship } from "@prisma/client";
 
 interface NavBarProps {
   companion: Companion;
+  relationship: Relationship;
 }
 
-export default function NavBar({ companion }: NavBarProps) {
+export default function NavBar({ companion, relationship }: NavBarProps) {
   const { theme } = useTheme();
 
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
@@ -32,7 +33,8 @@ export default function NavBar({ companion }: NavBarProps) {
             <span className="font-bold">FlowBrain</span>
           </Link> */}
           <div>
-            <h1 className="">{companion.name}- Persona Notes</h1>
+            <h1 className="font-bold">{relationship.title} </h1>
+            <h1 className="">Relationship Notes </h1>
           </div>
           <div className="flex items-center gap-2">
             {/* <UserButton
@@ -45,9 +47,9 @@ export default function NavBar({ companion }: NavBarProps) {
             <ThemeToggleButton /> */}
             <Button onClick={() => setShowAddEditNoteDialog(true)}>
               <Plus size={20} className="mr-2" />
-              Add Companion Note
+              Add {relationship.title} Note
             </Button>
-            <AIChatButton />
+            {/* <AIChatButton /> */}
           </div>
         </div>
       </div>
@@ -55,6 +57,7 @@ export default function NavBar({ companion }: NavBarProps) {
         open={showAddEditNoteDialog}
         setOpen={setShowAddEditNoteDialog}
         companion={companion}
+        relationship={relationship}
       />
     </>
   );

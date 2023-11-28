@@ -1,3 +1,4 @@
+"use client";
 import { CreateNoteSchema, createNoteSchema } from "@/lib/validation/note";
 import { zodResolver } from "@hookform/resolvers/zod";
 //import { Note } from "@prisma/client";
@@ -5,7 +6,7 @@ import { Note } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Companion } from "@prisma/client";
+import { Companion, Relationship } from "@prisma/client";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +30,7 @@ interface AddEditNoteDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   companion: Companion;
+  relationship: Relationship;
   noteToEdit?: Note;
 }
 
@@ -37,6 +39,7 @@ export default function AddEditNoteDialog({
   setOpen,
   companion,
   noteToEdit,
+  relationship,
 }: AddEditNoteDialogProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
 
@@ -52,7 +55,7 @@ export default function AddEditNoteDialog({
 
   async function onSubmit(input: CreateNoteSchema) {
     try {
-      console.log("made it to Submit Note");
+      console.log("made it to Submit Note. Relationship UserId =");
       if (noteToEdit) {
         console.log("there is a noteToEdit: " + noteToEdit.companionId);
         const response = await fetch(
@@ -67,11 +70,14 @@ export default function AddEditNoteDialog({
         );
         if (!response.ok) throw Error("Status code: " + response.status);
       } else {
-        const response = await fetch(`/api/owner/notes/${companion.id}`, {
-          method: "POST",
-          body: JSON.stringify(input),
-        });
-        if (!response.ok) throw Error("Status code: " + response.status);
+        const response = await fetch(
+          `/api/owner/notes/${companion.id}?role=${relationship.userId}`,
+          {
+            method: "POST",
+            body: JSON.stringify(input),
+          }
+        );
+        if (!response.ok) throw Error("xxStatus code: " + response.status);
         form.reset();
       }
       router.refresh();
@@ -113,7 +119,7 @@ export default function AddEditNoteDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {noteToEdit ? "Edit Note" : "Add Companion Note"}
+            {noteToEdit ? "Edit Note" : "Add Relationship Note"}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -131,6 +137,7 @@ export default function AddEditNoteDialog({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="content"

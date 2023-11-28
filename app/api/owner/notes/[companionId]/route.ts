@@ -31,7 +31,9 @@ export async function POST(
     console.log("req url: " + req.url);
     const role = searchParams.get("role");
     console.log("role= " + role);
-    console.log("inside of POST /api/notes/[companionId]?role=" + role);
+    console.log(
+      "inside of POST /api/owner/notes/[companionId]/notes?role=" + role
+    );
     const companion = await prisma.companion.findUnique({
       where: {
         id: params.companionId,
@@ -76,6 +78,11 @@ export async function POST(
     // } else {
     //   setUserId = userId;
     // }
+    // if (role === 'relationship'){
+
+    // }else{
+    //   const relationship =
+    // }
     const note = await prisma.$transaction(async (tx) => {
       const note = await tx.note.create({
         data: {
@@ -83,7 +90,7 @@ export async function POST(
           content: content,
           // userId: userId,
           companionId: companion.id,
-          userId: null,
+          userId: role,
         },
       });
       const ns1 = pineconeIndex.namespace(companion.namespace);
