@@ -12,6 +12,7 @@ import Image from "next/image";
 import { ImageUnderConstructionComponent } from "@/components/image/image-under-construction.";
 
 const under_construction = process.env.UNDER_CONSTRUCTION;
+const invitations = process.env.INVITATIONS;
 
 interface RootPageProps {
   searchParams: {
@@ -49,15 +50,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
   if (under_construction === "true") {
     return (
       <>
-        <div className="h-screen flex items-center justify-center">
-          <ImageUnderConstructionComponent height={300} />
-          {/* <Image
-            src="/under-construction.jpg"
-            alt="Under Construction"
-            height={300}
-            width={300}
-          /> */}
-        </div>
+        <ImageUnderConstructionComponent height={300} />
       </>
     );
   }
@@ -65,9 +58,11 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
   return (
     <div className="p-4 space-y-2">
       <h1>Home Page</h1>
+
       <Button>
         <Link href={`/invitation`}>Have an Invitation?</Link>
       </Button>
+
       {/* <SearchInput /> */}
       {/* <Categories data={categories} /> */}
       <Companions companions={activeCompanions} />

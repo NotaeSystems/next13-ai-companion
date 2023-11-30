@@ -8,6 +8,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 //import { ProModal } from '@/components/pro-modal';
 import { MainNavbar } from "@/components/navbars/main-navbar";
+import NavigationButtons from "@/components/navbars/navigation-buttons";
+import NavigationBar from "@/components/navbars/navigation-bar";
 import UnderConstruction from "@/components/under-construction";
 //***********BUG**************
 // when globals.css is loaded here a hard refresh will lose css
@@ -34,6 +36,8 @@ export default function RootLayout({
         <body className={cn("bg-secondary", inter.className)}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <MainNavbar />
+            {/* <NavigationBar /> */}
+            <NavigationButtons />
             {children}
             <Toaster />
           </ThemeProvider>

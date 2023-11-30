@@ -6,6 +6,7 @@ import { auth, redirectToSignIn, SignedOut, SignedIn } from "@clerk/nextjs";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { cn } from "@/lib/utils";
+import Logo from "@/components/navbars/logo";
 // import { MobileSidebar } from "@/components/mobile-sidebar";
 // import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
@@ -22,13 +23,14 @@ const font = Poppins({ weight: "600", subsets: ["latin"] });
 export const MainNavbar = () => {
   return (
     <>
-      <div className="w-full h-20 bg-emerald-800 sticky top-0">
+      <div className="w-full h-20 hidden md:flex md:space-x-4 bg-emerald-800 sticky top-0">
         <div className="container mx-auto px-4 h-full">
           <nav className="flex justify-between items-center h-full">
-            <Link href="/" className="flex items-center gap-1">
+            {/* <Link href="/" className="flex items-center gap-1">
               <Image src={logo} alt="logo" width={40} height={40} />
               <span className="font-bold">SmartyPersona</span>
-            </Link>
+            </Link> */}
+            <Logo />
             <div>
               <Button>
                 <Link href="/">

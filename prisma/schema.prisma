@@ -195,6 +195,7 @@ model Profile {
   ageLevel           String  @default("unknown")
   conversations      Int     @default(0)
   conversationsLimit Int     @default(10)
+  betaUser           Boolean @default(true)
 
   relationships Relationship[]
 
