@@ -82,7 +82,7 @@ export async function POST(
     // buildContext builds the system message for the LLM
     console.log("Sending lastUserMessage to buildcontest: " + lastUserMessage);
 
-    const {context, temperature} = await buildContext(
+    const { context, temperature } = await buildContext(
       companion,
       lastUserMessage,
       user.id
@@ -102,7 +102,7 @@ export async function POST(
     // create a stream of data from OpenAI (stream data to the frontend)
     const stream = await OpenAIStream(response);
 
-    //console.log(response)
+    console.log(response);
     // send the stream as a response to our client / frontend
 
     return new StreamingTextResponse(stream);

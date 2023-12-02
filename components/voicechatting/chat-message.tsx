@@ -9,55 +9,49 @@ import { BotAvatar } from "@/components/bot-avatar";
 import { UserAvatar } from "@/components/user-avatar";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { type Message } from "ai";
 
 export interface ChatMessageProps {
-  role: "system" | "user";
-  content?: string;
-  isLoading?: boolean;
-  src?: string;
-  id?: string;
+  // role: "system" | "user";
+  message: Message;
+  // isLoading?: boolean;
+  // src?: string;
+  // id?: string;
 }
-
-export const ChatMessage = ({
-  role,
-  content,
-  isLoading,
-  src,
-  id,
-}: ChatMessageProps) => {
+const isLoading: boolean = false;
+export function ChatMessage({ message }: ChatMessageProps) {
   const { toast } = useToast();
   const { theme } = useTheme();
 
   const onCopy = () => {
-    if (!content) {
+    if (!message.content) {
       return;
     }
 
-    navigator.clipboard.writeText(content);
+    navigator.clipboard.writeText(message.content);
     toast({
       description: "Message copied to clipboard.",
       duration: 3000,
     });
   };
-
-  console.log("in chat-message; " + content);
+  console.log("in chat-message; " + message.content);
   return (
     <div
       className={cn(
         "group flex items-start gap-x-3 py-4 w-full",
-        role === "user" && "justify-end"
+        message.role === "user" && "justify-end"
       )}
     >
-      {role !== "user" && src && <BotAvatar src={src} />}
+      {/* {message.role !== "user" && src && <BotAvatar src={src} />} */}
       <div className="rounded-md px-4 py-2 max-w-sm text-sm bg-primary/10">
         {isLoading ? (
           <BeatLoader color={theme === "light" ? "black" : "white"} size={5} />
         ) : (
-          content
+          message.content
         )}
       </div>
-      {role === "user" && <UserAvatar />}
-      {role !== "user" && !isLoading && (
+      {message.role === "user" && <UserAvatar />}
+      {message.role !== "user" && !isLoading && (
         <Button
           onClick={onCopy}
           className="opacity-0 group-hover:opacity-100 transition"
@@ -69,4 +63,4 @@ export const ChatMessage = ({
       )}
     </div>
   );
-};
+}

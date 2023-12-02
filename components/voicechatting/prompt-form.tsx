@@ -14,7 +14,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useEnterSubmit } from "@/lib/patientchat/hooks/use-enter-submit";
+import { useEnterSubmit } from "@/lib/voicechatting/hooks/use-enter-submit";
 import { useRouter } from "next/navigation";
 import { useWhisper } from "@chengsokdara/use-whisper";
 import { useEffect, useState } from "react";
@@ -39,7 +39,7 @@ function RecordingButton({
 
     const { default: axios } = await import("axios");
 
-    const response = await fetch("/api/patientchat/whisper", {
+    const response = await fetch("/api/voicechatting/whisper", {
       method: "POST",
       body: formData,
     });

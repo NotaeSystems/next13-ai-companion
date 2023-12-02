@@ -12,9 +12,6 @@ import { UserAvatar } from "@/components/chat/user-avatar";
 // Import the WhisperSTT class from the library
 import { WhisperSTT } from "whisper-speech-to-text";
 
-// const whisper = new WhisperSTT(
-//   "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"
-// );
 interface StreamingProps {
   companion: Companion & {
     messages: Message[];

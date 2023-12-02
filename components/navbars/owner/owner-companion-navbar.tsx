@@ -75,6 +75,15 @@ export const OwnerCompanionNavbar = async ({
             </div>
             <div>
               <Button>
+                <Link
+                  href={`/dashboard/relationships/${relationship.id}/chats/patient`}
+                >
+                  Chat Patient
+                </Link>
+              </Button>
+            </div>
+            <div>
+              <Button>
                 <Link href={`/dashboard/chat/${companion.id}`}>
                   Chat Completion
                 </Link>
