@@ -112,6 +112,7 @@ const DashboardRelationshipsChatsStreamingPage = async ({
         </>
       );
     }
+    // this means the user is the owner of the persona
     if (companion.userId === relationship.userId) {
       return (
         <>
@@ -120,8 +121,9 @@ const DashboardRelationshipsChatsStreamingPage = async ({
             relationship={relationship}
           />
           {/* <main className="flex min-h-screen flex-col items-center justify-between p-24"> */}
-          {/* <main className="flex flex-col h-full p-24 space-y-2 items-center ">
-            <div className="bg-slate-800 p-3  rounded-md  text-white">
+          {/* <main className="flex min-h-screen flex-col items-center justify-between p-24"> */}
+          {/* <main className="flex flex-col h-full p-24 space-y-2 items-center "> */}
+          {/* <div className="bg-slate-800 p-3  rounded-md  text-white">
               <div className="flex justify-center col-auto">
                 <h2 className="text-2xl">{companion.name}</h2>
               </div>
@@ -129,13 +131,14 @@ const DashboardRelationshipsChatsStreamingPage = async ({
                 <Link href={`/dashboard/companion/${companion.id}`}>
                   <ImagePersonaLargeComponent companion={companion} />
                 </Link>
-              </div> */}
-
-          <Button>
-            <Link href={`/dashboard/relationships/${relationship.id}`}>
-              Your Relationship
-            </Link>
-          </Button>
+              </div>  */}
+          <div className="flex items-center justify-center mt-6">
+            <Button>
+              <Link href={`/dashboard/relationships/${relationship.id}`}>
+                Your Relationship
+              </Link>
+            </Button>
+          </div>
           <Chat
             id={id}
             companion={companion}
@@ -146,40 +149,41 @@ const DashboardRelationshipsChatsStreamingPage = async ({
                 relationship={relationship}
               /> */}
           {/* </div> */}
-          {/* // </main> */}
+          {/* </main> */}
         </>
       );
     }
     return (
       <>
+        <h2 className="text-2xl">{companion.name}</h2>
         <CompanionNavbar companion={companion} relationship={relationship} />
-        {/* <main className="flex min-h-screen flex-col items-center justify-between p-24"> */}
-        {/* <main className="flex flex-col h-full p-24 space-y-2 items-center ">
+        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+          {/* <main className="flex flex-col h-full p-24 space-y-2 items-center ">
           <div className="bg-slate-800 p-3  rounded-md  text-white">
             <div className="flex justify-center col-auto">
               <h2 className="text-2xl">{companion.name}</h2>
             </div> */}
-        <div className="flex justify-center col-auto">
-          <Link href={`/dashboard/companion/${companion.id}`}>
-            <Image
-              src={companion.src}
-              className="rounded-xl object-cover"
-              alt="Character"
-              width={50}
-              height={50}
-            />
-          </Link>
-        </div>
+          <div className="flex justify-center col-auto">
+            <Link href={`/dashboard/companion/${companion.id}`}>
+              <Image
+                src={companion.src}
+                className="rounded-xl object-cover"
+                alt="Character"
+                width={50}
+                height={50}
+              />
+            </Link>
+          </div>
 
-        {/* <Button>
+          {/* <Button>
             <Link href={`/dashboard/companion/${companionId}/relationship`}>
               Relationship
             </Link>
           </Button> */}
 
-        {/* <ChatComponent companion={companion} relationship={relationship} /> */}
-        {/* </div>
-        </main> */}
+          {/* <ChatComponent companion={companion} relationship={relationship} /> */}
+          {/* </div> */}
+        </main>
       </>
     );
   } catch (err) {

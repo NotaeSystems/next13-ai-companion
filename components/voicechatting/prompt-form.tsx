@@ -142,7 +142,7 @@ export function PromptForm({
           ref={inputRef}
           tabIndex={0}
           onKeyDown={onKeyDown}
-          rows={1}
+          rows={2}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Hey, Jason! How are you today?"

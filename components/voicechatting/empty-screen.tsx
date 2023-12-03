@@ -29,13 +29,17 @@ export function EmptyScreen({ companion }: EmptyScreenProps) {
   return (
     <>
       <div className="mx-auto max-w-2xl px-4">
-        <div className="rounded-lg border bg-background p-8">
-          <h1 className="mb-2 text-lg font-semibold">
-            Welcome to Voice Chatting!
-          </h1>
-          <Link href={`/dashboard/companion/${companion.id}`}>
-            <ImagePersonaLargeComponent companion={companion} />
-          </Link>
+        <div className="grid rounded-lg border bg-background p-8 items-center justify-center">
+          <div>
+            <h1 className="mb-2 text-lg font-semibold">
+              Welcome to Voice Chatting!
+            </h1>
+          </div>
+          <div>
+            <Link href={`/dashboard/companion/${companion.id}`}>
+              <ImagePersonaLargeComponent companion={companion} />
+            </Link>
+          </div>
         </div>
         {/* <p className="mb-2 leading-normal text-muted-foreground">
           Welcome to VoiceChatting
