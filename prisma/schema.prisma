@@ -31,12 +31,17 @@ model Invitation {
 }
 
 model Companion {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  namespace   String @default("Pending")
-  status      String @default("Active") // Inactive, Active
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  namespace String @default("Pending")
+  status    String @default("Active") // Inactive, Active
+
   adminStatus String @default("Active") // Pending, Active, Suspended
-  role        String @default("You are an ai assistant to converse on a friendly level with user.")
-  publicView  String @default("Yes") // companion can be available to public or private
+
+  adminAllowVoice String @default("Active") // Inactive, Active for admin
+  allowVoice      String @default("Active") // Inactive, Active for owner of Persona
+
+  role       String @default("You are an ai assistant to converse on a friendly level with user.")
+  publicView String @default("Yes") // companion can be available to public or private
 
   userId        String // the root owner of this persona, can delete and edit
   userName      String
@@ -94,11 +99,12 @@ model Relationship {
   profileId String  @db.ObjectId
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  adminStatus String @default("Active")
-  status      String @default("Active")
+  adminStatus     String @default("Active") // for admin only
+  status          String @default("Active") // for owner 
+  adminAllowVoice String @default("Active") // for owner 
 
-  addNotes        String @default("No")
-  addPersonaNotes String @default("No")
+  adminAddRelationshipNotes String @default("No")
+  adminAddPersonaNotes      String @default("No")
 
   companionId String    @db.ObjectId
   companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)

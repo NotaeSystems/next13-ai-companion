@@ -33,50 +33,38 @@ export const MainNavbar = () => {
             <Logo />
             <div>
               <Button>
-                <Link href="/">
-                  <h1 className={cn("font-bold")}>Home</h1>
-                </Link>
+                <Link href="/">Home</Link>
               </Button>
             </div>
 
             <div>
               <Button>
-                <Link href="/faq">
-                  <h1 className={cn("font-bold ")}>FAQ</h1>
-                </Link>
+                <Link href="/faq">FAQ</Link>
               </Button>
             </div>
 
             <div>
               <Button>
-                <Link href="/aboutus">
-                  <h1 className={cn("font-bold ")}>About Us</h1>
-                </Link>
+                <Link href="/aboutus">About Us</Link>
               </Button>
             </div>
 
             <div>
               <Button>
-                <Link href="/contactus">
-                  <h1 className={cn("font-bold")}>Contact Us</h1>
-                </Link>
+                <Link href="/contactus">Contact Us</Link>
               </Button>
             </div>
 
             <SignedOut>
               <div>
                 <Button>
-                  <Link href="/sign-in">
-                    <h1 className={cn("font-bold ")}>Sign In</h1>
-                  </Link>
+                  <Link href="/sign-in">Sign In</Link>
                 </Button>
               </div>
 
               <div>
                 <Button>
-                  <Link href="/sign-up">
-                    <h1 className={cn("font-bold ")}>Sign Up</h1>
-                  </Link>
+                  <Link href="/sign-up">Sign Up</Link>
                 </Button>
               </div>
             </SignedOut>
@@ -84,9 +72,7 @@ export const MainNavbar = () => {
             <SignedIn>
               <div>
                 <Button>
-                  <Link href="/dashboard">
-                    <h1 className={cn("font-bold")}>Dashboard</h1>
-                  </Link>
+                  <Link href="/dashboard">Dashboard</Link>
                 </Button>
               </div>
 

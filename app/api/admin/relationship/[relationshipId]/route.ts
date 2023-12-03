@@ -4,13 +4,15 @@ import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 import { isAdmin } from "@/lib/admin/isAdmin";
+
 export async function PATCH(
   req: Request,
   { params }: { params: { relationshipId: string } }
 ) {
   try {
-    console.log("inside of /api/admin/relationship/[relationshipId]");
+    console.log("inside of /api/admin/relationship/[relationshipId]xxx");
     const body = await req.json();
+    console.log("body: " + JSON.stringify(body));
     //const user = await currentUser();
 
     // check to see if logged-in user is admin and active /////////
@@ -32,9 +34,10 @@ export async function PATCH(
 
     const {
       adminStatus,
+      adminAllowVoice,
       status,
-      addNotes,
-
+      adminAddPersonaNotes,
+      adminAddRelationshipNotes,
       content,
       // temperature,
 
@@ -69,8 +72,10 @@ export async function PATCH(
       },
       data: {
         adminStatus,
+        adminAllowVoice,
         status,
-        addNotes,
+        adminAddPersonaNotes,
+        adminAddRelationshipNotes,
         content,
         // instructions,
         // pineconeIndex,

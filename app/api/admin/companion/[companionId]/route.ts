@@ -33,6 +33,7 @@ export async function PATCH(
     const {
       src,
       adminStatus,
+      adminAllowVoice,
       publicView,
       name,
       namespace,
@@ -54,6 +55,7 @@ export async function PATCH(
       !src ||
       !name ||
       !adminStatus ||
+      !adminAllowVoice ||
       !publicView ||
       !namespace ||
       !status ||
@@ -83,6 +85,7 @@ export async function PATCH(
         // userName: user.firstName,
         src,
         adminStatus,
+        adminAllowVoice,
         publicView,
         name,
         namespace,

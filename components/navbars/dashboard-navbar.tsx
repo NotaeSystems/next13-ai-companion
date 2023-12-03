@@ -19,68 +19,28 @@ export const DashboardNavbar = () => {
     <div className="w-full h-20 bg-blue-800 sticky top-0">
       <div className="container mx-auto px-4 h-full">
         <nav className="flex justify-between items-center h-full">
-          <div>
-            <h1>Dashboard</h1>
-          </div>
+          <div>Dashboard</div>
           <div>
             <Button>
-              <Link href="/dashboard">
-                <h1 className={cn("font-bold")}>Subscribed Personas</h1>
-              </Link>
+              <Link href="/dashboard">Subscribed Personas</Link>
             </Button>
           </div>
           <div>
             <Button>
-              <Link href="/dashboard/owned">
-                <h1 className={cn("font-bold")}>Owned Personas</h1>
-              </Link>
+              <Link href="/dashboard/owned">Owned Personas</Link>
             </Button>
           </div>
           <div>
             <Button>
-              <Link href="/dashboard/profile/{userId}">
-                <h1 className={cn("font-bold")}>Your Profile</h1>
-              </Link>
+              <Link href="/dashboard/profile/{userId}">Your Profile</Link>
             </Button>
           </div>
 
           <div>
             <Button>
-              <Link href="/dashboard/billing">
-                <h1 className={cn("font-bold ")}>Billing</h1>
-              </Link>
+              <Link href="/dashboard/billing">Billing</Link>
             </Button>
           </div>
-          {/* 
-          <SignedOut>
-            <div>
-              <Button>
-                <Link href="/sign-in">
-                  <h1 className={cn("font-bold ")}>Sign In</h1>
-                </Link>
-              </Button>
-            </div>
-
-            <div>
-              <Button>
-                <Link href="/sign-up">
-                  <h1 className={cn("font-bold ")}>Sign Up</h1>
-                </Link>
-              </Button>
-            </div>
-          </SignedOut>
-
-          <SignedIn>
-            <div>
-              <Button>
-                <Link href="/dashboard">
-                  <h1 className={cn("font-bold")}>Dashboard</h1>
-                </Link>
-              </Button>
-            </div>
-
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn> */}
         </nav>
       </div>
     </div>

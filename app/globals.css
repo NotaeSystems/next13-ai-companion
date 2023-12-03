@@ -7,8 +7,14 @@ body,
 :root {
   height: 100%;
 } */
-
 @layer base {
+  h1 {
+    @apply flex text-2xl font-bold items-center justify-center m-3;
+  }
+  h2 {
+    @apply flex text-xl font-bold items-center justify-center m-3;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;

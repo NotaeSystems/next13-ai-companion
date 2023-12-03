@@ -40,6 +40,9 @@ const formSchema = z.object({
   status: z.string().min(1, {
     message: "Status is required.",
   }),
+  addNotes: z.string().min(1, {
+    message: "Add Notes is required.",
+  }),
 
   // temperature: z.coerce
   //   .number()
@@ -75,6 +78,7 @@ export const RelationshipForm = ({
     defaultValues: Relationship || {
       name: "",
       status: "Pending",
+      adminAllowVoice: "",
       addNotes: "",
       content: "",
       temperature: "0.5",

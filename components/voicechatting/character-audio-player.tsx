@@ -9,9 +9,10 @@ import React, { useEffect, useState } from "react";
 
 async function playText(
   text: string,
+  voiceId: string,
   setIsPlaying: (isPlaying: boolean) => void
 ) {
-  const response = await fetch("/api/voicechatting/voice", {
+  const response = await fetch(`/api/voice/${voiceId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,9 +40,12 @@ async function playText(
 
 export function CharacterAudioPlayer({
   playMessage,
+  voiceId,
 }: {
   playMessage: Message | null;
+  voiceId: string;
 }) {
+  console.log("inside of components/voicechtting/character-audio-player");
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const togglePlay = () => {
@@ -50,7 +54,7 @@ export function CharacterAudioPlayer({
     } else {
       setIsPlaying(true);
       if (playMessage !== null) {
-        playText(playMessage.content, setIsPlaying);
+        playText(playMessage.content, voiceId, setIsPlaying);
       }
     }
   };
@@ -66,7 +70,7 @@ export function CharacterAudioPlayer({
     ) {
       return;
     }
-    playText(playMessage.content, setIsPlaying);
+    playText(playMessage.content, voiceId, setIsPlaying);
   }, [playMessage?.content, setIsPlaying]);
 
   if (playMessage === null || playMessage.role !== "assistant") {

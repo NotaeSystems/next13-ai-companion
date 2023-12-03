@@ -44,6 +44,9 @@ const formSchema = z.object({
   adminStatus: z.string().min(1, {
     message: "Admin Status is required.",
   }),
+  adminAllowVoice: z.string().min(1, {
+    message: "Voice Status is required.",
+  }),
   publicView: z.string().min(2, {
     message: "Is this Persona available to the public?",
   }),
@@ -110,6 +113,7 @@ export const CompanionForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: companion || {
       adminStatus: "",
+      adminAllowVoice: "",
       publicView: "",
       name: "",
       status: "Pending",
@@ -212,6 +216,35 @@ export const CompanionForm = ({
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="adminAllowVoice"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Admin Voice Status</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue
+                        defaultValue={field.value}
+                        placeholder="Select a status"
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="InActive">Inactive</SelectItem>
+                    <SelectItem value="Active">Active</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>Select a Status for your AI</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="publicView"

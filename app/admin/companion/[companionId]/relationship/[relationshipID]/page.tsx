@@ -64,17 +64,19 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
   //   );
   // }
   // Create relationship between user and companion
-  if (!relationship) {
-    relationship = await prismadb.relationship.create({
-      data: {
-        userId: userId,
-        companionId: companion.id,
-        role: "user",
-        content: "You are a friendly stranger to Assistant",
-      },
-    });
-  }
+  // if (!relationship) {
+  //   relationship = await prismadb.relationship.create({
+  //     data: {
+  //       userId: userId,
+  //       companionId: companion.id,
+  //       role: "user",
+  //       content: "You are a friendly stranger to Assistant",
+  //     },
+  //   });
+  // }
   //const categories = await prismadb.category.findMany();
+
+  if (!relationship) throw Error("userId undefined");
 
   return (
     <>
@@ -95,7 +97,7 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
           alt="Picture of the author"
         />
       </div> */}
-      <RelationshipForm Companion={companion} Relationship={relationship} />;
+      <RelationshipForm companion={companion} relationship={relationship} />;
     </>
   );
 };

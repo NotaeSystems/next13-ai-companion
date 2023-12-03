@@ -57,18 +57,23 @@ export function Chat({
   className,
 }: ChatProps) {
   const router = useRouter();
-  const [previewToken, setPreviewToken] = useLocalStorage<string | null>(
-    "ai-token",
-    null
-  );
+  // const [previewToken, setPreviewToken] = useLocalStorage<string | null>(
+  //   "ai-token",
+  //   null
+  // );
+  // sets message to be played by speakers
   const [playMessage, setPlayMessage] = useState<Message | null>(null);
+
+  // whether or not to use speakers to play Assistant's response message
+  const [playVoice, setPlayVoice] = useState(false);
+
   // const [evaluationStep, setEvaluationStep] =
   //   useState<EvaluationStage>("intro");
 
-  const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW);
-  const [previewTokenInput, setPreviewTokenInput] = useState(
-    previewToken ?? ""
-  );
+  // const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW);
+  // const [previewTokenInput, setPreviewTokenInput] = useState(
+  //   previewToken ?? ""
+  // );
 
   const { messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
@@ -77,13 +82,14 @@ export function Chat({
       id,
       body: {
         id,
-        previewToken,
+        // previewToken,
       },
       onResponse(response) {
         if (response.status === 401) {
           toast.error(response.statusText);
         }
       },
+      // the message returned is the assistant's response
       onFinish(message: Message) {
         setPlayMessage(message);
       },
@@ -109,9 +115,48 @@ export function Chat({
   //   router.refresh();
   //   router.push("/");
   // };
+  let allowVoice: boolean = false;
+  if (
+    companion.adminAllowVoice === "Active" &&
+    relationship.adminAllowVoice === "Active"
+  ) {
+    allowVoice = true;
+  }
+
+  const voiceId: string = companion.voiceId;
+
+  function turnOnVoiceHandler() {
+    console.log("made it to turnOnVoiceHandler");
+    setPlayMessage(null);
+    if (playVoice === true) {
+      setPlayVoice(false);
+    } else {
+      setPlayVoice(true);
+    }
+  }
+  console.log("playvoice=" + playVoice);
 
   return (
     <>
+      {allowVoice ? (
+        <h1>
+          {playVoice ? (
+            <Button
+              onClick={turnOnVoiceHandler}
+              className="rounded-md bg-green-400 p-2 mt-2"
+            >
+              Turn Speakers Off
+            </Button>
+          ) : (
+            <Button
+              onClick={turnOnVoiceHandler}
+              className="rounded-md bg-yellow-400 p-2 mt-2"
+            >
+              Turn Speakers On
+            </Button>
+          )}
+        </h1>
+      ) : null}
       {/* <div className="flex justify-center col-auto">
         <Link href={`/dashboard/companion/${companion.id}`}>
           <ImagePersonaLargeComponent companion={companion} />
@@ -122,8 +167,12 @@ export function Chat({
           <>
             <ChatList messages={messages} />
             <ChatScrollAnchor trackVisibility={isLoading} />
-            <CharacterAudioPlayer playMessage={playMessage} />
-            {/* {evaluationStep === "report" && <Report report={completion} />} */}
+            {playVoice ? (
+              <CharacterAudioPlayer
+                playMessage={playMessage}
+                voiceId={voiceId}
+              />
+            ) : null}
           </>
         ) : (
           <EmptyScreen companion={companion} />

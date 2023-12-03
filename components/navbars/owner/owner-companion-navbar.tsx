@@ -50,9 +50,7 @@ export const OwnerCompanionNavbar = async ({
       <div className="w-full h-20 bg-yellow-800 sticky top-0">
         <div className="container mx-auto px-4 h-full">
           <nav className="flex justify-between items-center h-full">
-            <div>
-              <h1>Owner Persona</h1>
-            </div>
+            <div>Owner Persona</div>
 
             <div>
               <Link href={`/owner/${companion.id}`}>
@@ -60,9 +58,7 @@ export const OwnerCompanionNavbar = async ({
               </Link>
             </div>
 
-            <div>
-              <h1>{companion.name}</h1>
-            </div>
+            <div>{companion.name}</div>
 
             <div>
               <Button>
@@ -70,6 +66,15 @@ export const OwnerCompanionNavbar = async ({
                   href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
                 >
                   Chat Streaming
+                </Link>
+              </Button>
+            </div>
+            <div>
+              <Button>
+                <Link
+                  href={`/dashboard/relationships/${relationship.id}/chats/voicechatting`}
+                >
+                  Chat VoiceChatting
                 </Link>
               </Button>
             </div>
@@ -119,13 +124,15 @@ export const OwnerCompanionNavbar = async ({
               </Button>
             </div>
 
-            <div>
-              <Button>
-                <Link href={`/owner//${companion.id}/notes`}>
-                  Persona Notes
-                </Link>
-              </Button>
-            </div>
+            {relationship.adminAddPersonaNotes === "Yes" ? (
+              <div>
+                <Button>
+                  <Link href={`/owner//${companion.id}/notes`}>
+                    Persona Notes
+                  </Link>
+                </Button>
+              </div>
+            ) : null}
           </nav>
         </div>
       </div>

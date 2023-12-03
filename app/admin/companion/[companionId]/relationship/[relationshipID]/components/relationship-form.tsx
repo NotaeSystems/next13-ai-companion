@@ -40,6 +40,18 @@ const formSchema = z.object({
   adminStatus: z.string().min(1, {
     message: "Admin Status is required.",
   }),
+  adminAllowVoice: z.string().min(1, {
+    message: "Admin Allow Voice is required.",
+  }),
+  adminAddPersonaNotes: z.string().min(1, {
+    message: "Admin Allow Persona Notes is required.",
+  }),
+  adminAddRelationshipNotes: z.string().min(1, {
+    message: "Admin Allow Realtionship Notes is required.",
+  }),
+  // addNotes: z.string().min(1, {
+  //   message: "Admin Allow Notes is required.",
+  // }),
   status: z.string().min(1, {
     message: "Status is required.",
   }),
@@ -62,22 +74,24 @@ const formSchema = z.object({
 
 interface RelationshipFormProps {
   //categories: Category[];
-  Companion: Companion;
-  Relationship: Relationship;
+  companion: Companion;
+  relationship: Relationship;
 }
 
 export const RelationshipForm = ({
   //categories,
-  Relationship,
+  relationship,
 }: RelationshipFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: Relationship || {
+    defaultValues: relationship || {
       name: "",
       adminStatus: "Pending",
+      adminAddPersonaNotes: "",
+      adminAddRelationshipNotes: "",
       status: "Pending",
       content: "",
       temperature: "0.5",
@@ -90,7 +104,7 @@ export const RelationshipForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       console.log("inside of submit");
-      await axios.patch(`/api/admin/relationship/${Relationship.id}`, values);
+      await axios.patch(`/api/admin/relationship/${relationship.id}`, values);
 
       toast({
         description: "Success.",
@@ -98,7 +112,7 @@ export const RelationshipForm = ({
       });
 
       router.refresh();
-      router.push(`/admin/companion/${Relationship.companionId}`);
+      router.push(`/admin/companion/${relationship.companionId}`);
     } catch (error) {
       toast({
         variant: "destructive",
@@ -162,6 +176,99 @@ export const RelationshipForm = ({
             />
             <FormField
               control={form.control}
+              name="adminAllowVoice"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Admin Allow Voice</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder=""
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Inactive">Inactive</SelectItem>
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="Suspended">Suspended</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select an Admin Status for your AI
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="adminAddPersonaNotes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Admin Allow Persona Core Notes</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select an Admin Allow Voice Status"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
+                      <SelectItem value="Suspended">Suspended</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select an Admin Status for your AI
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="adminAddRelationshipNotes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Admin Allow Relationship Notes</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a Admin Allow Relationship Notes"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
+                      <SelectItem value="Suspended">Suspended</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select an Admin Status for your AI
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="status"
               render={({ field }) => (
                 <FormItem>
@@ -189,54 +296,6 @@ export const RelationshipForm = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="addNotes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Add Ai Notes</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="bg-background">
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a Notes status"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Yes">Yes</SelectItem>
-                      <SelectItem value="No">No</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Select a Add Notes Status for your AI
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* <FormField
-              name="pineconeIndex"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="col-span-2 md:col-span-1">
-                  <FormLabel>Pine Cone Index</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="Pinecone Index name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>The Pine Cone Index Name</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
 
             {/* <FormField
               name="temperature"

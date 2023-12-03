@@ -60,7 +60,7 @@ export const CompanionNavbar = async ({
             <div>
               <Button>
                 <Link
-                  href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
+                  href={`/dashboard/relationships/${relationship.id}/chats/voicechatting`}
                 >
                   Chat
                 </Link>

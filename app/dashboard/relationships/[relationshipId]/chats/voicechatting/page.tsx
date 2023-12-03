@@ -1,16 +1,3 @@
-// import { nanoid } from "@/lib/utils";
-// import { Chat } from "@/components/voicechatting/chat";
-
-// // export const runtime = "edge";
-
-// export default function PatientPage() {
-//   const id = nanoid();
-//   console.log("Random Chat Id: " + id);
-//   return <Chat id={id} />;
-// }
-// /dashboard/streaming/[chatid]
-// streams elevenlabs voice back
-
 import { redirect } from "next/navigation";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 //import Image from 'next/image'
@@ -24,20 +11,21 @@ import { isAdmin } from "@/lib/admin/isAdmin";
 import { OwnerCompanionNavbar } from "@/components/navbars/owner/owner-companion-navbar";
 import { ImagePersonaLargeComponent } from "@/components/image/image-persona-large";
 import { nanoid } from "@/lib/utils";
-interface DashboardRelationshipsChatsStreamingPageProps {
+
+interface VoiceChattingPageProps {
   params: {
     relationshipId: string;
   };
 }
 const id = nanoid();
 console.log("Random Chat Id: " + id);
-const DashboardRelationshipsChatsStreamingPage = async ({
-  params,
-}: DashboardRelationshipsChatsStreamingPageProps) => {
+
+const VoiceChattingPage = async ({ params }: VoiceChattingPageProps) => {
   try {
     console.log(
-      "made it to /dashboard/relationships/[relationshipId]/chats/streaming"
+      "made it to /dashboard/relationships/[relationshipId]/chats/voicechatting"
     );
+
     const { userId } = auth();
 
     if (!userId) {
@@ -63,7 +51,9 @@ const DashboardRelationshipsChatsStreamingPage = async ({
     }
 
     // does user have rights to converse with this companion
+    // find out if user is admin
     let userIsAdmin = await isAdmin(userId);
+
     if (userId != relationship.userId && !userIsAdmin) {
       return (
         <div className="text-xl text-red-500 col-span-full text-center">
@@ -103,6 +93,7 @@ const DashboardRelationshipsChatsStreamingPage = async ({
       );
     }
 
+    // this means the user has been suspended by Admin
     if (relationship.adminStatus === "Suspended") {
       return (
         <>
@@ -112,78 +103,29 @@ const DashboardRelationshipsChatsStreamingPage = async ({
         </>
       );
     }
-    // this means the user is the owner of the persona
-    if (companion.userId === relationship.userId) {
-      return (
-        <>
+
+    return (
+      <>
+        {/* Send Owner Companion Navbar if User is Owner of Persona if not 
+        then send Regular Companion Bar */}
+        {companion.userId === relationship.userId ? (
           <OwnerCompanionNavbar
             companion={companion}
             relationship={relationship}
           />
-          {/* <main className="flex min-h-screen flex-col items-center justify-between p-24"> */}
-          {/* <main className="flex min-h-screen flex-col items-center justify-between p-24"> */}
-          {/* <main className="flex flex-col h-full p-24 space-y-2 items-center "> */}
-          {/* <div className="bg-slate-800 p-3  rounded-md  text-white">
-              <div className="flex justify-center col-auto">
-                <h2 className="text-2xl">{companion.name}</h2>
-              </div>
-              {/* <div className="flex justify-center col-auto">
-                <Link href={`/dashboard/companion/${companion.id}`}>
-                  <ImagePersonaLargeComponent companion={companion} />
-                </Link>
-              </div>  */}
-          <div className="flex items-center justify-center mt-6">
-            <Button>
-              <Link href={`/dashboard/relationships/${relationship.id}`}>
-                Your Relationship
-              </Link>
-            </Button>
-          </div>
-          <Chat
-            id={id}
-            companion={companion}
-            relationship={relationship}
-          ></Chat>
-          {/* <ChatComponent
-                companion={companion}
-                relationship={relationship}
-              /> */}
-          {/* </div> */}
-          {/* </main> */}
-        </>
-      );
-    }
-    return (
-      <>
-        <h2 className="text-2xl">{companion.name}</h2>
-        <CompanionNavbar companion={companion} relationship={relationship} />
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-          {/* <main className="flex flex-col h-full p-24 space-y-2 items-center ">
-          <div className="bg-slate-800 p-3  rounded-md  text-white">
-            <div className="flex justify-center col-auto">
-              <h2 className="text-2xl">{companion.name}</h2>
-            </div> */}
-          <div className="flex justify-center col-auto">
-            <Link href={`/dashboard/companion/${companion.id}`}>
-              <Image
-                src={companion.src}
-                className="rounded-xl object-cover"
-                alt="Character"
-                width={50}
-                height={50}
-              />
-            </Link>
-          </div>
+        ) : (
+          <CompanionNavbar companion={companion} relationship={relationship} />
+        )}
 
-          {/* <Button>
-            <Link href={`/dashboard/companion/${companionId}/relationship`}>
-              Relationship
+        <div className="flex items-center justify-center mt-6">
+          <Button>
+            <Link href={`/dashboard/relationships/${relationship.id}`}>
+              <h1>{companion.name} </h1>
             </Link>
-          </Button> */}
+          </Button>
+        </div>
 
-          {/* <ChatComponent companion={companion} relationship={relationship} /> */}
-          {/* </div> */}
-        </main>
+        <Chat id={id} companion={companion} relationship={relationship}></Chat>
       </>
     );
   } catch (err) {
@@ -191,4 +133,4 @@ const DashboardRelationshipsChatsStreamingPage = async ({
   }
 };
 
-export default DashboardRelationshipsChatsStreamingPage;
+export default VoiceChattingPage;
