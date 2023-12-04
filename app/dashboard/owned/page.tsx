@@ -68,7 +68,7 @@ const DashboardOwnedPage = async ({}: DashboardOwnedPageProps) => {
 
   return (
     <div className="p-4 space-y-2">
-      <h1>Home Page</h1>
+      <h1>Your Owned Personas</h1>
       <Button>
         <Link href={`/invitation`}>Have an Invitation?</Link>
       </Button>

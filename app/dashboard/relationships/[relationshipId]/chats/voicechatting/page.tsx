@@ -120,7 +120,7 @@ const VoiceChattingPage = async ({ params }: VoiceChattingPageProps) => {
         <div className="flex items-center justify-center mt-6">
           <Button>
             <Link href={`/dashboard/relationships/${relationship.id}`}>
-              <h1>{companion.name} </h1>
+              <h1>{relationship.title}</h1>
             </Link>
           </Button>
         </div>

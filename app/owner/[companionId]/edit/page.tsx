@@ -61,7 +61,7 @@ const OwnerEditCompanionPage = async ({
   return (
     <>
       <OwnerCompanionNavbar companion={companion} relationship={relationship} />
-      <h1> Edit Companion</h1>
+      <h1> Edit {companion.name}</h1>
       <CompanionForm companion={companion} categories={categories} />
     </>
   );

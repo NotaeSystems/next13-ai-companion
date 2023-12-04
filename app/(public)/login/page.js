@@ -1,6 +1,6 @@
 "use client";
 
-// Not Used at this time. This uses next-auth instead of Clerk\
+// Not Used at this time. This uses next-auth instead of Clerk
 
 //import { MainNavbar } from "@/components/main-navbar";
 ////import GoogleButton from "react-google-button"

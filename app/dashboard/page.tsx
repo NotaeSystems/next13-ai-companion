@@ -23,7 +23,6 @@ const DashboardRootPage = async ({ searchParams }: RootPageProps) => {
   }
 
   // find all the active relationships between logged-in user and companion
-  // TODO only find companions that status: Active
 
   const activeRelationships = await prismadb.relationship.findMany({
     where: { userId: userId, status: "Active", adminStatus: "Active" },
@@ -31,22 +30,12 @@ const DashboardRootPage = async ({ searchParams }: RootPageProps) => {
     include: { companion: true },
   });
 
-  // console.log(
-  //   "relationships: " + JSON.stringify(relationships[1].companion.name)
-  // );
-  //const companions: any = activeRelationships;
   return (
-    <div className="h-full p-4 space-y-2">
-      {/* <Button>
-        <Link href="/dashboard/profile/{userId}">Your Profile</Link>
-      </Button>
-      <Button>
-        <Link href="/dashboard/settings">Billing</Link>
-      </Button> */}
-      <RelationshipsDashboard relationships={activeRelationships} />
-      {/* <SearchInput /> 
-      {<Categories data={categories} />} */}
-    </div>
+    <>
+      <div className="h-full p-4 space-y-2">
+        <RelationshipsDashboard relationships={activeRelationships} />
+      </div>
+    </>
   );
 };
 

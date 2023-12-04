@@ -4,12 +4,15 @@ import { Companions } from "@/components/companions";
 // import { SearchInput } from "@/components/search-input";
 // import { MainNavbar } from "@/components/navbars/main-navbar";
 import Link from "next/link";
-//
-
+import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 import { ImageUnderConstructionComponent } from "@/components/image/image-under-construction.";
+
+export const metadata: Metadata = {
+  title: "SmartyPersona - Chat with your favorite personas.",
+};
 
 const under_construction = process.env.UNDER_CONSTRUCTION;
 const invitations = process.env.INVITATIONS;
@@ -22,6 +25,7 @@ interface RootPageProps {
 }
 
 const RootPage = async ({ searchParams }: RootPageProps) => {
+  // lets find all persona who are public
   const activeCompanions = await prismadb.companion.findMany({
     where: {
       //categoryId: searchParams.categoryId,
@@ -57,11 +61,12 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
 
   return (
     <div className="p-4 space-y-2">
-      <h1>Home Page</h1>
-
-      <Button>
-        <Link href={`/invitation`}>Have an Invitation?</Link>
-      </Button>
+      <h1>Home</h1>
+      {invitations === "true" ? (
+        <Button>
+          <Link href={`/invitation`}>Have an Invitation?</Link>
+        </Button>
+      ) : null}
 
       {/* <SearchInput /> */}
       {/* <Categories data={categories} /> */}

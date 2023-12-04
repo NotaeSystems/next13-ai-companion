@@ -39,7 +39,7 @@ function RecordingButton({
 
     const { default: axios } = await import("axios");
 
-    const response = await fetch("/api/voicechatting/whisper", {
+    const response = await fetch("/api/whisper", {
       method: "POST",
       body: formData,
     });

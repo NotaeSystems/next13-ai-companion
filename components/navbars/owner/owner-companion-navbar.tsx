@@ -60,7 +60,7 @@ export const OwnerCompanionNavbar = async ({
 
             <div>{companion.name}</div>
 
-            <div>
+            {/* <div>
               <Button>
                 <Link
                   href={`/dashboard/relationships/${relationship.id}/chats/streaming`}
@@ -68,7 +68,7 @@ export const OwnerCompanionNavbar = async ({
                   Chat Streaming
                 </Link>
               </Button>
-            </div>
+            </div> */}
             <div>
               <Button>
                 <Link
@@ -78,7 +78,7 @@ export const OwnerCompanionNavbar = async ({
                 </Link>
               </Button>
             </div>
-            <div>
+            {/* <div>
               <Button>
                 <Link
                   href={`/dashboard/relationships/${relationship.id}/chats/patient`}
@@ -86,14 +86,14 @@ export const OwnerCompanionNavbar = async ({
                   Chat Patient
                 </Link>
               </Button>
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <Button>
                 <Link href={`/dashboard/chat/${companion.id}`}>
                   Chat Completion
                 </Link>
               </Button>
-            </div>
+            </div> */}
             <div>
               <Button>
                 <Link href={`/dashboard/relationships/${relationship.id}`}>

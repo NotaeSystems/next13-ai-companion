@@ -142,7 +142,9 @@ export const CompanionForm = ({
       });
 
       router.refresh();
-      router.push(`/dashboard/companion/${companion.id}`);
+      if (companion) {
+        router.push(`/dashboard/companion/${companion.id}`);
+      }
     } catch (error) {
       toast({
         variant: "destructive",

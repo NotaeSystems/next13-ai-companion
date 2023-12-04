@@ -62,7 +62,7 @@ export async function POST(
   try {
     if (Debugging) {
       console.warn(
-        "\n\n********************** New Conversation *****************************\n\n"
+        "\n\n********************** New Conversation  4444*****************************\n\n"
       );
     }
 
@@ -116,7 +116,7 @@ export async function POST(
     }
 
     // chatter must be the relationship user or an admin to chat
-    let userIsAdmin = await isAdmin(userId);
+    let userIsAdmin = await isAdmin(user.id);
     if (relationship.userId != userId && !userIsAdmin) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -364,7 +364,7 @@ export async function POST(
     ///// lets query Pinecone namespace with our last few messages that were embedded by openai
     // and find  relevant facts that were inserted by the present User
     console.log(
-      "********** Lets find Pine Cone data for User on Relationship **************"
+      "********** Lets find Pine Cone data for User on Relationship **************xxx bbb"
     );
     const vectorUserQueryResponse = await companionNamespace.query({
       vector: embedding,
@@ -491,7 +491,7 @@ export async function POST(
     //const stream = OpenAIStream(response);
     console.log("streaming response from LLM back to chat page");
 
-    const stream = OpenAIStream(response, {
+    const stream = OpenAIStream(response as AsyncIterable<any>, {
       // log tokens to the console
       onToken: (token) => console.log(token),
     });

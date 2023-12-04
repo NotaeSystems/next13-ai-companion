@@ -68,7 +68,7 @@ export async function POST(
 
     if (Debugging) {
       console.log(
-        "***** inside of POST /api/relationship/[relationshipId]/chats/streaming *****\n"
+        "***** inside of POST /api/relationship/[relationshipId]/chats/streaming ***** zzzz\n"
       );
     }
 
@@ -116,7 +116,7 @@ export async function POST(
     }
 
     // chatter must be the relationship user or an admin to chat
-    let userIsAdmin = await isAdmin(userId);
+    let userIsAdmin = await isAdmin(user.id);
     if (relationship.userId != userId && !userIsAdmin) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -487,10 +487,11 @@ export async function POST(
     console.log(
       "**********************End of Conversation*****************************"
     );
-
+    // const response: AsyncIterableOpenAIStreamReturnTypes
     //const stream = OpenAIStream(response);
     console.log("streaming response from LLM back to chat page");
 
+    // Bug in OpenaAi https://github.com/vercel/ai/issues/610. Type issue
     const stream = OpenAIStream(response, {
       // log tokens to the console
       onToken: (token) => console.log(token),

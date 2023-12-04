@@ -82,6 +82,15 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
       <div className="flex justify-center col-auto">
         <h1>{companion.name}</h1>
       </div>
+      <div>
+        <Button>
+          <Link
+            href={`/dashboard/relationships/${relationship.id}/chats/voicechatting`}
+          >
+            Chat VoiceChatting
+          </Link>
+        </Button>
+      </div>
       {/* <div className="flex justify-center col-auto">
         <Image
           src={companion.src}

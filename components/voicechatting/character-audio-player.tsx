@@ -45,7 +45,7 @@ export function CharacterAudioPlayer({
   playMessage: Message | null;
   voiceId: string;
 }) {
-  console.log("inside of components/voicechtting/character-audio-player");
+  console.log("inside of components/voicechatting/character-audio-player");
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const togglePlay = () => {

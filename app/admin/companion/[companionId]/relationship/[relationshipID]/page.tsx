@@ -97,6 +97,15 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
           alt="Picture of the author"
         />
       </div> */}
+      <div>
+        <Button>
+          <Link
+            href={`/dashboard/relationships/${relationship.id}/chats/voicechatting`}
+          >
+            Chat VoiceChatting
+          </Link>
+        </Button>
+      </div>
       <RelationshipForm companion={companion} relationship={relationship} />;
     </>
   );

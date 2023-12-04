@@ -63,7 +63,7 @@ export const RelationshipsDashboard = ({
               <CardContent>
                 <ScrollArea className="h-[100px] rounded-md border p-4">
                   <p className="text-xs">
-                    {relationship.companion.description}
+                    {relationship.companion.description} help
                   </p>
                 </ScrollArea>
               </CardContent>

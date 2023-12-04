@@ -56,6 +56,8 @@ export function Chat({
   relationship,
   className,
 }: ChatProps) {
+  console.log("inside of chat.txs : " + companion.name);
+
   const router = useRouter();
   // const [previewToken, setPreviewToken] = useLocalStorage<string | null>(
   //   "ai-token",
@@ -165,7 +167,7 @@ export function Chat({
       <div className={cn("pb-[200px] pt-2 md:pt-10", className)}>
         {messages.length ? (
           <>
-            <ChatList messages={messages} />
+            <ChatList messages={messages} companion={companion} />
             <ChatScrollAnchor trackVisibility={isLoading} />
             {playVoice ? (
               <CharacterAudioPlayer
