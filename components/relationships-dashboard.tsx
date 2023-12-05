@@ -9,8 +9,8 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
-//const chatLink = process.env.COMPANION_CHAT_LINK;
 
 interface CompanionsDashboardProps {
   relationships: any;
@@ -22,7 +22,7 @@ export const RelationshipsDashboard = ({
   if (relationships.length === 0) {
     return (
       <>
-        <h1>Your Personas</h1>
+        <h1>Your Subscribed Personas</h1>
         <div className="pt-10 flex flex-col items-center justify-center space-y-3">
           <div className="relative w-60 h-60">
             <Image fill className="grayscale" src="/empty.png" alt="Empty" />
@@ -33,11 +33,9 @@ export const RelationshipsDashboard = ({
     );
   }
 
-  // determine if user is owner
-
   return (
     <>
-      <h1 className="text-2xl text-center my-5 "> Your Personas</h1>
+      <h1 className="text-2xl text-center my-5 "> Your Subscribed Personas</h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 pb-10">
         {relationships.map((relationship: any) => (
           <Card

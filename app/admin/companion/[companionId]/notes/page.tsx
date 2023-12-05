@@ -27,7 +27,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
   });
 
   if (!companion) {
-    console.log("companion Not Found. Is user the owner of the companion?");
+    console.log("Persona Not Found. Is user the owner of the Persona?");
     return redirect("/dashboard");
   }
 

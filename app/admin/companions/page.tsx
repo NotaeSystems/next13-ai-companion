@@ -1,8 +1,6 @@
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import prismadb from "@/lib/prismadb";
-// import { Categories } from "@/components/categories";
-// import { CompanionsDashboard } from "@/components/companions-dashboard";
-// import { SearchInput } from "@/components/search-input";
-// import { MainNavbar } from "@/components/navbars/main-navbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 // import { cn } from "@/lib/utils";
@@ -18,7 +16,7 @@ interface RootPageProps {
 const RootPage = async ({ searchParams }: RootPageProps) => {
   const categories = await prismadb.category.findMany();
   const { userId } = auth();
-  console.log(userId);
+  Debugging(`${userId}`);
 
   if (!userId) {
     return redirectToSignIn();
@@ -28,7 +26,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
   // TODO only find companions that status: Active
 
   const relationships = await prismadb.relationship.findMany({
-    where: { userId: userId, status: "Active" },
+    where: { userId: userId },
 
     include: { companion: true },
   });
@@ -41,13 +39,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
       <Button>
         <Link href={`/admin/new/companion`}>Create New Companion</Link>
       </Button>
-      {/* <Button>
-        <Link href="/dashboard/profile/{userId}">Your Profile</Link>
-      </Button>
-      <Button>
-        <Link href="/dashboard/settings">Billing</Link>
-      </Button> */}
-      {/* <CompanionsDashboard data={data} /> */}
+
       <AdminCompanions data={companions} />
       {/* <SearchInput /> 
       {<Categories data={categories} />} */}

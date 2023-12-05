@@ -1,14 +1,13 @@
+import Global from "@/Global";
 import { Metadata } from "next";
 import { ImageUnderConstructionComponent } from "@/components/image/image-under-construction.";
 
-const under_construction = process.env.UNDER_CONSTRUCTION;
-
 export const metadata: Metadata = {
-  title: "SmartyPersona-Invitation",
+  title: Global.siteName + " Invitation",
 };
 
 export default function InvitationPage() {
-  if (under_construction === "true") {
+  if (Global.invitations) {
     return (
       <>
         <div className="h-screen flex items-center justify-center">

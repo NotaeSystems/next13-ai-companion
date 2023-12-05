@@ -1,3 +1,5 @@
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import prismadb from "@/lib/prismadb";
 import { Categories } from "@/components/categories";
 import { CompanionsDashboard } from "@/components/companions-dashboard";
@@ -18,7 +20,7 @@ interface ProfilesAdminPageProps {
 const ProfilesAdminPage = async ({ searchParams }: ProfilesAdminPageProps) => {
   const categories = await prismadb.category.findMany();
   const { userId } = auth();
-  console.log(userId);
+  Debugging(`${userId}`);
   if (!userId) {
     return redirectToSignIn();
   }

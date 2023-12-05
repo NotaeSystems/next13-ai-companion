@@ -1,3 +1,5 @@
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import prismadb from "@/lib/prismadb";
 // import { Categories } from "@/components/categories";
 import { Companions } from "@/components/companions";
@@ -11,11 +13,11 @@ import Image from "next/image";
 import { ImageUnderConstructionComponent } from "@/components/image/image-under-construction.";
 
 export const metadata: Metadata = {
-  title: "SmartyPersona - Chat with your favorite personas.",
+  title: Global.siteName,
 };
 
-const under_construction = process.env.UNDER_CONSTRUCTION;
-const invitations = process.env.INVITATIONS;
+// const under_construction = process.env.UNDER_CONSTRUCTION;
+const underConstruction: boolean = Global.underConstruction;
 
 interface RootPageProps {
   searchParams: {
@@ -25,7 +27,7 @@ interface RootPageProps {
 }
 
 const RootPage = async ({ searchParams }: RootPageProps) => {
-  // lets find all persona who are public
+  // lets find all Personas who are public
   const activeCompanions = await prismadb.companion.findMany({
     where: {
       //categoryId: searchParams.categoryId,
@@ -48,10 +50,13 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
     },
   });
 
-  console.log("Public Personas" + activeCompanions);
+  Debugging(
+    "Debugging: Public Personas: " + JSON.stringify(activeCompanions.length)
+  );
+
   const categories = await prismadb.category.findMany();
 
-  if (under_construction === "true") {
+  if (underConstruction) {
     return (
       <>
         <ImageUnderConstructionComponent height={300} />
@@ -61,12 +66,11 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
 
   return (
     <div className="p-4 space-y-2">
-      <h1>Home</h1>
-      {invitations === "true" ? (
-        <Button>
-          <Link href={`/invitation`}>Have an Invitation?</Link>
-        </Button>
-      ) : null}
+      <h1>Home Page</h1>
+
+      <Button>
+        <Link href={`/invitation`}>Have an Invitation?</Link>
+      </Button>
 
       {/* <SearchInput /> */}
       {/* <Categories data={categories} /> */}

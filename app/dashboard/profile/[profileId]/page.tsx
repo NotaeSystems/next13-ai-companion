@@ -4,9 +4,11 @@ import { Profile } from "@prisma/client";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 import prismadb from "@/lib/prismadb";
 import { ProfileForm } from "./components/profile-form";
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 
 export const metadata: Metadata = {
-  title: "Smarty Persona-Profile",
+  title: Global.siteName + " Profile",
 };
 
 interface ProfilePageProps {
@@ -43,8 +45,9 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
     <div>
       <h1 className="text-2xl text-center my-5 ">Your Profile</h1>
       <p className="text-2xl text-center my-5 ">
-        Give some information about you so that your Personas can better
-        converse with you.
+        Give some information about you so that Persona can better converse with
+        you. This information is optional but will make conversations more
+        enjoyable.
       </p>
       <ProfileForm Profile={profile} />
     </div>

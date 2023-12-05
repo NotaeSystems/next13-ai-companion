@@ -1,3 +1,5 @@
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import { redirect } from "next/navigation";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 
@@ -95,14 +97,6 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
           You are now in a Relationship with Companion-{companion.name}
         </h1> */}
         <div className="flex justify-center col-auto"></div>
-        {/* <div className="flex justify-center col-auto">
-          <Image
-            src={companion.src}
-            width={125}
-            height={125}
-            alt="Picture of the author"
-          />
-        </div> */}
         <RelationshipForm companion={companion} relationship={relationship} />;
       </>
     );
@@ -114,14 +108,6 @@ const RelationshipPage = async ({ params }: CompanionIdPageProps) => {
         You are now in a Relationship with Companion-{companion.name}
       </h1> */}
       <div className="flex justify-center col-auto"></div>
-      {/* <div className="flex justify-center col-auto">
-        <Image
-          src={companion.src}
-          width={125}
-          height={125}
-          alt="Picture of the author"
-        />
-      </div> */}
       <RelationshipForm companion={companion} relationship={relationship} />;
     </>
   );

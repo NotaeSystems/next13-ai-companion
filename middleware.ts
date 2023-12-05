@@ -10,8 +10,9 @@ export default authMiddleware({
     "/contactus",
     "/aboutus",
     "/faq",
-    "profile",
-    "server-error",
+    "/profile",
+    "/server-error",
+    "/persona(.*)",
   ],
 });
 

@@ -1,3 +1,5 @@
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import prismadb from "@/lib/prismadb";
 import { Categories } from "@/components/categories";
 import { CompanionsDashboard } from "@/components/companions-dashboard";
@@ -19,7 +21,7 @@ interface CompanionIdPageProps {
 
 const CompanionPage = async ({ params }: CompanionIdPageProps) => {
   const { userId } = auth();
-  console.log(userId);
+  Debugging(`${userId}`);
   if (!userId) {
     return redirectToSignIn();
   }
@@ -33,7 +35,7 @@ const CompanionPage = async ({ params }: CompanionIdPageProps) => {
   });
 
   if (!companion) {
-    console.log("Returning there is no companion found");
+    Debugging("Returning there is no companion found");
     return redirect("/admin");
   }
 

@@ -1,4 +1,7 @@
+import Global from "@/Global";
 import prismadb from "@/lib/prismadb";
+import { ImageUnderConstructionComponent } from "@/components/image/image-under-construction.";
+
 import { Categories } from "@/components/categories";
 import { CompanionsDashboard } from "@/components/companions-dashboard";
 import { SearchInput } from "@/components/search-input";
@@ -22,11 +25,18 @@ const GroupsAdminPage = async ({ searchParams }: GroupsAdminPageProps) => {
   // }
 
   const groups = await prismadb.group.findMany({});
-
+  if (Global.underConstruction) {
+    return (
+      <>
+        <div className="h-screen flex items-center justify-center">
+          <ImageUnderConstructionComponent height={300} />
+        </div>
+      </>
+    );
+  }
   return (
     <div className="h-full p-4 space-y-2">
       <h1>Groups</h1>
-      <h2>Under Construction</h2>
     </div>
   );
 };

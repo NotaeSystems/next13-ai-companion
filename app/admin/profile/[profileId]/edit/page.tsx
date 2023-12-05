@@ -1,3 +1,5 @@
+import Global, { debugging } from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import { redirect } from "next/navigation";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 
@@ -14,7 +16,7 @@ interface EditProfileAdminPageProps {
 console.log("paramsId: ");
 const EditProfileAdminPage = async ({ params }: EditProfileAdminPageProps) => {
   const { userId } = auth();
-  console.log("inside of EditProfileAdminPage");
+  Debugging("inside of EditProfileAdminPage");
 
   if (!userId) {
     return redirectToSignIn();
@@ -25,7 +27,7 @@ const EditProfileAdminPage = async ({ params }: EditProfileAdminPageProps) => {
   // if (!validSubscription) {
   //   return redirect("/");
   // }
-  console.log("params.profileId: " + params.profileId);
+  Debugging("params.profileId: " + params.profileId);
   let profile = null;
 
   profile = await prismadb.profile.findUnique({
@@ -35,13 +37,11 @@ const EditProfileAdminPage = async ({ params }: EditProfileAdminPageProps) => {
   });
 
   if (!profile) {
-    console.log("Profile Not Found");
+    Debugging("Profile Not Found");
     return redirect("/dashboard");
   }
   const profileFullname = profile.firstName + " " + profile.lastName;
-  // const categories = await prismadb.category.findMany();
 
-  // console.log("getting ready to return");
   return (
     <>
       <AdminProfileNavbar profile={profile}></AdminProfileNavbar>

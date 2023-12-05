@@ -1,3 +1,5 @@
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import Image from "next/image";
 import Link from "next/link";
 import { Profile, Companion, Relationship } from "@prisma/client";

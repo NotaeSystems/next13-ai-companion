@@ -1,6 +1,8 @@
 "use client";
 
 // relationship-form
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import * as z from "zod";
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -104,7 +106,7 @@ export const RelationshipForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      console.log("inside of submit");
+      Debugging("inside of submit");
       await axios.patch(`/api/relationship/${relationship.id}`, values);
 
       toast({
@@ -140,14 +142,7 @@ export const RelationshipForm = ({
             <div className="flex items-center justify-center">
               <div className="flex items-center justify-center">
                 <Link href={`/dashboard/companion/${companion.id}`}>
-                  <ImagePersonaLargeComponent companion={companion} />
-                  {/* <Image
-                    src={companion.src}
-                    className="rounded-xl object-cover"
-                    alt="Persona ${companion.name}"
-                    height={150}
-                    width={150}
-                  /> */}
+                  <ImagePersonaLargeComponent companion={companion} />y{" "}
                 </Link>
               </div>
             </div>

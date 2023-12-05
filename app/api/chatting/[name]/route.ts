@@ -1,33 +1,35 @@
-//import { notesIndex } from "@/lib/db/pinecone";
-//import prisma from "@/lib/db/prisma";
+import Global from "@/Global";
 import { Debugging } from "@/lib/debugging";
+//import { notesIndex } from "@/lib/db/pinecone";
+//import prisma from "@/lib/db/prisma"
 import prisma from "@/lib/prismadb";
 import { Pinecone } from "@pinecone-database/pinecone";
 import openai, { getEmbedding } from "@/lib/openai";
 
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import Global from "@/Global";
 import { ChatCompletionMessage } from "openai/resources/index.mjs";
 import { NextResponse } from "next/server";
 import { Companion, User, Relationship } from "@prisma/client";
 import { findRelationship } from "@/lib/context/findRelationship";
 import { auth, currentUser } from "@clerk/nextjs";
 import { isAdmin } from "@/lib/admin/isAdmin";
-
 //////////////////////////* Setup /////////////////////////////////////
 
 //////////////////////////* Constants* /////////////////////////////
 
 // number of chat messages to truncate from the end of req.body to get gist  of
 // of the active chat for short-term transitive memory. These messages Will be passed to pinecone
-const messagesTruncatedNumber = Global.messagesTruncatedNumber;
+const messagesTruncatedNumber = -10;
+
+// turn on Debugging
+// const Debugging = true;
 
 // the Openai LLM Model to use.
 // TODO will be set in Companion record later
-const llmModel = Global.llmModel;
+const llmModel = "gpt-3.5-turbo";
 
 // Pinecone. The number of relevant vectorized facts to return from Pinecone vectorized search
-const topK = Global.topK;
+const topK = 6;
 
 ///////////////////////// *Pinecone //////////////////////////////////////
 // Pinecone is our vectorized database api service from which we get specialized vectorized knowledge
@@ -60,16 +62,11 @@ export async function POST(
   { params }: { params: { relationshipId: string } }
 ) {
   try {
-    Debugging("***** Getting ready to verify User ********* \n");
-
+    ////////////////////////////////////////////////////////
     Debugging(
       "\n\n********************** New Conversation  /api/chatting/[name]*****************************\n\n"
     );
-
-    /////////////////////////////////////////////////
     Debugging("***** Getting ready to verify User ********* \n");
-
-    ///// verify the user with Clerk who is logged in and making this call ///////////////////
 
     const { userId } = auth();
     const user = await currentUser();
@@ -78,16 +75,15 @@ export async function POST(
       Debugging(" !!!!!!! Not a logged in user. Returning\n !!!!!!!!!!");
       return new NextResponse("Unauthorized", { status: 401 });
     }
+    ///////////////////////////////////////////////////////////
 
-    Debugging(
+    console.log(
       "****** User verified: " +
         user.firstName +
         " " +
         user.lastName +
         "\n *********"
     );
-
-    ///////////////////////////////////////////////////////////
 
     //// There must be the Relationship user or an admin to chat with relationship of user
     // check to see if relationship exists
@@ -100,12 +96,12 @@ export async function POST(
 
     // const companionId = companion.id;
     if (!relationship) {
-      Debugging(" !!!!!!! Cannot find relationship. Returning\n !!!!!!!!!!");
+      console.log(" !!!!!!! Cannot find relationship. Returning\n !!!!!!!!!!");
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     if (relationship.status != "Active") {
-      Debugging(
+      console.log(
         "\n\n !!!!!!!!!!!!!!!!!!! Found Relationship but Relationship is not Active. Returning Unauthorized !!!!!!!!!"
       );
       return new NextResponse("Unauthorized", { status: 401 });
@@ -120,7 +116,7 @@ export async function POST(
     // find the Companion that User is chatting with this is in the url as [companionId] //////////////////////
     // the information comes to as params in the url and is inthe params variable
 
-    Debugging("****** Getting ready to find Persona:\n  *********");
+    console.log("****** Getting ready to find Companion\n  *********");
     let companion: Companion | null;
 
     companion = await prisma.companion.findUnique({
@@ -131,7 +127,7 @@ export async function POST(
 
     // if we cannot find companion Or companion is 'Suspended' then we will return an error
     if (!companion) {
-      Debugging(
+      console.log(
         "\n !!!!!!!!!!!!!Could not find an active Companion. Returning. !!!!!!!!! \n"
       );
       return new NextResponse("Companion not found", { status: 404 });
@@ -139,7 +135,7 @@ export async function POST(
     // we found the Companion now check to see if Companion is active
 
     if (companion.status != "Active") {
-      Debugging(
+      console.log(
         " *********  Companion found but is not active. Companion Status: " +
           companion.status +
           "****************\n"
@@ -152,7 +148,7 @@ export async function POST(
       );
     }
 
-    Debugging(
+    console.log(
       " ****** Found an active Companion: " + companion.name + "***********\n"
     );
 
@@ -186,25 +182,25 @@ export async function POST(
     // lets check to see if the conversations limit has been reached by User for billing purposes
     // TODO do some billing here
 
-    Debugging("\n ****** Billing for Conversation Limit ********\n");
-    Debugging(
+    console.log("\n ****** Billing for Conversation Limit ********\n");
+    console.log(
       "\n Relationship Conversations: " + relationship.conversations + "\n"
     );
-    Debugging(
+    console.log(
       "\n Relationship Conversations Limit: " +
         relationship.conversationsLimit +
         "\n"
     );
 
     if (relationship.conversations > relationship.conversationsLimit) {
-      Debugging(
+      console.log(
         " !!!!!!!!!!!!!!!!!conversational Limit of " +
           relationship.conversationsLimit +
           " reached. Need to do Billing !!!!!!!!!!!"
       );
     }
 
-    Debugging(
+    console.log(
       "\n************* Found Relationship. Getting Relationship Content ********************* \n"
     );
 
@@ -225,7 +221,7 @@ export async function POST(
       " " +
       relationship.educationalLevel;
 
-    Debugging("userRelationshipContent: " + userRelationshipContent);
+    console.log("userRelationshipContent: " + userRelationshipContent);
 
     /// now that the User , Companion and Relationship has been verified lets pull the request body for the chat
     // the request body has the present active chat messages
@@ -241,7 +237,7 @@ export async function POST(
     // lets check if the User and Assistant has an active chat session already going on.
 
     ////////////////////// *Short-term Chat Memory  ///////////////////////////////////////
-    Debugging("\n *** Short Term Chat Memory ***\n");
+    console.log("\n *** Short Term Chat Memory ***\n");
 
     // the present chat messages are sent by the chat page.
     // the messages are give a special type of ChatCompletionMessage[]
@@ -250,12 +246,12 @@ export async function POST(
     // Lets find the present chat message which is the last message in the array of messages
     const lastChatMessage = messages.slice(-1);
 
-    Debugging(
+    console.log(
       "\n *************** Request Messages from present Active Chat: request.messages **************\n" +
         JSON.stringify(body.messages)
     );
 
-    Debugging("Last Chat Message: " + JSON.stringify(lastChatMessage));
+    console.log("Last Chat Message: " + JSON.stringify(lastChatMessage));
 
     // It could be a long chat session that would be too much to send to the LLM
     // so we limit the the message history
@@ -264,7 +260,7 @@ export async function POST(
 
     const messagesTruncated = messages.slice(messagesTruncatedNumber);
 
-    Debugging(
+    console.log(
       "\n Truncated Messages .The last: " +
         messagesTruncatedNumber +
         " from the Active Chat" +
@@ -277,7 +273,7 @@ export async function POST(
     // these messages need to be embedded and vectorized by openai and sent to the Pinecone vector database
     // we are using our getEmbedding function from our function "@/lib/openai
 
-    Debugging(
+    console.log(
       "############### Embedding the truncated messages for querying Pinecone vectorized database ########"
     );
     const embedding = await getEmbedding(
@@ -288,7 +284,7 @@ export async function POST(
     //// companionNamespace is the location of our companion's segmented partiton of the Pinecone Vectorized Database
     //  where public facts about this particular companion is stored
 
-    Debugging(
+    console.log(
       "*************** Will be searching Pinecone in the Companion's namespace: " +
         JSON.stringify(companion.namespace) +
         "****************"
@@ -298,7 +294,7 @@ export async function POST(
     ///// lets query Pinecone companion namespace with our last few messages that were embedded by openai
     // and find  relevant facts that were inserted by the present User. topK is the number of related records to return
 
-    Debugging(
+    console.log(
       "********** Lets find Pine Cone data for Assistant **************"
     );
 
@@ -359,7 +355,7 @@ export async function POST(
 
     ///// lets query Pinecone namespace with our last few messages that were embedded by openai
     // and find  relevant facts that were inserted by the present User
-    Debugging(
+    console.log(
       "********** Lets find Pine Cone data for User on Relationship **************xxx bbb"
     );
     const vectorUserQueryResponse = await companionNamespace.query({
@@ -460,13 +456,13 @@ export async function POST(
       content: context,
     };
 
-    Debugging(
+    console.log(
       "\n\n System Message:\n " + JSON.stringify(systemMessage) + "\n\n"
     );
 
     // lets call the LLM model and send the systemMessage along with messages now in the chat stream
     // which includes the last message from User
-    Debugging(
+    console.log(
       "\n Calling the LLM Model: " +
         llmModel +
         " with the System Message\n  Temperature is: " +
@@ -479,8 +475,8 @@ export async function POST(
       messages: [systemMessage, ...messagesTruncated],
       temperature: relationship.temperature,
     });
-    Debugging("LLM response: " + JSON.stringify(response));
-    Debugging(
+    console.log("LLM response: " + JSON.stringify(response));
+    console.log(
       "**********************End of Conversation*****************************"
     );
 

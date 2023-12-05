@@ -6,7 +6,7 @@ import { auth, currentUser, redirectToSignIn } from "@clerk/nextjs";
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 
-import { CompanionForm } from "./components/companion-form";
+// import { CompanionForm } from "./components/companion-form";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";

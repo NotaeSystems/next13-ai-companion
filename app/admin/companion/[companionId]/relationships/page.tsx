@@ -1,3 +1,5 @@
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import prismadb from "@/lib/prismadb";
 import { Categories } from "@/components/categories";
 // import { AdminDashboard } from "@/components/admin/admin-companions";
@@ -13,6 +15,7 @@ import { AdminCompanions } from "@/components/admin/admin-companions";
 import { redirect } from "next/navigation";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { Companion, Relationship } from "@prisma/client";
+
 interface RelationshipsAdminPageProps {
   params: {
     companionId: string;
@@ -23,9 +26,9 @@ const RelationshipsAdminPage = async ({
   params,
 }: RelationshipsAdminPageProps) => {
   // const categories = await prismadb.category.findMany();
-  console.log("inside of admin/companions/[companionID]/relationships");
+  Debugging(`inside of admin/companions/$[companionID]/relationships`);
   const { userId } = auth();
-  console.log(userId);
+  Debugging(`${userId}`);
 
   if (!userId) {
     return redirectToSignIn();
@@ -43,50 +46,49 @@ const RelationshipsAdminPage = async ({
   //const data: any = relationships;
   let companion: Companion | null;
 
-  companion = await prismadb.companion.findUnique({
+  {
+    try {
+      companion = await prismadb.companion.findUnique({
+        where: {
+          id: params.companionId,
+        },
+        include: {
+          relationships: true,
+        },
+      });
+    } catch (error) {
+      return <>Cannot find Persona"</>;
+    }
+  }
+
+  if (!companion) {
+    return (
+      <>
+        <p>Cannot find Persona</p>
+      </>
+    );
+  }
+  const relationships = await prismadb.relationship.findMany({
     where: {
-      id: params.companionId,
-    },
-    include: {
-      relationships: true,
+      companionId: params.companionId,
     },
   });
 
-  if (!companion) {
-    return redirect("/admin");
-  }
+  // const relationships: Relationship[] = companion.relationships;
 
-  // const relationships = await prismadb.relationship.findMany({
-  //   where: {
-  //     companionId: companion.id,
-  //     // status: "Active",
-
-  //     // name: {
-  //     //   search: searchParams.name,
-  //     // },
-  //   },
-  //   orderBy: {
-  //     createdAt: "desc",
-  //   },
-  //   include: {
-  //     companion: true,
-  //   },
-  // });
-  const relationships = companion.relationships;
   return (
     <div className="h-full p-4 space-y-2">
       <AdminCompanionNavbar companion={companion} />
-      <h1>Relationships of {companion.name}</h1>
-      <h2>Under Construction</h2>
+      <h1>Relationships of {companion.name} </h1>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 pb-10">
-        {relationships.map((relationship) => (
+        {relationships.map((relationship: Relationship) => (
           <Card
             key={relationship.id}
             className="bg-primary/10 rounded-xl cursor-pointer hover:opacity-75 transition border-0"
           >
             <Link
-              href={`/admin/companion/${companion.id}/relationship/${relationship.id}`}
+              href={`/admin/companion/${relationship.companionId}/relationship/${relationship.id}`}
             >
               <CardHeader className="flex items-center justify-center text-center text-muted-foreground">
                 {/* <div className="relative w-32 h-32">

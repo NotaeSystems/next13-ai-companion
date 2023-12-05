@@ -1,13 +1,13 @@
+import Global from "@/Global";
 import { Metadata } from "next";
 import { ImageUnderConstructionComponent } from "@/components/image/image-under-construction.";
-const under_construction = process.env.UNDER_CONSTRUCTION;
 
 export const metadata: Metadata = {
-  title: "SmartyPersona-FAQ",
+  title: Global.siteName + " FAQ",
 };
 
 export default function FaqPage() {
-  if (under_construction === "true") {
+  if (Global.underConstruction) {
     return (
       <>
         <div className="h-screen flex items-center justify-center">

@@ -22,12 +22,15 @@ model Topic {
 }
 
 model Invitation {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  inviteCode  String
-  companionId String
-  userId      String
-  email       String
-  status      String
+  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
+  inviteCode           String
+  companionId          String
+  userId               String?
+  email                String?
+  status               String  @default("Active")
+  message              String?
+  starterConversations Int     @default(100)
+  limit                Int     @default(0) // limit of users who can use this invite
 }
 
 model Companion {
@@ -201,7 +204,7 @@ model Profile {
   ageLevel           String  @default("unknown")
   conversations      Int     @default(0)
   conversationsLimit Int     @default(10)
-  betaUser           Boolean @default(true)
+  isBetaUser         Boolean @default(true)
 
   relationships Relationship[]
 

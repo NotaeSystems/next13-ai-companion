@@ -1,3 +1,5 @@
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import prismadb from "@/lib/prismadb";
 import { Categories } from "@/components/categories";
 // import { AdminDashboard } from "@/components/admin/admin-companions";
@@ -17,11 +19,11 @@ interface RootPageProps {
   };
 }
 
-const RootPage = async () => {
+const AdminRootPage = async () => {
   // const categories = await prismadb.category.findMany();
-  console.log("inside of admin");
+  Debugging("inside of /admin");
   const { userId } = auth();
-  console.log(userId);
+  Debugging(`${userId}`);
 
   if (!userId) {
     return redirectToSignIn();
@@ -39,7 +41,7 @@ const RootPage = async () => {
   const companions = await prismadb.companion.findMany();
 
   const data: any = companions;
-  console.log("getting ready to return");
+  Debugging("getting ready to return");
   return (
     <div className="h-full p-4 space-y-2">
       <h1>Admin Dashboard</h1>
@@ -52,4 +54,4 @@ const RootPage = async () => {
   );
 };
 
-export default RootPage;
+export default AdminRootPage;

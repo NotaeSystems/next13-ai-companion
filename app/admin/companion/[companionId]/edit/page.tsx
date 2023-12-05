@@ -1,3 +1,5 @@
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import { redirect } from "next/navigation";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 
@@ -14,7 +16,7 @@ interface CompanionIdPageProps {
 
 const EditCompanionPage = async ({ params }: CompanionIdPageProps) => {
   const { userId } = auth();
-  console.log("inside of EditCompanionPage");
+  Debugging("inside of EditCompanionPage");
 
   if (!userId) {
     return redirectToSignIn();
@@ -35,7 +37,7 @@ const EditCompanionPage = async ({ params }: CompanionIdPageProps) => {
     });
   }
   if (!companion) {
-    console.log("companion Not Found");
+    Debugging("companion Not Found");
     return redirect("/admin");
   }
   const categories = await prismadb.category.findMany();

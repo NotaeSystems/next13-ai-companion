@@ -1,3 +1,5 @@
+import Global from "@/Global.js";
+import { Debugging } from "@/lib/debugging";
 import { redirect } from "next/navigation";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 
@@ -14,7 +16,7 @@ interface CompanionIdPageProps {
 
 const EditCompanionPage = async ({ params }: CompanionIdPageProps) => {
   const { userId } = auth();
-  console.log("inside of EditCompanionPage");
+  Debugging("inside of /dashboard/companion/[companinId] EditCompanionPage");
 
   if (!userId) {
     return redirectToSignIn();
@@ -37,15 +39,26 @@ const EditCompanionPage = async ({ params }: CompanionIdPageProps) => {
     });
   }
   if (!companion) {
-    console.log("companion Not Found. Is user the owner of the companion?");
+    Debugging("companion Not Found. Is user the owner of the companion?");
     return redirect("/dashboard");
   }
   const categories = await prismadb.category.findMany();
-
-  console.log("getting ready to return");
+  // check to see if relationship exists
+  let relationship = null;
+  relationship = await prismadb.relationship.findFirst({
+    where: {
+      companionId: companion.id,
+      userId: userId,
+    },
+  });
+  if (!relationship) {
+    Debugging("Relationship Not Found. Is user the owner of the companion?");
+    return redirect("/dashboard");
+  }
+  Debugging("getting ready to return");
   return (
     <>
-      <CompanionNavbar companion={companion} />
+      <CompanionNavbar companion={companion} relationship={relationship} />
       <h1> Edit Companion</h1>
       <CompanionForm companion={companion} categories={categories} />
     </>

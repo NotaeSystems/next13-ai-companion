@@ -1,9 +1,11 @@
+import Global from "@/Global";
+
 import prismadb from "@/lib/prismadb";
 import { ImageUnderConstructionComponent } from "@/components/image/image-under-construction.";
+
 const BillingAdminPage = async () => {
   const under_construction = process.env.UNDER_CONSTRUCTION;
-
-  if (under_construction === "true") {
+  if (Global.underConstruction) {
     return (
       <>
         <div className="h-screen flex items-center justify-center">
